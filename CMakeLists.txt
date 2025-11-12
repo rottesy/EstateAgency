@@ -36,6 +36,11 @@ set(SOURCES
     src/TransactionDialog.cpp
     src/AuctionDialog.cpp
     src/HtmlFormatter.cpp
+    src/PropertiesWidget.cpp
+    src/ClientsWidget.cpp
+    src/TransactionsWidget.cpp
+    src/AuctionsWidget.cpp
+    src/DashboardWidget.cpp
 )
 
 # Заголовочные файлы для MOC
@@ -45,6 +50,11 @@ set(HEADERS
     include/ClientDialog.h
     include/TransactionDialog.h
     include/AuctionDialog.h
+    include/PropertiesWidget.h
+    include/ClientsWidget.h
+    include/TransactionsWidget.h
+    include/AuctionsWidget.h
+    include/DashboardWidget.h
 )
 
 # Создание исполняемого файла
