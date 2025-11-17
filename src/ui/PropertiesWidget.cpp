@@ -22,12 +22,12 @@ PropertiesWidget::PropertiesWidget(EstateAgency *agency, QWidget *parent) : QWid
 
 void PropertiesWidget::setupUI()
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(15);
 
-    QHBoxLayout *headerLayout = new QHBoxLayout;
-    QLabel *title = new QLabel("Недвижимость");
+    auto *headerLayout = new QHBoxLayout;
+    auto *title = new QLabel("Недвижимость");
     title->setStyleSheet("color: #ffffff; font-size: 22pt; font-weight: bold;");
     headerLayout->addWidget(title);
     headerLayout->addStretch();
@@ -45,7 +45,7 @@ void PropertiesWidget::setupUI()
     headerLayout->addWidget(refreshPropertyBtn);
     layout->addLayout(headerLayout);
 
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
+    auto *splitter = new QSplitter(Qt::Horizontal);
 
     propertiesTable = new QTableWidget;
     propertiesTable->setColumnCount(7);
@@ -63,11 +63,11 @@ void PropertiesWidget::setupUI()
     propertiesTable->setColumnWidth(6, 300);
     propertiesTable->horizontalHeader()->setStretchLastSection(false);
 
-    QFrame *detailsFrame = new QFrame;
+    auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);
     detailsFrame->setStyleSheet("background-color: #252525; border-radius: 8px; padding: 15px;");
-    QVBoxLayout *detailsLayout = new QVBoxLayout(detailsFrame);
-    QLabel *detailsTitle = new QLabel("Информация");
+    auto *detailsLayout = new QVBoxLayout(detailsFrame);
+    auto *detailsTitle = new QLabel("Информация");
     detailsTitle->setStyleSheet("color: #ffffff; font-size: 14pt; font-weight: "
                                 "bold; padding-bottom: 10px;");
     detailsLayout->addWidget(detailsTitle);
@@ -361,14 +361,14 @@ void PropertiesWidget::showPropertyDetails(Property *prop)
     html += "<h3 style='font-weight: bold; margin-top: 20px; margin-bottom: "
             "10px;'>ДОПОЛНИТЕЛЬНЫЕ ХАРАКТЕРИСТИКИ</h3>";
 
-    if (Apartment *apt = dynamic_cast<Apartment *>(prop))
+    if (auto *apt = dynamic_cast<Apartment *>(prop))
     {
         html += "<p><b>Комнат:</b> " + QString::number(apt->getRooms()) + "</p>";
         html += "<p><b>Этаж:</b> " + QString::number(apt->getFloor()) + "</p>";
         html += "<p><b>Балкон:</b> " + QString(apt->getHasBalcony() ? "Да" : "Нет") + "</p>";
         html += "<p><b>Лифт:</b> " + QString(apt->getHasElevator() ? "Да" : "Нет") + "</p>";
     }
-    else if (House *house = dynamic_cast<House *>(prop))
+    else if (auto *house = dynamic_cast<House *>(prop))
     {
         html += "<p><b>Этажей:</b> " + QString::number(house->getFloors()) + "</p>";
         html += "<p><b>Комнат:</b> " + QString::number(house->getRooms()) + "</p>";
@@ -376,7 +376,7 @@ void PropertiesWidget::showPropertyDetails(Property *prop)
         html += "<p><b>Гараж:</b> " + QString(house->getHasGarage() ? "Да" : "Нет") + "</p>";
         html += "<p><b>Сад:</b> " + QString(house->getHasGarden() ? "Да" : "Нет") + "</p>";
     }
-    else if (CommercialProperty *comm = dynamic_cast<CommercialProperty *>(prop))
+    else if (auto *comm = dynamic_cast<CommercialProperty *>(prop))
     {
         html += "<p><b>Тип бизнеса:</b> " + QString::fromStdString(comm->getBusinessType()) + "</p>";
         html += "<p><b>Парковка:</b> " + QString(comm->getHasParking() ? "Да" : "Нет") + "</p>";
@@ -443,15 +443,15 @@ void PropertiesWidget::showPropertyTransactions(const std::string &propertyId)
 QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
                                                std::function<void()> deleteAction)
 {
-    QWidget *actionsWidget = new QWidget;
-    QHBoxLayout *actionsLayout = new QHBoxLayout(actionsWidget);
+    auto *actionsWidget = new QWidget;
+    auto *actionsLayout = new QHBoxLayout(actionsWidget);
     actionsLayout->setContentsMargins(5, 5, 5, 5);
     actionsLayout->setSpacing(8);
 
-    QPushButton *editBtn = new QPushButton("Редактировать");
+    auto *editBtn = new QPushButton("Редактировать");
     editBtn->setMinimumWidth(110);
     editBtn->setFixedHeight(35);
-    QPushButton *deleteBtn = new QPushButton("Удалить");
+    auto *deleteBtn = new QPushButton("Удалить");
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 

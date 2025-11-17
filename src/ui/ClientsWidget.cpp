@@ -18,12 +18,12 @@ ClientsWidget::ClientsWidget(EstateAgency *agency, QWidget *parent) : QWidget(pa
 
 void ClientsWidget::setupUI()
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(15);
 
-    QHBoxLayout *headerLayout = new QHBoxLayout;
-    QLabel *title = new QLabel("Клиенты");
+    auto *headerLayout = new QHBoxLayout;
+    auto *title = new QLabel("Клиенты");
     title->setStyleSheet("color: #ffffff; font-size: 22pt; font-weight: bold;");
     headerLayout->addWidget(title);
     headerLayout->addStretch();
@@ -41,7 +41,7 @@ void ClientsWidget::setupUI()
     headerLayout->addWidget(refreshClientBtn);
     layout->addLayout(headerLayout);
 
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
+    auto *splitter = new QSplitter(Qt::Horizontal);
 
     clientsTable = new QTableWidget;
     clientsTable->setColumnCount(6);
@@ -59,11 +59,11 @@ void ClientsWidget::setupUI()
     clientsTable->setColumnWidth(5, 300);
     clientsTable->horizontalHeader()->setStretchLastSection(false);
 
-    QFrame *detailsFrame = new QFrame;
+    auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);
     detailsFrame->setStyleSheet("background-color: #252525; border-radius: 8px; padding: 15px;");
-    QVBoxLayout *detailsLayout = new QVBoxLayout(detailsFrame);
-    QLabel *detailsTitle = new QLabel("Информация о клиенте");
+    auto *detailsLayout = new QVBoxLayout(detailsFrame);
+    auto *detailsTitle = new QLabel("Информация о клиенте");
     detailsTitle->setStyleSheet("color: #ffffff; font-size: 14pt; font-weight: "
                                 "bold; padding-bottom: 10px;");
     detailsLayout->addWidget(detailsTitle);
@@ -360,15 +360,15 @@ QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &
                                             const std::function<void()> &editAction,
                                             const std::function<void()> &deleteAction)
 {
-    QWidget *actionsWidget = new QWidget;
-    QHBoxLayout *actionsLayout = new QHBoxLayout(actionsWidget);
+    auto *actionsWidget = new QWidget;
+    auto *actionsLayout = new QHBoxLayout(actionsWidget);
     actionsLayout->setContentsMargins(5, 5, 5, 5);
     actionsLayout->setSpacing(8);
 
-    QPushButton *editBtn = new QPushButton("Редактировать");
+    auto *editBtn = new QPushButton("Редактировать");
     editBtn->setMinimumWidth(110);
     editBtn->setFixedHeight(35);
-    QPushButton *deleteBtn = new QPushButton("Удалить");
+    auto *deleteBtn = new QPushButton("Удалить");
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 

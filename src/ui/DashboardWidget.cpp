@@ -8,11 +8,11 @@ DashboardWidget::DashboardWidget(EstateAgency *agency, QWidget *parent) : QWidge
 
 void DashboardWidget::setupUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    auto *mainLayout = new QVBoxLayout(this);
     mainLayout->setContentsMargins(50, 50, 50, 50);
     mainLayout->setSpacing(40);
 
-    QLabel *header = new QLabel("Панель управления");
+    auto *header = new QLabel("Панель управления");
     header->setStyleSheet("color: #ffffff; "
                           "font-size: 48pt; "
                           "font-weight: 300; "
@@ -22,14 +22,14 @@ void DashboardWidget::setupUI()
 
     auto createMetricWidget = [](const QString &label, const QString &color, QLabel **valuePtr) -> QWidget *
     {
-        QWidget *widget = new QWidget;
+        auto *widget = new QWidget;
         widget->setFixedHeight(160);
 
-        QVBoxLayout *layout = new QVBoxLayout(widget);
+        auto *layout = new QVBoxLayout(widget);
         layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(12);
 
-        QLabel *labelWidget = new QLabel(label);
+        auto *labelWidget = new QLabel(label);
         labelWidget->setStyleSheet(QString("color: %1; "
                                            "font-size: 11pt; "
                                            "font-weight: 500; "
@@ -37,7 +37,7 @@ void DashboardWidget::setupUI()
                                        .arg(color));
         layout->addWidget(labelWidget);
 
-        QLabel *valueLabel = new QLabel("0");
+        auto *valueLabel = new QLabel("0");
         valueLabel->setStyleSheet(QString("color: %1; "
                                           "font-size: 50pt; "
                                           "font-weight: 700; "
@@ -63,7 +63,7 @@ void DashboardWidget::setupUI()
     QWidget *availMetric = createMetricWidget("Доступно", "#B794F6", &statsAvailableLabel);
     QWidget *auctionMetric = createMetricWidget("Аукционы", "#FF6B6B", &statsAuctionsLabel);
 
-    QHBoxLayout *metricsLayout = new QHBoxLayout;
+    auto *metricsLayout = new QHBoxLayout;
     metricsLayout->setSpacing(60);
     metricsLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -76,30 +76,30 @@ void DashboardWidget::setupUI()
 
     mainLayout->addLayout(metricsLayout);
 
-    QFrame *divider = new QFrame;
+    auto *divider = new QFrame;
     divider->setFixedHeight(1);
     divider->setStyleSheet("background-color: #333333;");
     mainLayout->addWidget(divider);
 
-    QWidget *actionsWidget = new QWidget;
-    QVBoxLayout *actionsLayout = new QVBoxLayout(actionsWidget);
+    auto *actionsWidget = new QWidget;
+    auto *actionsLayout = new QVBoxLayout(actionsWidget);
     actionsLayout->setContentsMargins(0, 0, 0, 0);
     actionsLayout->setSpacing(25);
 
-    QLabel *actionsTitle = new QLabel("Действия");
+    auto *actionsTitle = new QLabel("Действия");
     actionsTitle->setStyleSheet("color: #888888; "
                                 "font-size: 11pt; "
                                 "font-weight: 500; "
                                 "letter-spacing: 2px;");
     actionsLayout->addWidget(actionsTitle);
 
-    QHBoxLayout *buttonsLayout = new QHBoxLayout;
+    auto *buttonsLayout = new QHBoxLayout;
     buttonsLayout->setSpacing(20);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
     auto createModernButton = [](const QString &text, const QString &color) -> QPushButton *
     {
-        QPushButton *btn = new QPushButton(text);
+        auto *btn = new QPushButton(text);
         btn->setStyleSheet(QString("QPushButton {"
                                    "    background-color: transparent;"
                                    "    color: %1;"

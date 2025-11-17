@@ -389,20 +389,20 @@ void MainWindow::setupMenuBar()
 
 void MainWindow::setupNewUI()
 {
-    QWidget *centralWidget = new QWidget(this);
-    QHBoxLayout *mainLayout = new QHBoxLayout(centralWidget);
+    auto *centralWidget = new QWidget(this);
+    auto *mainLayout = new QHBoxLayout(centralWidget);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
 
-    QFrame *sidebar = new QFrame;
+    auto *sidebar = new QFrame;
     sidebar->setFixedWidth(250);
     sidebar->setStyleSheet("background-color: #1a1a1a; border-right: 1px solid #3d3d3d;");
 
-    QVBoxLayout *sidebarLayout = new QVBoxLayout(sidebar);
+    auto *sidebarLayout = new QVBoxLayout(sidebar);
     sidebarLayout->setContentsMargins(0, 20, 0, 20);
     sidebarLayout->setSpacing(10);
 
-    QLabel *titleLabel = new QLabel("Недвижимость");
+    auto *titleLabel = new QLabel("Недвижимость");
     titleLabel->setStyleSheet("color: #ffffff; font-size: 18pt; font-weight: "
                               "bold; padding: 10px 20px;");
     sidebarLayout->addWidget(titleLabel);
@@ -420,8 +420,8 @@ void MainWindow::setupNewUI()
 
     sidebarLayout->addStretch();
 
-    QPushButton *saveBtn = new QPushButton("Сохранить");
-    QPushButton *loadBtn = new QPushButton("Загрузить");
+    auto *saveBtn = new QPushButton("Сохранить");
+    auto *loadBtn = new QPushButton("Загрузить");
     saveBtn->setStyleSheet("QPushButton { background-color: #2d5a3d; padding: 10px; border-radius: "
                            "5px; } QPushButton:hover { background-color: #3d6a4d; }");
     loadBtn->setStyleSheet("QPushButton { background-color: #2d3d5a; padding: 10px; border-radius: "

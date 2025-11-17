@@ -128,10 +128,10 @@ AuctionDialog::~AuctionDialog() = default;
 
 void AuctionDialog::setupUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    auto *mainLayout = new QVBoxLayout(this);
 
-    QGroupBox *auctionGroup = new QGroupBox(isViewMode ? "Информация об аукционе" : "Создать аукцион");
-    QFormLayout *formLayout = new QFormLayout(auctionGroup);
+    auto *auctionGroup = new QGroupBox(isViewMode ? "Информация об аукционе" : "Создать аукцион");
+    auto *formLayout = new QFormLayout(auctionGroup);
 
     idEdit = new QLineEdit;
     idEdit->setPlaceholderText("123456 (6-8 цифр)");
@@ -186,8 +186,8 @@ void AuctionDialog::setupUI()
 
     if (isViewMode)
     {
-        QGroupBox *bidsGroup = new QGroupBox("Ставки");
-        QVBoxLayout *bidsLayout = new QVBoxLayout(bidsGroup);
+        auto *bidsGroup = new QGroupBox("Ставки");
+        auto *bidsLayout = new QVBoxLayout(bidsGroup);
 
         currentHighestBidLabel = new QLabel("Текущая максимальная ставка: нет ставок");
         currentHighestBidLabel->setStyleSheet("color: #6a9; font-size: 10pt; font-weight: bold; padding: 5px;");
@@ -200,7 +200,7 @@ void AuctionDialog::setupUI()
         bidsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
         bidsLayout->addWidget(bidsTable);
 
-        QGroupBox *addBidGroup = new QGroupBox("Добавить ставку");
+        auto *addBidGroup = new QGroupBox("Добавить ставку");
         QFormLayout *bidFormLayout = new QFormLayout(addBidGroup);
 
         clientCombo = new QComboBox;
@@ -217,7 +217,7 @@ void AuctionDialog::setupUI()
         bidFormLayout->addRow("Клиент:", clientCombo);
         bidFormLayout->addRow("Ставка:", bidAmountSpin);
 
-        QHBoxLayout *bidButtonsLayout = new QHBoxLayout;
+        auto *bidButtonsLayout = new QHBoxLayout;
         addBidBtn = new QPushButton("Сделать ставку");
         connect(addBidBtn, &QPushButton::clicked, this, &AuctionDialog::addBid);
         bidButtonsLayout->addWidget(addBidBtn);

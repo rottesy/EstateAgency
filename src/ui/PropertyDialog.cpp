@@ -74,16 +74,16 @@ PropertyDialog::~PropertyDialog() = default;
 
 void PropertyDialog::setupUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    auto *mainLayout = new QVBoxLayout(this);
 
-    QHBoxLayout *typeLayout = new QHBoxLayout;
+    auto *typeLayout = new QHBoxLayout;
     typeLayout->addWidget(new QLabel("Тип:"));
     typeCombo = new QComboBox;
     typeCombo->addItems({"Квартира", "Дом", "Коммерческая"});
     typeLayout->addWidget(typeCombo);
     mainLayout->addLayout(typeLayout);
 
-    QFormLayout *commonLayout = new QFormLayout;
+    auto *commonLayout = new QFormLayout;
     idEdit = new QLineEdit;
     idEdit->setPlaceholderText("123456 (6-8 цифр)");
     idEdit->setMaxLength(8);
@@ -120,12 +120,12 @@ void PropertyDialog::setupUI()
     commonLayout->addRow("Описание:", descriptionEdit);
     commonLayout->addRow(availableCheck);
 
-    QGroupBox *commonGroup = new QGroupBox("Общая информация");
+    auto *commonGroup = new QGroupBox("Общая информация");
     commonGroup->setLayout(commonLayout);
     mainLayout->addWidget(commonGroup);
 
     apartmentGroup = new QGroupBox("Параметры квартиры");
-    QFormLayout *aptLayout = new QFormLayout;
+    auto *aptLayout = new QFormLayout;
     roomsSpin = new QSpinBox;
     roomsSpin->setRange(1, 10);
     floorSpin = new QSpinBox;
@@ -141,7 +141,7 @@ void PropertyDialog::setupUI()
     mainLayout->addWidget(apartmentGroup);
 
     houseGroup = new QGroupBox("Параметры дома");
-    QFormLayout *houseLayout = new QFormLayout;
+    auto *houseLayout = new QFormLayout;
     floorsSpin = new QSpinBox;
     floorsSpin->setRange(1, 10);
     houseRoomsSpin = new QSpinBox;
@@ -162,7 +162,7 @@ void PropertyDialog::setupUI()
     mainLayout->addWidget(houseGroup);
 
     commercialGroup = new QGroupBox("Параметры коммерческой");
-    QFormLayout *commLayout = new QFormLayout;
+    auto *commLayout = new QFormLayout;
     businessTypeEdit = new QLineEdit;
     parkingCheck = new QCheckBox;
     parkingSpacesSpin = new QSpinBox;
@@ -203,7 +203,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
     descriptionEdit->setPlainText(QString::fromStdString(prop->getDescription()));
     availableCheck->setChecked(prop->getIsAvailable());
 
-    if (Apartment *apt = dynamic_cast<Apartment *>(prop))
+    if (auto *apt = dynamic_cast<Apartment *>(prop))
     {
         typeCombo->setCurrentIndex(0);
         roomsSpin->setValue(apt->getRooms());
@@ -211,7 +211,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
         balconyCheck->setChecked(apt->getHasBalcony());
         elevatorCheck->setChecked(apt->getHasElevator());
     }
-    else if (House *house = dynamic_cast<House *>(prop))
+    else if (auto *house = dynamic_cast<House *>(prop))
     {
         typeCombo->setCurrentIndex(1);
         floorsSpin->setValue(house->getFloors());
@@ -220,7 +220,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
         garageCheck->setChecked(house->getHasGarage());
         gardenCheck->setChecked(house->getHasGarden());
     }
-    else if (CommercialProperty *comm = dynamic_cast<CommercialProperty *>(prop))
+    else if (auto *comm = dynamic_cast<CommercialProperty *>(prop))
     {
         typeCombo->setCurrentIndex(2);
         businessTypeEdit->setText(QString::fromStdString(comm->getBusinessType()));

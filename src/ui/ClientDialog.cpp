@@ -47,8 +47,8 @@ ClientDialog::~ClientDialog() = default;
 
 void ClientDialog::setupUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    QFormLayout *formLayout = new QFormLayout;
+    auto *mainLayout = new QVBoxLayout(this);
+    auto *formLayout = new QFormLayout;
 
     idEdit = new QLineEdit;
     idEdit->setPlaceholderText("123456 (6-8 цифр)");

@@ -17,12 +17,12 @@ AuctionsWidget::AuctionsWidget(EstateAgency *agency, QWidget *parent) : QWidget(
 
 void AuctionsWidget::setupUI()
 {
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    auto *layout = new QVBoxLayout(this);
     layout->setContentsMargins(20, 20, 20, 20);
     layout->setSpacing(15);
 
-    QHBoxLayout *headerLayout = new QHBoxLayout;
-    QLabel *title = new QLabel("Аукционы");
+    auto *headerLayout = new QHBoxLayout;
+    auto *title = new QLabel("Аукционы");
     title->setStyleSheet("color: #ffffff; font-size: 22pt; font-weight: bold;");
     headerLayout->addWidget(title);
     headerLayout->addStretch();
@@ -40,7 +40,7 @@ void AuctionsWidget::setupUI()
     headerLayout->addWidget(refreshAuctionBtn);
     layout->addLayout(headerLayout);
 
-    QSplitter *splitter = new QSplitter(Qt::Horizontal);
+    auto *splitter = new QSplitter(Qt::Horizontal);
 
     auctionsTable = new QTableWidget;
     auctionsTable->setColumnCount(7);
@@ -60,11 +60,11 @@ void AuctionsWidget::setupUI()
     auctionsTable->setColumnWidth(6, 300);
     auctionsTable->horizontalHeader()->setStretchLastSection(false);
 
-    QFrame *detailsFrame = new QFrame;
+    auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);
     detailsFrame->setStyleSheet("background-color: #252525; border-radius: 8px; padding: 15px;");
-    QVBoxLayout *detailsLayout = new QVBoxLayout(detailsFrame);
-    QLabel *detailsTitle = new QLabel("Детали аукциона");
+    auto *detailsLayout = new QVBoxLayout(detailsFrame);
+    auto *detailsTitle = new QLabel("Детали аукциона");
     detailsTitle->setStyleSheet("color: #ffffff; font-size: 14pt; font-weight: "
                                 "bold; padding-bottom: 10px;");
     detailsLayout->addWidget(detailsTitle);
@@ -417,15 +417,15 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
                                              const std::function<void()> &viewAction,
                                              const std::function<void()> &deleteAction, [[maybe_unused]] bool isView)
 {
-    QWidget *actionsWidget = new QWidget;
-    QHBoxLayout *actionsLayout = new QHBoxLayout(actionsWidget);
+    auto *actionsWidget = new QWidget;
+    auto *actionsLayout = new QHBoxLayout(actionsWidget);
     actionsLayout->setContentsMargins(5, 5, 5, 5);
     actionsLayout->setSpacing(8);
 
-    QPushButton *viewBtn = new QPushButton("Просмотр");
+    auto *viewBtn = new QPushButton("Просмотр");
     viewBtn->setMinimumWidth(100);
     viewBtn->setFixedHeight(35);
-    QPushButton *deleteBtn = new QPushButton("Удалить");
+    auto *deleteBtn = new QPushButton("Удалить");
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 

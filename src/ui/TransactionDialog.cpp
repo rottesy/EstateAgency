@@ -74,8 +74,8 @@ TransactionDialog::~TransactionDialog() = default;
 
 void TransactionDialog::setupUI()
 {
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
-    QFormLayout *formLayout = new QFormLayout;
+    auto *mainLayout = new QVBoxLayout(this);
+    auto *formLayout = new QFormLayout;
 
     idEdit = new QLineEdit;
     idEdit->setPlaceholderText("123456 (6-8 цифр)");
@@ -90,12 +90,12 @@ void TransactionDialog::setupUI()
 
     clientCombo = new QComboBox;
 
-    QWidget *priceWidget = new QWidget;
-    QVBoxLayout *priceLayout = new QVBoxLayout(priceWidget);
+    auto *priceWidget = new QWidget;
+    auto *priceLayout = new QVBoxLayout(priceWidget);
     priceLayout->setContentsMargins(0, 0, 0, 0);
     priceLayout->setSpacing(5);
 
-    QHBoxLayout *priceInputLayout = new QHBoxLayout;
+    auto *priceInputLayout = new QHBoxLayout;
     priceSpin = new QDoubleSpinBox;
     priceSpin->setMinimum(10000);
     priceSpin->setMaximum(1000000000);
