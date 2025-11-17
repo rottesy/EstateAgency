@@ -2,10 +2,29 @@
 #define UTILS_H
 
 #include <QString>
+#include <ctime>
 #include <string>
+
+#ifdef _WIN32
+#include <time.h>
+#else
+#include <time.h>
+#endif
 
 namespace Utils
 {
+// Thread-safe localtime wrapper
+inline std::tm getLocalTime(std::time_t time)
+{
+    std::tm result;
+#ifdef _WIN32
+    localtime_s(&result, &time);
+#else
+    localtime_r(&time, &result);
+#endif
+    return result;
+}
+
 inline std::string toString(const QString &qstr) { return qstr.toStdString(); }
 
 inline QString toQString(const std::string &str) { return QString::fromStdString(str); }
@@ -34,6 +53,3 @@ inline bool isNumericId(const QString &str)
 } // namespace Utils
 
 #endif
-
-
-

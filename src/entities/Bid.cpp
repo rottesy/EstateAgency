@@ -1,4 +1,5 @@
 #include "../../include/entities/Bid.h"
+#include "../../include/core/Utils.h"
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -20,7 +21,7 @@ Bid::Bid(const std::string &clientId, const std::string &clientName, double amou
     }
 
     auto now = std::time(nullptr);
-    auto tm = *std::localtime(&now);
+    auto tm = Utils::getLocalTime(now);
     std::ostringstream oss;
     oss << std::put_time(&tm, DATE_FORMAT);
     timestamp = oss.str();

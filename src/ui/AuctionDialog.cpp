@@ -1,5 +1,6 @@
 #include "../../include/ui/AuctionDialog.h"
 #include "../../include/core/EstateAgency.h"
+#include "../../include/core/Utils.h"
 #include "../../include/entities/Bid.h"
 #include "../../include/entities/Client.h"
 #include "../../include/entities/Property.h"
@@ -610,7 +611,7 @@ void AuctionDialog::createTransactionFromAuction()
     std::string transactionId;
     {
         auto now = std::time(nullptr);
-        auto tm = *std::localtime(&now);
+        auto tm = Utils::getLocalTime(now);
         std::ostringstream oss;
         oss << std::put_time(&tm, "%H%M%S");
         transactionId = oss.str();

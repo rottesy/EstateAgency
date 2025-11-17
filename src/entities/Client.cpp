@@ -1,4 +1,5 @@
 #include "../../include/entities/Client.h"
+#include "../../include/core/Utils.h"
 #include <cctype>
 #include <ctime>
 #include <iomanip>
@@ -30,7 +31,7 @@ Client::Client(const std::string &id, const std::string &name, const std::string
     }
 
     auto now = std::time(nullptr);
-    auto tm = *std::localtime(&now);
+    auto tm = Utils::getLocalTime(now);
     std::ostringstream oss;
     oss << std::put_time(&tm, DATE_FORMAT);
     registrationDate = oss.str();

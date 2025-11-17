@@ -1,5 +1,6 @@
 #include "../../include/entities/Transaction.h"
 #include "../../include/core/Constants.h"
+#include "../../include/core/Utils.h"
 #include <cctype>
 #include <ctime>
 #include <iomanip>
@@ -41,7 +42,7 @@ Transaction::Transaction(const std::string &id, const std::string &propertyId, c
     }
 
     auto now = std::time(nullptr);
-    auto tm = *std::localtime(&now);
+    auto tm = Utils::getLocalTime(now);
     std::ostringstream oss;
     oss << std::put_time(&tm, DATE_FORMAT);
     this->date = oss.str();

@@ -1,5 +1,6 @@
 #include "../../include/entities/Auction.h"
 #include "../../include/core/Constants.h"
+#include "../../include/core/Utils.h"
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -26,7 +27,7 @@ Auction::Auction(const std::string &id, const std::string &propertyId, const std
     }
 
     auto now = std::time(nullptr);
-    auto tm = *std::localtime(&now);
+    auto tm = Utils::getLocalTime(now);
     std::ostringstream oss;
     oss << std::put_time(&tm, DATE_FORMAT);
     createdAt = oss.str();
@@ -108,7 +109,7 @@ void Auction::complete()
     {
         status = Constants::AuctionStatus::COMPLETED;
         auto now = std::time(nullptr);
-        auto tm = *std::localtime(&now);
+        auto tm = Utils::getLocalTime(now);
         std::ostringstream oss;
         oss << std::put_time(&tm, DATE_FORMAT);
         completedAt = oss.str();
@@ -121,7 +122,7 @@ void Auction::cancel()
     {
         status = Constants::AuctionStatus::CANCELLED;
         auto now = std::time(nullptr);
-        auto tm = *std::localtime(&now);
+        auto tm = Utils::getLocalTime(now);
         std::ostringstream oss;
         oss << std::put_time(&tm, DATE_FORMAT);
         completedAt = oss.str();
