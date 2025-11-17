@@ -1,9 +1,11 @@
 #include "../../include/entities/Transaction.h"
 #include "../../include/core/Constants.h"
 #include "../../include/core/Utils.h"
+#include <algorithm>
 #include <cctype>
-#include <ctime>
+#include <compare>
 #include <iomanip>
+#include <ranges>
 #include <sstream>
 #include <stdexcept>
 
@@ -41,16 +43,12 @@ Transaction::Transaction(const std::string &id, const std::string &propertyId, c
         throw std::invalid_argument("Invalid status");
     }
 
-    auto now = std::time(nullptr);
-    auto tm = Utils::getLocalTime(now);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, DATE_FORMAT);
-    this->date = oss.str();
+    this->date = Utils::getCurrentTimeString(DATE_FORMAT);
 }
 
 bool Transaction::operator==(const Transaction &other) const { return id == other.id; }
 
-bool Transaction::operator<(const Transaction &other) const { return date < other.date; }
+std::strong_ordering Transaction::operator<=>(const Transaction &other) const { return date <=> other.date; }
 
 void Transaction::setStatus(const std::string &newStatus)
 {
@@ -95,12 +93,5 @@ bool Transaction::validateId(const std::string &id)
         return false;
     }
 
-    for (char c : id)
-    {
-        if (!std::isdigit(static_cast<unsigned char>(c)))
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::ranges::all_of(id, [](char c) { return std::isdigit(static_cast<unsigned char>(c)); });
 }

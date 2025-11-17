@@ -2,7 +2,8 @@
 #define AUCTION_H
 
 #include "Bid.h"
-#include <iomanip>
+#include <compare>
+#include <format>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -26,7 +27,7 @@ class Auction
             double startingPrice);
 
     bool operator==(const Auction &other) const;
-    bool operator<(const Auction &other) const;
+    std::strong_ordering operator<=>(const Auction &other) const;
 
     bool addBid(std::shared_ptr<Bid> bid);
     void addBidDirect(std::shared_ptr<Bid> bid);
@@ -55,13 +56,12 @@ class Auction
 
     friend std::ostream &operator<<(std::ostream &os, const Auction &auction)
     {
-        os << "Auction ID: " << auction.id << "\n"
-           << "Property: " << auction.propertyAddress << " (ID: " << auction.propertyId << ")\n"
-           << "Starting Price: " << std::fixed << std::setprecision(2) << auction.startingPrice << " руб.\n"
-           << "Buyout Price: " << std::fixed << std::setprecision(2) << auction.buyoutPrice << " руб.\n"
-           << "Status: " << auction.status << "\n"
-           << "Bids Count: " << auction.bids.size() << "\n"
-           << "Created: " << auction.createdAt;
+        os << std::format("Auction ID: {}\n", auction.id)
+           << std::format("Property: {} (ID: {})\n", auction.propertyAddress, auction.propertyId)
+           << std::format("Starting Price: {:.2f} руб.\n", auction.startingPrice)
+           << std::format("Buyout Price: {:.2f} руб.\n", auction.buyoutPrice)
+           << std::format("Status: {}\n", auction.status) << std::format("Bids Count: {}\n", auction.bids.size())
+           << std::format("Created: {}", auction.createdAt);
         return os;
     }
 };

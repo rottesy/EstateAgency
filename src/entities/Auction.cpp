@@ -1,8 +1,8 @@
 #include "../../include/entities/Auction.h"
 #include "../../include/core/Constants.h"
 #include "../../include/core/Utils.h"
-#include <ctime>
-#include <iomanip>
+#include <compare>
+#include <format>
 #include <sstream>
 #include <stdexcept>
 
@@ -26,16 +26,17 @@ Auction::Auction(const std::string &id, const std::string &propertyId, const std
         throw std::invalid_argument("Starting price must be positive");
     }
 
-    auto now = std::time(nullptr);
-    auto tm = Utils::getLocalTime(now);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, DATE_FORMAT);
-    createdAt = oss.str();
+    createdAt = Utils::getCurrentTimeString(DATE_FORMAT);
 }
 
 bool Auction::operator==(const Auction &other) const { return id == other.id; }
 
-bool Auction::operator<(const Auction &other) const { return createdAt < other.createdAt; }
+std::strong_ordering Auction::operator<=>(const Auction &other) const
+{
+    if (auto cmp = createdAt <=> other.createdAt; cmp != 0)
+        return cmp;
+    return id <=> other.id;
+}
 
 bool Auction::addBid(std::shared_ptr<Bid> bid)
 {
@@ -108,11 +109,7 @@ void Auction::complete()
     if (status == Constants::AuctionStatus::ACTIVE)
     {
         status = Constants::AuctionStatus::COMPLETED;
-        auto now = std::time(nullptr);
-        auto tm = Utils::getLocalTime(now);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, DATE_FORMAT);
-        completedAt = oss.str();
+        completedAt = Utils::getCurrentTimeString(DATE_FORMAT);
     }
 }
 
@@ -121,11 +118,7 @@ void Auction::cancel()
     if (status == Constants::AuctionStatus::ACTIVE)
     {
         status = Constants::AuctionStatus::CANCELLED;
-        auto now = std::time(nullptr);
-        auto tm = Utils::getLocalTime(now);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, DATE_FORMAT);
-        completedAt = oss.str();
+        completedAt = Utils::getCurrentTimeString(DATE_FORMAT);
     }
 }
 
@@ -142,19 +135,12 @@ bool Auction::wasBuyout() const
 
 std::string Auction::toString() const
 {
-    std::ostringstream oss;
-    oss << "Auction ID: " << id << ", "
-        << "Property: " << propertyAddress << ", "
-        << "Starting: " << std::fixed << std::setprecision(PRICE_PRECISION) << startingPrice << " руб., "
-        << "Status: " << status << ", "
-        << "Bids: " << bids.size();
-    return oss.str();
+    return std::format("Auction ID: {}, Property: {}, Starting: {:.2f} руб., Status: {}, Bids: {}", id, propertyAddress,
+                       startingPrice, status, bids.size());
 }
 
 std::string Auction::toFileString() const
 {
-    std::ostringstream oss;
-    oss << id << "|" << propertyId << "|" << propertyAddress << "|" << std::fixed << std::setprecision(PRICE_PRECISION)
-        << startingPrice << "|" << buyoutPrice << "|" << status << "|" << createdAt << "|" << completedAt;
-    return oss.str();
+    return std::format("{}|{}|{}|{:.2f}|{:.2f}|{}|{}|{}", id, propertyId, propertyAddress, startingPrice, buyoutPrice,
+                       status, createdAt, completedAt);
 }

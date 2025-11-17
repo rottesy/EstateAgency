@@ -1,7 +1,7 @@
 #include "../../include/entities/Bid.h"
 #include "../../include/core/Utils.h"
-#include <ctime>
-#include <iomanip>
+#include <compare>
+#include <format>
 #include <sstream>
 #include <stdexcept>
 
@@ -20,37 +20,30 @@ Bid::Bid(const std::string &clientId, const std::string &clientName, double amou
         throw std::invalid_argument("Bid amount must be positive");
     }
 
-    auto now = std::time(nullptr);
-    auto tm = Utils::getLocalTime(now);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, DATE_FORMAT);
-    timestamp = oss.str();
+    timestamp = Utils::getCurrentTimeString(DATE_FORMAT);
 }
 
 bool Bid::operator==(const Bid &other) const { return clientId == other.clientId && amount == other.amount; }
 
-bool Bid::operator<(const Bid &other) const
+std::partial_ordering Bid::operator<=>(const Bid &other) const
 {
-    if (amount != other.amount)
-    {
-        return amount < other.amount;
-    }
-    return timestamp < other.timestamp;
+    if (auto cmp = amount <=> other.amount; cmp != 0)
+        return cmp;
+    // Convert string comparison (strong_ordering) to partial_ordering
+    auto strCmp = timestamp <=> other.timestamp;
+    if (strCmp == std::strong_ordering::less)
+        return std::partial_ordering::less;
+    if (strCmp == std::strong_ordering::greater)
+        return std::partial_ordering::greater;
+    return std::partial_ordering::equivalent;
 }
 
 std::string Bid::toString() const
 {
-    std::ostringstream oss;
-    oss << "Client: " << clientName << " (ID: " << clientId << "), "
-        << "Amount: " << std::fixed << std::setprecision(PRICE_PRECISION) << amount << " руб., "
-        << "Time: " << timestamp;
-    return oss.str();
+    return std::format("Client: {} (ID: {}), Amount: {:.2f} руб., Time: {}", clientName, clientId, amount, timestamp);
 }
 
 std::string Bid::toFileString() const
 {
-    std::ostringstream oss;
-    oss << clientId << "|" << clientName << "|" << std::fixed << std::setprecision(PRICE_PRECISION) << amount << "|"
-        << timestamp;
-    return oss.str();
+    return std::format("{}|{}|{:.2f}|{}", clientId, clientName, amount, timestamp);
 }

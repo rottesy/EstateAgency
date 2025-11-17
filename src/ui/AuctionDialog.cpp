@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <cctype>
+#include <chrono>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -610,8 +611,9 @@ void AuctionDialog::createTransactionFromAuction()
 
     std::string transactionId;
     {
-        auto now = std::time(nullptr);
-        auto tm = Utils::getLocalTime(now);
+        auto now = std::chrono::system_clock::now();
+        auto time = std::chrono::system_clock::to_time_t(now);
+        auto tm = Utils::getLocalTime(time);
         std::ostringstream oss;
         oss << std::put_time(&tm, "%H%M%S");
         transactionId = oss.str();
@@ -665,8 +667,9 @@ void AuctionDialog::createTransactionFromAuction()
             {
                 transactionId = cleanId + std::string(6 - cleanId.length(), '0');
             }
-            auto now = std::time(nullptr);
-            transactionId += std::to_string(now % 100);
+            auto now = std::chrono::system_clock::now();
+            auto time = std::chrono::system_clock::to_time_t(now);
+            transactionId += std::to_string(time % 100);
             if (transactionId.length() > 8)
                 transactionId = transactionId.substr(0, 8);
             suffix = 1;

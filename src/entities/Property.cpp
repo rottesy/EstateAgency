@@ -1,6 +1,8 @@
 #include "../../include/entities/Property.h"
 #include <algorithm>
 #include <cctype>
+#include <compare>
+#include <ranges>
 #include <stdexcept>
 
 Property::Property(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
@@ -35,9 +37,7 @@ Property::Property(const std::string &id, const std::string &city, const std::st
 
 bool Property::operator==(const Property &other) const { return id == other.id; }
 
-bool Property::operator<(const Property &other) const { return price < other.price; }
-
-bool Property::operator>(const Property &other) const { return price > other.price; }
+std::partial_ordering Property::operator<=>(const Property &other) const { return price <=> other.price; }
 
 void Property::setPrice(double newPrice)
 {
@@ -102,14 +102,7 @@ bool Property::validateId(const std::string &id)
         return false;
     }
 
-    for (char c : id)
-    {
-        if (!std::isdigit(static_cast<unsigned char>(c)))
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::ranges::all_of(id, [](char c) { return std::isdigit(static_cast<unsigned char>(c)); });
 }
 
 bool Property::validateAddressPart(const std::string &part)

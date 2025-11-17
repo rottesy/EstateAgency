@@ -1,7 +1,8 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
-#include <iomanip>
+#include <compare>
+#include <format>
 #include <iostream>
 #include <string>
 
@@ -28,8 +29,7 @@ class Property
     virtual Property *clone() const = 0;
 
     bool operator==(const Property &other) const;
-    bool operator<(const Property &other) const;
-    bool operator>(const Property &other) const;
+    std::partial_ordering operator<=>(const Property &other) const;
 
     std::string getId() const { return id; }
     std::string getCity() const { return city; }
@@ -54,13 +54,11 @@ class Property
 
     friend std::ostream &operator<<(std::ostream &os, const Property &prop)
     {
-        os << "ID: " << prop.id << "\n"
-           << "Type: " << prop.getType() << "\n"
-           << "Address: " << prop.city << ", " << prop.street << ", " << prop.house << "\n"
-           << "Price: " << std::fixed << std::setprecision(2) << prop.price << " руб.\n"
-           << "Area: " << prop.area << " м²\n"
-           << "Description: " << prop.description << "\n"
-           << "Available: " << (prop.isAvailable ? "Yes" : "No");
+        os << std::format("ID: {}\n", prop.id) << std::format("Type: {}\n", prop.getType())
+           << std::format("Address: {}, {}, {}\n", prop.city, prop.street, prop.house)
+           << std::format("Price: {:.2f} руб.\n", prop.price) << std::format("Area: {} м²\n", prop.area)
+           << std::format("Description: {}\n", prop.description)
+           << std::format("Available: {}", prop.isAvailable ? "Yes" : "No");
         return os;
     }
 };

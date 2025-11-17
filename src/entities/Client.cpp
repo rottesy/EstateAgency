@@ -1,11 +1,14 @@
 #include "../../include/entities/Client.h"
 #include "../../include/core/Utils.h"
+#include <algorithm>
 #include <cctype>
-#include <ctime>
+#include <compare>
 #include <iomanip>
+#include <ranges>
 #include <regex>
 #include <sstream>
 #include <stdexcept>
+
 
 namespace
 {
@@ -30,16 +33,12 @@ Client::Client(const std::string &id, const std::string &name, const std::string
         throw std::invalid_argument("Invalid email format");
     }
 
-    auto now = std::time(nullptr);
-    auto tm = Utils::getLocalTime(now);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, DATE_FORMAT);
-    registrationDate = oss.str();
+    registrationDate = Utils::getCurrentTimeString(DATE_FORMAT);
 }
 
 bool Client::operator==(const Client &other) const { return id == other.id; }
 
-bool Client::operator<(const Client &other) const { return name < other.name; }
+std::strong_ordering Client::operator<=>(const Client &other) const { return name <=> other.name; }
 
 void Client::setName(const std::string &newName)
 {
@@ -75,14 +74,7 @@ bool Client::validateId(const std::string &id)
         return false;
     }
 
-    for (char c : id)
-    {
-        if (!std::isdigit(static_cast<unsigned char>(c)))
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::ranges::all_of(id, [](char c) { return std::isdigit(static_cast<unsigned char>(c)); });
 }
 
 bool Client::validatePhone(const std::string &phone)

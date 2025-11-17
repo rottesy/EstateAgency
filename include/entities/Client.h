@@ -1,6 +1,7 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+#include <compare>
 #include <iostream>
 #include <string>
 
@@ -19,7 +20,7 @@ class Client
     friend std::ostream &operator<<(std::ostream &os, const Client &client);
 
     bool operator==(const Client &other) const;
-    bool operator<(const Client &other) const;
+    std::strong_ordering operator<=>(const Client &other) const;
 
     std::string getId() const { return id; }
     std::string getName() const { return name; }

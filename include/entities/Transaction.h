@@ -1,7 +1,8 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include <iomanip>
+#include <compare>
+#include <format>
 #include <iostream>
 #include <string>
 
@@ -23,7 +24,7 @@ class Transaction
     friend std::ostream &operator<<(std::ostream &os, const Transaction &trans);
 
     bool operator==(const Transaction &other) const;
-    bool operator<(const Transaction &other) const;
+    std::strong_ordering operator<=>(const Transaction &other) const;
 
     std::string getId() const { return id; }
     std::string getPropertyId() const { return propertyId; }
@@ -44,13 +45,10 @@ class Transaction
 
     friend std::ostream &operator<<(std::ostream &os, const Transaction &trans)
     {
-        os << "Transaction ID: " << trans.id << "\n"
-           << "Property ID: " << trans.propertyId << "\n"
-           << "Client ID: " << trans.clientId << "\n"
-           << "Date: " << trans.date << "\n"
-           << "Final Price: " << std::fixed << std::setprecision(2) << trans.finalPrice << " руб.\n"
-           << "Status: " << trans.status << "\n"
-           << "Notes: " << trans.notes;
+        os << std::format("Transaction ID: {}\n", trans.id) << std::format("Property ID: {}\n", trans.propertyId)
+           << std::format("Client ID: {}\n", trans.clientId) << std::format("Date: {}\n", trans.date)
+           << std::format("Final Price: {:.2f} руб.\n", trans.finalPrice) << std::format("Status: {}\n", trans.status)
+           << std::format("Notes: {}", trans.notes);
         return os;
     }
 };

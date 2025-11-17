@@ -2,7 +2,11 @@
 #define UTILS_H
 
 #include <QString>
+#include <chrono>
 #include <ctime>
+#include <iomanip>
+#include <ranges>
+#include <sstream>
 #include <string>
 
 #ifdef _WIN32
@@ -25,6 +29,17 @@ inline std::tm getLocalTime(std::time_t time)
     return result;
 }
 
+// Format current time using std::chrono
+inline std::string getCurrentTimeString(const char *format = "%Y-%m-%d %H:%M:%S")
+{
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    auto tm = getLocalTime(time);
+    std::ostringstream oss;
+    oss << std::put_time(&tm, format);
+    return oss.str();
+}
+
 inline std::string toString(const QString &qstr) { return qstr.toStdString(); }
 
 inline QString toQString(const std::string &str) { return QString::fromStdString(str); }
@@ -41,14 +56,7 @@ inline bool isNumericId(const QString &str)
     {
         return false;
     }
-    for (const QChar &ch : str)
-    {
-        if (!ch.isDigit())
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::ranges::all_of(str, [](const QChar &ch) { return ch.isDigit(); });
 }
 } // namespace Utils
 
