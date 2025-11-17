@@ -35,14 +35,6 @@ void PropertyManager::addApartment(const ApartmentParams &params)
     }
 }
 
-void PropertyManager::addApartment(const std::string &id, const std::string &city, const std::string &street,
-                                   const std::string &house, double price, double area, const std::string &description,
-                                   int rooms, int floor, bool hasBalcony, bool hasElevator)
-{
-    addApartment(
-        ApartmentParams{{id, city, street, house, price, area, description}, rooms, floor, hasBalcony, hasElevator});
-}
-
 void PropertyManager::addHouse(const HouseParams &params)
 {
     try
@@ -56,14 +48,6 @@ void PropertyManager::addHouse(const HouseParams &params)
     }
 }
 
-void PropertyManager::addHouse(const std::string &id, const std::string &city, const std::string &street,
-                               const std::string &house, double price, double area, const std::string &description,
-                               int floors, int rooms, double landArea, bool hasGarage, bool hasGarden)
-{
-    addHouse(HouseParams{
-        {id, city, street, house, price, area, description}, floors, rooms, landArea, hasGarage, hasGarden});
-}
-
 void PropertyManager::addCommercialProperty(const CommercialPropertyParams &params)
 {
     try
@@ -75,18 +59,6 @@ void PropertyManager::addCommercialProperty(const CommercialPropertyParams &para
     {
         throw PropertyManagerException(std::string("Failed to add commercial property: ") + e.what());
     }
-}
-
-void PropertyManager::addCommercialProperty(const std::string &id, const std::string &city, const std::string &street,
-                                            const std::string &house, double price, double area,
-                                            const std::string &description, const std::string &businessType,
-                                            bool hasParking, int parkingSpaces, bool isVisibleFromStreet)
-{
-    addCommercialProperty(CommercialPropertyParams{{id, city, street, house, price, area, description},
-                                                   businessType,
-                                                   hasParking,
-                                                   parkingSpaces,
-                                                   isVisibleFromStreet});
 }
 
 bool PropertyManager::removeProperty(const std::string &id)

@@ -5,6 +5,7 @@
 #include "../../include/entities/Client.h"
 #include "../../include/entities/CommercialProperty.h"
 #include "../../include/entities/House.h"
+#include "../../include/entities/PropertyParams.h"
 #include "../../include/entities/Transaction.h"
 #include "../../include/services/PropertyManager.h"
 #include "../../include/ui/PropertyDialog.h"
@@ -16,6 +17,7 @@
 #include <QTableWidgetItem>
 #include <functional>
 #include <ranges>
+
 
 PropertiesWidget::PropertiesWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency)
 {
@@ -142,24 +144,34 @@ void PropertiesWidget::addProperty()
 
             if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeApartment)
             {
-                agency->getPropertyManager().addApartment(
-                    Utils::toString(id), Utils::toString(city), Utils::toString(street), Utils::toString(house), price,
-                    area, Utils::toString(description), dialog.getRooms(), dialog.getFloor(), dialog.getHasBalcony(),
-                    dialog.getHasElevator());
+                ApartmentParams params{{Utils::toString(id), Utils::toString(city), Utils::toString(street),
+                                        Utils::toString(house), price, area, Utils::toString(description)},
+                                       dialog.getRooms(),
+                                       dialog.getFloor(),
+                                       dialog.getHasBalcony(),
+                                       dialog.getHasElevator()};
+                agency->getPropertyManager().addApartment(params);
             }
             else if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeHouse)
             {
-                agency->getPropertyManager().addHouse(
-                    Utils::toString(id), Utils::toString(city), Utils::toString(street), Utils::toString(house), price,
-                    area, Utils::toString(description), dialog.getFloors(), dialog.getRooms(), dialog.getLandArea(),
-                    dialog.getHasGarage(), dialog.getHasGarden());
+                HouseParams params{{Utils::toString(id), Utils::toString(city), Utils::toString(street),
+                                    Utils::toString(house), price, area, Utils::toString(description)},
+                                   dialog.getFloors(),
+                                   dialog.getRooms(),
+                                   dialog.getLandArea(),
+                                   dialog.getHasGarage(),
+                                   dialog.getHasGarden()};
+                agency->getPropertyManager().addHouse(params);
             }
             else
             {
-                agency->getPropertyManager().addCommercialProperty(
-                    Utils::toString(id), Utils::toString(city), Utils::toString(street), Utils::toString(house), price,
-                    area, Utils::toString(description), Utils::toString(dialog.getBusinessType()),
-                    dialog.getHasParking(), dialog.getParkingSpaces(), dialog.getIsVisibleFromStreet());
+                CommercialPropertyParams params{{Utils::toString(id), Utils::toString(city), Utils::toString(street),
+                                                 Utils::toString(house), price, area, Utils::toString(description)},
+                                                Utils::toString(dialog.getBusinessType()),
+                                                dialog.getHasParking(),
+                                                dialog.getParkingSpaces(),
+                                                dialog.getIsVisibleFromStreet()};
+                agency->getPropertyManager().addCommercialProperty(params);
             }
 
             refresh();
@@ -207,24 +219,34 @@ void PropertiesWidget::editProperty()
 
             if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeApartment)
             {
-                agency->getPropertyManager().addApartment(
-                    Utils::toString(newId), Utils::toString(city), Utils::toString(street), Utils::toString(house),
-                    price, area, Utils::toString(description), dialog.getRooms(), dialog.getFloor(),
-                    dialog.getHasBalcony(), dialog.getHasElevator());
+                ApartmentParams params{{Utils::toString(newId), Utils::toString(city), Utils::toString(street),
+                                        Utils::toString(house), price, area, Utils::toString(description)},
+                                       dialog.getRooms(),
+                                       dialog.getFloor(),
+                                       dialog.getHasBalcony(),
+                                       dialog.getHasElevator()};
+                agency->getPropertyManager().addApartment(params);
             }
             else if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeHouse)
             {
-                agency->getPropertyManager().addHouse(
-                    Utils::toString(newId), Utils::toString(city), Utils::toString(street), Utils::toString(house),
-                    price, area, Utils::toString(description), dialog.getFloors(), dialog.getRooms(),
-                    dialog.getLandArea(), dialog.getHasGarage(), dialog.getHasGarden());
+                HouseParams params{{Utils::toString(newId), Utils::toString(city), Utils::toString(street),
+                                    Utils::toString(house), price, area, Utils::toString(description)},
+                                   dialog.getFloors(),
+                                   dialog.getRooms(),
+                                   dialog.getLandArea(),
+                                   dialog.getHasGarage(),
+                                   dialog.getHasGarden()};
+                agency->getPropertyManager().addHouse(params);
             }
             else
             {
-                agency->getPropertyManager().addCommercialProperty(
-                    Utils::toString(newId), Utils::toString(city), Utils::toString(street), Utils::toString(house),
-                    price, area, Utils::toString(description), Utils::toString(dialog.getBusinessType()),
-                    dialog.getHasParking(), dialog.getParkingSpaces(), dialog.getIsVisibleFromStreet());
+                CommercialPropertyParams params{{Utils::toString(newId), Utils::toString(city), Utils::toString(street),
+                                                 Utils::toString(house), price, area, Utils::toString(description)},
+                                                Utils::toString(dialog.getBusinessType()),
+                                                dialog.getHasParking(),
+                                                dialog.getParkingSpaces(),
+                                                dialog.getIsVisibleFromStreet()};
+                agency->getPropertyManager().addCommercialProperty(params);
             }
 
             refresh();

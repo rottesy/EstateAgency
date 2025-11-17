@@ -65,18 +65,8 @@ class PropertyManager
 
     void addProperty(std::unique_ptr<Property> property);
     void addApartment(const ApartmentParams &params);
-    void addApartment(const std::string &id, const std::string &city, const std::string &street,
-                      const std::string &house, double price, double area, const std::string &description, int rooms,
-                      int floor, bool hasBalcony, bool hasElevator);
     void addHouse(const HouseParams &params);
-    void addHouse(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
-                  double price, double area, const std::string &description, int floors, int rooms, double landArea,
-                  bool hasGarage, bool hasGarden);
     void addCommercialProperty(const CommercialPropertyParams &params);
-    void addCommercialProperty(const std::string &id, const std::string &city, const std::string &street,
-                               const std::string &house, double price, double area, const std::string &description,
-                               const std::string &businessType, bool hasParking, int parkingSpaces,
-                               bool isVisibleFromStreet);
 
     bool removeProperty(const std::string &id);
     Property *findProperty(const std::string &id) const;

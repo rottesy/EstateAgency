@@ -15,9 +15,6 @@ class House : public Property
 
   public:
     explicit House(const HouseParams &params);
-    House(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
-          double price, double area, const std::string &description, int floors, int rooms, double landArea,
-          bool hasGarage, bool hasGarden);
 
     std::string getType() const override;
     void displayInfo() const override;

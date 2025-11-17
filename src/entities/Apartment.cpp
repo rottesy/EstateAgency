@@ -1,4 +1,5 @@
 #include "../../include/entities/Apartment.h"
+#include "../../include/entities/PropertyParams.h"
 #include <sstream>
 #include <stdexcept>
 
@@ -25,14 +26,6 @@ Apartment::Apartment(const ApartmentParams &params)
     }
 }
 
-Apartment::Apartment(const std::string &id, const std::string &city, const std::string &street,
-                     const std::string &house, double price, double area, const std::string &description, int rooms,
-                     int floor, bool hasBalcony, bool hasElevator)
-    : Apartment(
-          ApartmentParams{{id, city, street, house, price, area, description}, rooms, floor, hasBalcony, hasElevator})
-{
-}
-
 std::string Apartment::getType() const { return "Apartment"; }
 
 void Apartment::displayInfo() const
@@ -55,8 +48,12 @@ std::string Apartment::toFileString() const
 
 Property *Apartment::clone() const
 {
-    return new Apartment(getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription(), rooms,
-                         floor, hasBalcony, hasElevator);
+    ApartmentParams params{{getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription()},
+                           rooms,
+                           floor,
+                           hasBalcony,
+                           hasElevator};
+    return new Apartment(params);
 }
 
 void Apartment::setRooms(int newRooms)

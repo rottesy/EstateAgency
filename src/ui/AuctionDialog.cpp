@@ -583,55 +583,80 @@ QString AuctionDialog::getPropertyId() const
 
 double AuctionDialog::getStartingPrice() const { return priceSpin->value(); }
 
-void AuctionDialog::createTransactionFromAuction()
+namespace
 {
-    if (!currentAuction || !agency)
-        return;
+bool hasExistingTransaction(EstateAgency *agency, const std::string &propertyId, const std::string &clientId,
+                            double amount)
+{
+    auto existingTransactions = agency->getTransactionManager().getTransactionsByProperty(propertyId);
+    return std::ranges::any_of(existingTransactions,
+                               [&clientId, amount](const Transaction *trans)
+                               {
+                                   return trans->getClientId() == clientId && trans->getStatus() == "completed" &&
+                                          trans->getFinalPrice() == amount;
+                               });
+}
 
-    const Bid *winner = currentAuction->getHighestBid();
-    if (!winner)
+std::string generateBaseTransactionId()
+{
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    auto tm = Utils::getLocalTime(time);
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%H%M%S");
+    std::string transactionId = oss.str();
+
+    if (transactionId.length() < 8)
     {
-        return;
+        transactionId += std::to_string(tm.tm_mday % 100);
     }
 
-    auto existingTransactions =
-        agency->getTransactionManager().getTransactionsByProperty(currentAuction->getPropertyId());
-    for (const Transaction *trans : existingTransactions)
+    if (transactionId.length() > 8)
     {
-        if (trans->getClientId() == winner->getClientId() && trans->getStatus() == "completed" &&
-            trans->getFinalPrice() == winner->getAmount())
-        {
+        transactionId = transactionId.substr(0, 8);
+    }
+    if (transactionId.length() < 6)
+    {
+        transactionId = transactionId + std::string(6 - transactionId.length(), '0');
+    }
 
-            return;
-        }
+    return transactionId;
+}
+
+std::string generateFallbackTransactionId(const std::string &auctionId)
+{
+    std::string cleanId;
+    for (char c : auctionId)
+    {
+        if (std::isdigit(static_cast<unsigned char>(c)))
+            cleanId += c;
     }
 
     std::string transactionId;
+    if (cleanId.length() >= 6)
     {
-        auto now = std::chrono::system_clock::now();
-        auto time = std::chrono::system_clock::to_time_t(now);
-        auto tm = Utils::getLocalTime(time);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "%H%M%S");
-        transactionId = oss.str();
-
-        if (transactionId.length() < 8)
-        {
-            transactionId += std::to_string(tm.tm_mday % 100);
-        }
-
-        if (transactionId.length() > 8)
-        {
-            transactionId = transactionId.substr(0, 8);
-        }
-        if (transactionId.length() < 6)
-        {
-            transactionId = transactionId + std::string(6 - transactionId.length(), '0');
-        }
+        transactionId = cleanId.substr(0, 6);
+    }
+    else
+    {
+        transactionId = cleanId + std::string(6 - cleanId.length(), '0');
     }
 
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::system_clock::to_time_t(now);
+    transactionId += std::to_string(time % 100);
+    if (transactionId.length() > 8)
+        transactionId = transactionId.substr(0, 8);
+
+    return transactionId;
+}
+
+std::string ensureUniqueTransactionId(EstateAgency *agency, const std::string &baseId, const std::string &auctionId)
+{
+    std::string transactionId = baseId;
+    std::string originalId = baseId;
     int suffix = 1;
-    std::string originalId = transactionId;
+
     while (agency->getTransactionManager().findTransaction(transactionId) != nullptr)
     {
         if (transactionId.length() < 8)
@@ -647,31 +672,32 @@ void AuctionDialog::createTransactionFromAuction()
             transactionId = std::format("{}{}", originalId.substr(0, 6), suffix % 100);
         }
         suffix++;
+
         if (suffix > 999)
         {
-            std::string baseId = currentAuction->getId();
-            std::string cleanId;
-            for (char c : baseId)
-            {
-                if (std::isdigit(static_cast<unsigned char>(c)))
-                    cleanId += c;
-            }
-            if (cleanId.length() >= 6)
-            {
-                transactionId = cleanId.substr(0, 6);
-            }
-            else
-            {
-                transactionId = cleanId + std::string(6 - cleanId.length(), '0');
-            }
-            auto now = std::chrono::system_clock::now();
-            auto time = std::chrono::system_clock::to_time_t(now);
-            transactionId += std::to_string(time % 100);
-            if (transactionId.length() > 8)
-                transactionId = transactionId.substr(0, 8);
+            transactionId = generateFallbackTransactionId(auctionId);
             suffix = 1;
         }
     }
+
+    return transactionId;
+}
+} // namespace
+
+void AuctionDialog::createTransactionFromAuction()
+{
+    if (!currentAuction || !agency)
+        return;
+
+    const Bid *winner = currentAuction->getHighestBid();
+    if (!winner)
+        return;
+
+    if (hasExistingTransaction(agency, currentAuction->getPropertyId(), winner->getClientId(), winner->getAmount()))
+        return;
+
+    std::string baseId = generateBaseTransactionId();
+    std::string transactionId = ensureUniqueTransactionId(agency, baseId, currentAuction->getId());
 
     try
     {

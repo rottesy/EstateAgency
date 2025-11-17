@@ -1,5 +1,6 @@
 #include "../../include/services/FileManager.h"
 #include "../../include/core/Constants.h"
+#include "../../include/entities/PropertyParams.h"
 #include <fstream>
 #include <sstream>
 #include <string_view>
@@ -78,8 +79,9 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
                 iss.ignore();
                 iss >> elevator;
 
-                auto apartment = std::make_unique<Apartment>(id, city, street, house, price, area, desc, rooms, floor,
-                                                             balcony == 1, elevator == 1);
+                ApartmentParams params{
+                    {id, city, street, house, price, area, desc}, rooms, floor, balcony == 1, elevator == 1};
+                auto apartment = std::make_unique<Apartment>(params);
                 apartment->setAvailable(avail == std::string(1, AVAILABLE_CHAR));
                 properties.push_back(std::move(apartment));
             }
@@ -119,8 +121,9 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
                 iss.ignore();
                 iss >> garden;
 
-                auto houseObj = std::make_unique<House>(id, city, street, house, price, area, desc, floors, rooms,
-                                                        landArea, garage == 1, garden == 1);
+                HouseParams params{
+                    {id, city, street, house, price, area, desc}, floors, rooms, landArea, garage == 1, garden == 1};
+                auto houseObj = std::make_unique<House>(params);
                 houseObj->setAvailable(avail == std::string(1, AVAILABLE_CHAR));
                 properties.push_back(std::move(houseObj));
             }
@@ -156,9 +159,12 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
                 iss.ignore();
                 iss >> visible;
 
-                auto commercial =
-                    std::make_unique<CommercialProperty>(id, city, street, house, price, area, desc, businessType,
-                                                         parking == 1, parkingSpaces, visible == 1);
+                CommercialPropertyParams params{{id, city, street, house, price, area, desc},
+                                                businessType,
+                                                parking == 1,
+                                                parkingSpaces,
+                                                visible == 1};
+                auto commercial = std::make_unique<CommercialProperty>(params);
                 commercial->setAvailable(avail == std::string(1, AVAILABLE_CHAR));
                 properties.push_back(std::move(commercial));
             }

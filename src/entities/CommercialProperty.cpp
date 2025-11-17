@@ -1,4 +1,5 @@
 #include "../../include/entities/CommercialProperty.h"
+#include "../../include/entities/PropertyParams.h"
 #include <sstream>
 #include <stdexcept>
 #include <string_view>
@@ -25,18 +26,6 @@ CommercialProperty::CommercialProperty(const CommercialPropertyParams &params)
     }
 }
 
-CommercialProperty::CommercialProperty(const std::string &id, const std::string &city, const std::string &street,
-                                       const std::string &house, double price, double area,
-                                       const std::string &description, const std::string &businessType, bool hasParking,
-                                       int parkingSpaces, bool isVisibleFromStreet)
-    : CommercialProperty(CommercialPropertyParams{{id, city, street, house, price, area, description},
-                                                  businessType,
-                                                  hasParking,
-                                                  parkingSpaces,
-                                                  isVisibleFromStreet})
-{
-}
-
 std::string CommercialProperty::getType() const { return "Commercial"; }
 
 void CommercialProperty::displayInfo() const
@@ -59,8 +48,13 @@ std::string CommercialProperty::toFileString() const
 
 Property *CommercialProperty::clone() const
 {
-    return new CommercialProperty(getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription(),
-                                  businessType, hasParking, parkingSpaces, isVisibleFromStreet);
+    CommercialPropertyParams params{
+        {getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription()},
+        businessType,
+        hasParking,
+        parkingSpaces,
+        isVisibleFromStreet};
+    return new CommercialProperty(params);
 }
 
 void CommercialProperty::setBusinessType(std::string_view type)

@@ -14,9 +14,6 @@ class Apartment : public Property
 
   public:
     explicit Apartment(const ApartmentParams &params);
-    Apartment(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
-              double price, double area, const std::string &description, int rooms, int floor, bool hasBalcony,
-              bool hasElevator);
 
     std::string getType() const override;
     void displayInfo() const override;
