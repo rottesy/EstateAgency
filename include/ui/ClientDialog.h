@@ -12,7 +12,7 @@ class ClientDialog : public QDialog
     Q_OBJECT
 
   public:
-    ClientDialog(QWidget *parent = nullptr, Client *editClient = nullptr);
+    explicit ClientDialog(QWidget *parent = nullptr, Client *editClient = nullptr);
     ~ClientDialog();
 
     QString getId() const;

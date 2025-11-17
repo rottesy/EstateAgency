@@ -1,7 +1,7 @@
 #include "../../include/services/AuctionManager.h"
 #include <algorithm>
 
-AuctionManager::AuctionManager() {}
+AuctionManager::AuctionManager() = default;
 
 void AuctionManager::addAuction(std::shared_ptr<Auction> auction)
 {
@@ -86,4 +86,3 @@ std::vector<Auction *> AuctionManager::getAuctionsByProperty(const std::string &
     }
     return result;
 }
-

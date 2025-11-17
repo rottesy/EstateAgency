@@ -70,7 +70,7 @@ PropertyDialog::PropertyDialog(QWidget *parent, Property *editProperty) : QDialo
     setMinimumWidth(500);
 }
 
-PropertyDialog::~PropertyDialog() {}
+PropertyDialog::~PropertyDialog() = default;
 
 void PropertyDialog::setupUI()
 {
@@ -342,5 +342,3 @@ QString PropertyDialog::getBusinessType() const { return businessTypeEdit->text(
 int PropertyDialog::getParkingSpaces() const { return parkingSpacesSpin->value(); }
 bool PropertyDialog::getIsVisibleFromStreet() const { return visibleFromStreetCheck->isChecked(); }
 bool PropertyDialog::getHasParking() const { return parkingCheck->isChecked(); }
-
-

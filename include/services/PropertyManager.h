@@ -19,7 +19,7 @@ class PropertyManagerException : public std::exception
 
 template <typename T> class ContainerManager
 {
-  protected:
+  private:
     std::vector<std::shared_ptr<T>> items;
 
   public:
@@ -86,4 +86,3 @@ class PropertyManager
 };
 
 #endif
-

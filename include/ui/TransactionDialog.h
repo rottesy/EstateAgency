@@ -17,7 +17,7 @@ class TransactionDialog : public QDialog
     Q_OBJECT
 
   public:
-    TransactionDialog(QWidget *parent = nullptr, Transaction *editTransaction = nullptr,
+    explicit TransactionDialog(QWidget *parent = nullptr, Transaction *editTransaction = nullptr,
                       const QStringList &propertyIds = QStringList(), const QStringList &clientIds = QStringList());
     ~TransactionDialog();
 

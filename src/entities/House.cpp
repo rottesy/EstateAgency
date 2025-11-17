@@ -47,15 +47,16 @@ void House::displayInfo() const
 std::string House::toFileString() const
 {
     std::ostringstream oss;
-    oss << "HOUSE|" << id << "|" << city << "|" << street << "|" << house << "|" << price << "|" << area << "|"
-        << description << "|" << (isAvailable ? "1" : "0") << "|" << floors << "|" << rooms << "|" << landArea << "|"
-        << (hasGarage ? "1" : "0") << "|" << (hasGarden ? "1" : "0");
+    oss << "HOUSE|" << getId() << "|" << getCity() << "|" << getStreet() << "|" << getHouse() << "|" << getPrice()
+        << "|" << getArea() << "|" << getDescription() << "|" << (getIsAvailable() ? "1" : "0") << "|" << floors << "|"
+        << rooms << "|" << landArea << "|" << (hasGarage ? "1" : "0") << "|" << (hasGarden ? "1" : "0");
     return oss.str();
 }
 
 Property *House::clone() const
 {
-    return new House(id, city, street, house, price, area, description, floors, rooms, landArea, hasGarage, hasGarden);
+    return new House(getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription(), floors,
+                     rooms, landArea, hasGarage, hasGarden);
 }
 
 void House::setFloors(int floors)
@@ -84,4 +85,3 @@ void House::setLandArea(double landArea)
     }
     this->landArea = landArea;
 }
-

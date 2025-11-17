@@ -70,7 +70,7 @@ TransactionDialog::TransactionDialog(QWidget *parent, Transaction *editTransacti
     setMinimumWidth(400);
 }
 
-TransactionDialog::~TransactionDialog() {}
+TransactionDialog::~TransactionDialog() = default;
 
 void TransactionDialog::setupUI()
 {

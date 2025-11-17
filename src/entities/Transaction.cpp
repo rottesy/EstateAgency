@@ -11,7 +11,7 @@ namespace
 constexpr size_t MIN_ID_LENGTH = 6;
 constexpr size_t MAX_ID_LENGTH = 8;
 constexpr double MIN_PRICE = 0.0;
-const char *DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
+constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 } // namespace
 
 Transaction::Transaction(const std::string &id, const std::string &propertyId, const std::string &clientId,
@@ -115,4 +115,3 @@ bool Transaction::validateId(const std::string &id)
     }
     return true;
 }
-

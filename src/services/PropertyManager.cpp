@@ -4,9 +4,8 @@
 #include "../../include/entities/House.h"
 #include <algorithm>
 #include <cctype>
-#include <stdexcept>
 
-PropertyManager::PropertyManager() {}
+PropertyManager::PropertyManager() = default;
 
 void PropertyManager::addProperty(std::unique_ptr<Property> property)
 {
@@ -179,4 +178,3 @@ std::vector<Property *> PropertyManager::searchByAddress(const std::string &city
     }
     return result;
 }
-

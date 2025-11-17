@@ -43,7 +43,7 @@ ClientDialog::ClientDialog(QWidget *parent, Client *editClient) : QDialog(parent
     setMinimumWidth(400);
 }
 
-ClientDialog::~ClientDialog() {}
+ClientDialog::~ClientDialog() = default;
 
 void ClientDialog::setupUI()
 {

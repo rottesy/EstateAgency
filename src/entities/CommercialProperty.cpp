@@ -39,16 +39,16 @@ void CommercialProperty::displayInfo() const
 std::string CommercialProperty::toFileString() const
 {
     std::ostringstream oss;
-    oss << "COMMERCIAL|" << id << "|" << city << "|" << street << "|" << house << "|" << price << "|" << area << "|"
-        << description << "|" << (isAvailable ? "1" : "0") << "|" << businessType << "|" << (hasParking ? "1" : "0")
-        << "|" << parkingSpaces << "|" << (isVisibleFromStreet ? "1" : "0");
+    oss << "COMMERCIAL|" << getId() << "|" << getCity() << "|" << getStreet() << "|" << getHouse() << "|" << getPrice()
+        << "|" << getArea() << "|" << getDescription() << "|" << (getIsAvailable() ? "1" : "0") << "|" << businessType
+        << "|" << (hasParking ? "1" : "0") << "|" << parkingSpaces << "|" << (isVisibleFromStreet ? "1" : "0");
     return oss.str();
 }
 
 Property *CommercialProperty::clone() const
 {
-    return new CommercialProperty(id, city, street, house, price, area, description, businessType, hasParking,
-                                  parkingSpaces, isVisibleFromStreet);
+    return new CommercialProperty(getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription(),
+                                  businessType, hasParking, parkingSpaces, isVisibleFromStreet);
 }
 
 void CommercialProperty::setBusinessType(const std::string &type)
@@ -68,4 +68,3 @@ void CommercialProperty::setParkingSpaces(int spaces)
     }
     parkingSpaces = spaces;
 }
-

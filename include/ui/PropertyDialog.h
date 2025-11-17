@@ -25,7 +25,7 @@ class PropertyDialog : public QDialog
         TypeCommercial
     };
 
-    PropertyDialog(QWidget *parent = nullptr, Property *editProperty = nullptr);
+    explicit PropertyDialog(QWidget *parent = nullptr, Property *editProperty = nullptr);
     ~PropertyDialog();
 
     PropertyType getPropertyType() const;
@@ -96,5 +96,6 @@ class PropertyDialog : public QDialog
 };
 
 #endif
+
 
 

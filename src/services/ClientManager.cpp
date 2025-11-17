@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cctype>
 
-ClientManager::ClientManager() {}
+ClientManager::ClientManager() = default;
 
 void ClientManager::addClient(std::shared_ptr<Client> client)
 {
@@ -81,4 +81,3 @@ std::vector<Client *> ClientManager::searchByPhone(const std::string &phone) con
     }
     return result;
 }
-

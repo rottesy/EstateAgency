@@ -3,11 +3,9 @@
 
 #include "../services/AuctionManager.h"
 #include "../services/ClientManager.h"
-#include "../services/FileManager.h"
 #include "../services/PropertyManager.h"
 #include "../services/TransactionManager.h"
 #include <string>
-
 
 class EstateAgency
 {
@@ -32,7 +30,7 @@ class EstateAgency
     TransactionManager &getTransactionManager() { return transactionManager; }
     AuctionManager &getAuctionManager() { return auctionManager; }
 
-    void saveAllData() const;
+    void saveAllData();
     void loadAllData();
 
     void setDataDirectory(const std::string &dir) { dataDirectory = dir; }
@@ -40,4 +38,3 @@ class EstateAgency
 };
 
 #endif
-

@@ -24,7 +24,7 @@ EstateAgency::EstateAgency() : dataDirectory(DATA_DIRECTORY)
     }
 }
 
-EstateAgency::~EstateAgency() {}
+EstateAgency::~EstateAgency() = default;
 
 EstateAgency *EstateAgency::getInstance()
 {
@@ -45,16 +45,14 @@ void EstateAgency::destroyInstance()
     }
 }
 
-void EstateAgency::saveAllData() const
+void EstateAgency::saveAllData()
 {
     try
     {
-        FileManager::saveProperties(const_cast<PropertyManager &>(propertyManager),
-                                    dataDirectory + "/" + PROPERTIES_FILE);
-        FileManager::saveClients(const_cast<ClientManager &>(clientManager), dataDirectory + "/" + CLIENTS_FILE);
-        FileManager::saveTransactions(const_cast<TransactionManager &>(transactionManager),
-                                      dataDirectory + "/" + TRANSACTIONS_FILE);
-        FileManager::saveAuctions(const_cast<AuctionManager &>(auctionManager), dataDirectory + "/" + AUCTIONS_FILE);
+        FileManager::saveProperties(propertyManager, dataDirectory + "/" + PROPERTIES_FILE);
+        FileManager::saveClients(clientManager, dataDirectory + "/" + CLIENTS_FILE);
+        FileManager::saveTransactions(transactionManager, dataDirectory + "/" + TRANSACTIONS_FILE);
+        FileManager::saveAuctions(auctionManager, dataDirectory + "/" + AUCTIONS_FILE);
     }
     catch (const std::exception &e)
     {

@@ -40,15 +40,16 @@ void Apartment::displayInfo() const
 std::string Apartment::toFileString() const
 {
     std::ostringstream oss;
-    oss << "APARTMENT|" << id << "|" << city << "|" << street << "|" << house << "|" << price << "|" << area << "|"
-        << description << "|" << (isAvailable ? "1" : "0") << "|" << rooms << "|" << floor << "|"
-        << (hasBalcony ? "1" : "0") << "|" << (hasElevator ? "1" : "0");
+    oss << "APARTMENT|" << getId() << "|" << getCity() << "|" << getStreet() << "|" << getHouse() << "|" << getPrice()
+        << "|" << getArea() << "|" << getDescription() << "|" << (getIsAvailable() ? "1" : "0") << "|" << rooms << "|"
+        << floor << "|" << (hasBalcony ? "1" : "0") << "|" << (hasElevator ? "1" : "0");
     return oss.str();
 }
 
 Property *Apartment::clone() const
 {
-    return new Apartment(id, city, street, house, price, area, description, rooms, floor, hasBalcony, hasElevator);
+    return new Apartment(getId(), getCity(), getStreet(), getHouse(), getPrice(), getArea(), getDescription(), rooms,
+                         floor, hasBalcony, hasElevator);
 }
 
 void Apartment::setRooms(int rooms)
@@ -68,4 +69,3 @@ void Apartment::setFloor(int floor)
     }
     this->floor = floor;
 }
-

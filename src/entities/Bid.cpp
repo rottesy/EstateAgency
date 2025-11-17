@@ -7,7 +7,7 @@
 namespace
 {
 constexpr double MIN_AMOUNT = 0.0;
-const char *DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
+constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 constexpr int PRICE_PRECISION = 2;
 } // namespace
 
@@ -61,4 +61,3 @@ std::string Bid::toFileString() const
         << timestamp;
     return oss.str();
 }
-

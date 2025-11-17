@@ -1,6 +1,5 @@
 #include "../../include/entities/Auction.h"
 #include "../../include/core/Constants.h"
-#include <algorithm>
 #include <ctime>
 #include <iomanip>
 #include <sstream>
@@ -12,7 +11,7 @@ constexpr double MIN_PRICE = 0.0;
 constexpr double BUYOUT_MULTIPLIER = 1.7;
 constexpr double MIN_BID_INCREMENT = 0.01;
 constexpr double NO_BID = 0.0;
-const char *DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
+constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 constexpr int PRICE_PRECISION = 2;
 } // namespace
 
@@ -170,4 +169,3 @@ std::string Auction::toFileString() const
         << startingPrice << "|" << buyoutPrice << "|" << status << "|" << createdAt << "|" << completedAt;
     return oss.str();
 }
-

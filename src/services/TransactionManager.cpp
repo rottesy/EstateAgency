@@ -1,7 +1,7 @@
 #include "../../include/services/TransactionManager.h"
 #include <algorithm>
 
-TransactionManager::TransactionManager() {}
+TransactionManager::TransactionManager() = default;
 
 void TransactionManager::addTransaction(std::shared_ptr<Transaction> transaction)
 {
@@ -86,4 +86,3 @@ std::vector<Transaction *> TransactionManager::getTransactionsByStatus(const std
     }
     return result;
 }
-

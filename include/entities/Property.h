@@ -6,7 +6,7 @@
 
 class Property
 {
-  protected:
+  private:
     std::string id;
     std::string city;
     std::string street;
@@ -58,4 +58,3 @@ class Property
 std::ostream &operator<<(std::ostream &os, const Property &prop);
 
 #endif
-

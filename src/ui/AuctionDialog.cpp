@@ -125,7 +125,7 @@ AuctionDialog::AuctionDialog(QWidget *parent, Auction *editAuction, const QStrin
     setMinimumHeight(500);
 }
 
-AuctionDialog::~AuctionDialog() {}
+AuctionDialog::~AuctionDialog() = default;
 
 void AuctionDialog::setupUI()
 {

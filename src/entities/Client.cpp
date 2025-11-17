@@ -10,7 +10,7 @@ namespace
 {
 constexpr size_t MIN_ID_LENGTH = 6;
 constexpr size_t MAX_ID_LENGTH = 8;
-const char *DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
+constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 } // namespace
 
 Client::Client(const std::string &id, const std::string &name, const std::string &phone, const std::string &email)
@@ -112,4 +112,3 @@ std::string Client::toString() const
     oss << *this;
     return oss.str();
 }
-
