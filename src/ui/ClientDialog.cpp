@@ -74,7 +74,7 @@ void ClientDialog::setupUI()
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-void ClientDialog::loadClientData(Client *client)
+void ClientDialog::loadClientData(const Client *client)
 {
     idEdit->setText(QString::fromStdString(client->getId()));
     nameEdit->setText(QString::fromStdString(client->getName()));

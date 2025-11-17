@@ -74,9 +74,9 @@ void PropertyManager::addCommercialProperty(const std::string &id, const std::st
 
 bool PropertyManager::removeProperty(const std::string &id)
 {
-    auto removed = std::ranges::remove_if(properties,
-                                          [&id](const std::unique_ptr<Property> &prop) { return prop->getId() == id; });
-    if (removed.begin() != properties.end())
+    if (auto removed = std::ranges::remove_if(properties, [&id](const std::unique_ptr<Property> &prop)
+                                              { return prop->getId() == id; });
+        removed.begin() != properties.end())
     {
         properties.erase(removed.begin(), properties.end());
         return true;

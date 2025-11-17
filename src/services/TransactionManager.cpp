@@ -20,9 +20,9 @@ void TransactionManager::addTransaction(std::shared_ptr<Transaction> transaction
 
 bool TransactionManager::removeTransaction(const std::string &id)
 {
-    auto removed = std::ranges::remove_if(transactions, [&id](const std::shared_ptr<Transaction> &trans)
-                                          { return trans->getId() == id; });
-    if (removed.begin() != transactions.end())
+    if (auto removed = std::ranges::remove_if(transactions, [&id](const std::shared_ptr<Transaction> &trans)
+                                              { return trans->getId() == id; });
+        removed.begin() != transactions.end())
     {
         transactions.erase(removed.begin(), transactions.end());
         return true;

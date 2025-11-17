@@ -15,6 +15,7 @@
 #include "../services/TransactionManager.h"
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class FileManagerException : public std::exception
@@ -36,8 +37,8 @@ class FileManager
     static constexpr size_t BID_PREFIX_LENGTH = 4;
 
     // Вспомогательные функции для загрузки аукционов
-    static void parseBidLine(const std::string &line, Auction *currentAuction);
-    static std::shared_ptr<Auction> parseAuctionLine(const std::string &line);
+    static void parseBidLine(std::string_view line, Auction *currentAuction);
+    static std::shared_ptr<Auction> parseAuctionLine(std::string_view line);
 
   public:
     // Сохранение данных через менеджеры

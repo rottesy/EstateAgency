@@ -106,7 +106,7 @@ AuctionDialog::AuctionDialog(QWidget *parent, Auction *editAuction, const QStrin
     {
         auto clients = agency->getClientManager().getAllClients();
         QStringList clientIds;
-        for (auto *client : clients)
+        for (const auto *client : clients)
         {
             clientIds << QString::fromStdString(client->getId() + " - " + client->getName());
         }
@@ -264,7 +264,7 @@ void AuctionDialog::setupUI()
     }
 }
 
-void AuctionDialog::loadAuctionData(Auction *auction)
+void AuctionDialog::loadAuctionData(const Auction *auction)
 {
     if (!auction)
         return;
@@ -310,9 +310,7 @@ void AuctionDialog::updatePropertyInfo()
     }
 
     QString propId = propertyIds[propertyCombo->currentIndex()].split(" - ").first();
-    Property *prop = agency->getPropertyManager().findProperty(propId.toStdString());
-
-    if (prop)
+    if (const Property *prop = agency->getPropertyManager().findProperty(propId.toStdString()); prop)
     {
         double propertyPrice = prop->getPrice();
         QString priceText = QString("Цена недвижимости: %1 руб.").arg(QString::number(propertyPrice, 'f', 2));
@@ -381,7 +379,7 @@ void AuctionDialog::addBid()
     QString clientStr = clientCombo->currentText();
     QString clientId = clientStr.split(" - ").first();
 
-    Client *client = agency->getClientManager().findClient(clientId.toStdString());
+    const Client *client = agency->getClientManager().findClient(clientId.toStdString());
     if (!client)
     {
         QMessageBox::warning(this, "Ошибка", "Клиент не найден");
@@ -453,10 +451,10 @@ void AuctionDialog::completeAuction()
     const Bid *winner = currentAuction->getHighestBid();
     if (!winner)
     {
-        int ret =
-            QMessageBox::question(this, "Завершить аукцион", "На аукционе нет ставок. Завершить аукцион без сделки?",
-                                  QMessageBox::Yes | QMessageBox::No);
-        if (ret == QMessageBox::Yes)
+        if (int ret = QMessageBox::question(this, "Завершить аукцион",
+                                            "На аукционе нет ставок. Завершить аукцион без сделки?",
+                                            QMessageBox::Yes | QMessageBox::No);
+            ret == QMessageBox::Yes)
         {
             currentAuction->cancel();
             refreshAuctionInfo();
@@ -564,8 +562,7 @@ void AuctionDialog::validateAndAccept()
         return;
     }
 
-    double price = priceSpin->value();
-    if (price <= 0)
+    if (double price = priceSpin->value(); price <= 0)
     {
         QMessageBox::warning(this, "Ошибка", "Начальная цена должна быть положительной");
         return;
@@ -600,7 +597,7 @@ void AuctionDialog::createTransactionFromAuction()
 
     auto existingTransactions =
         agency->getTransactionManager().getTransactionsByProperty(currentAuction->getPropertyId());
-    for (Transaction *trans : existingTransactions)
+    for (const Transaction *trans : existingTransactions)
     {
         if (trans->getClientId() == winner->getClientId() && trans->getStatus() == "completed" &&
             trans->getFinalPrice() == winner->getAmount())

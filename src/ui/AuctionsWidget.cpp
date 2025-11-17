@@ -12,6 +12,7 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 #include <functional>
+#include <ranges>
 
 AuctionsWidget::AuctionsWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency) { setupUI(); }
 
@@ -142,7 +143,7 @@ void AuctionsWidget::addAuction()
         return;
     }
 
-    for (Property *p : properties)
+    for (const Property *p : properties)
     {
         if (!p)
             continue;
@@ -154,7 +155,7 @@ void AuctionsWidget::addAuction()
 
         auto auctions = agency->getAuctionManager().getAuctionsByProperty(propertyId);
         bool isInActiveAuction = false;
-        for (Auction *auction : auctions)
+        for (const Auction *auction : auctions)
         {
             if (auction && auction->getStatus() == "active")
             {
@@ -182,7 +183,7 @@ void AuctionsWidget::addAuction()
             QString propertyId = dialog.getPropertyId();
             double startingPrice = dialog.getStartingPrice();
 
-            Property *prop = agency->getPropertyManager().findProperty(propertyId.toStdString());
+            const Property *prop = agency->getPropertyManager().findProperty(propertyId.toStdString());
             if (!prop)
             {
                 QMessageBox::warning(this, "Ошибка", "Недвижимость не найдена");
@@ -220,7 +221,7 @@ void AuctionsWidget::viewAuction()
 
     QStringList propertyIds;
     auto properties = agency->getPropertyManager().getAllProperties();
-    for (Property *p : properties)
+    for (const Property *p : properties)
         propertyIds << QString::fromStdString(p->getId() + " - " + p->getAddress());
 
     AuctionDialog dialog(this, auction, propertyIds);
@@ -272,7 +273,7 @@ void AuctionsWidget::searchAuctions()
 
     if (isNumericOnly && searchText.length() >= 6 && searchText.length() <= 8)
     {
-        Auction *auction = agency->getAuctionManager().findAuction(searchText.toStdString());
+        const Auction *auction = agency->getAuctionManager().findAuction(searchText.toStdString());
         if (auction)
         {
             int row = auctionsTable->rowCount();
@@ -314,7 +315,7 @@ void AuctionsWidget::auctionSelectionChanged()
     int row = auctionsTable->currentRow();
     if (row >= 0 && row < auctionsTable->rowCount())
     {
-        QTableWidgetItem *item = auctionsTable->item(row, 0);
+        const QTableWidgetItem *item = auctionsTable->item(row, 0);
         if (item)
         {
             QString id = item->text();
@@ -325,12 +326,12 @@ void AuctionsWidget::auctionSelectionChanged()
     }
 }
 
-void AuctionsWidget::showAuctionDetails(Auction *auction)
+void AuctionsWidget::showAuctionDetails(const Auction *auction)
 {
     if (!auction)
         return;
 
-    Property *prop = agency->getPropertyManager().findProperty(auction->getPropertyId());
+    const Property *prop = agency->getPropertyManager().findProperty(auction->getPropertyId());
 
     QString html;
     html += "<html><body style='font-family: Arial, sans-serif;'>";
@@ -348,8 +349,7 @@ void AuctionsWidget::showAuctionDetails(Auction *auction)
     if (!auction->getCompletedAt().empty())
         html += "<p><b>Дата завершения:</b> " + QString::fromStdString(auction->getCompletedAt()) + "</p>";
 
-    double currentBid = auction->getCurrentHighestBid();
-    if (currentBid > 0)
+    if (double currentBid = auction->getCurrentHighestBid(); currentBid > 0)
     {
         const Bid *highest = auction->getHighestBid();
         html += "<p><b>Текущая максимальная ставка:</b> " + QString::number(currentBid, 'f', 2) + " руб.</p>";
@@ -378,8 +378,7 @@ void AuctionsWidget::showAuctionDetails(Auction *auction)
         html += "<p>Недвижимость не найдена.</p>";
 
     html += "<h3 style='font-weight: bold; margin-top: 20px; margin-bottom: 10px;'>СТАВКИ</h3>";
-    auto bids = auction->getBids();
-    if (bids.empty())
+    if (auto bids = auction->getBids(); bids.empty())
         html += "<p>Ставок пока нет.</p>";
     else
     {
@@ -404,13 +403,12 @@ void AuctionsWidget::showAuctionDetails(Auction *auction)
 bool AuctionsWidget::hasActiveTransactions(const std::string &propertyId)
 {
     auto transactions = agency->getTransactionManager().getTransactionsByProperty(propertyId);
-    for (Transaction *t : transactions)
-    {
-        if (t && (t->getStatus() == Constants::TransactionStatus::PENDING ||
-                  t->getStatus() == Constants::TransactionStatus::COMPLETED))
-            return true;
-    }
-    return false;
+    return std::ranges::any_of(transactions,
+                               [](const Transaction *t)
+                               {
+                                   return t && (t->getStatus() == Constants::TransactionStatus::PENDING ||
+                                                t->getStatus() == Constants::TransactionStatus::COMPLETED);
+                               });
 }
 
 QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString &id,
@@ -463,9 +461,12 @@ void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
     }
 }
 
-QString AuctionsWidget::getSelectedIdFromTable(QTableWidget *table) const { return TableHelper::getSelectedId(table); }
+QString AuctionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
+{
+    return TableHelper::getSelectedId(table);
+}
 
-bool AuctionsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
+bool AuctionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {

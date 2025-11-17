@@ -2,6 +2,7 @@
 #include "../../include/core/Constants.h"
 #include <fstream>
 #include <sstream>
+#include <string_view>
 
 void FileManager::saveProperties(const PropertyManager &manager, const std::string &filename)
 {
@@ -344,7 +345,7 @@ void FileManager::saveAuctions(const AuctionManager &manager, const std::string 
     file.close();
 }
 
-void FileManager::parseBidLine(const std::string &line, Auction *currentAuction)
+void FileManager::parseBidLine(std::string_view line, Auction *currentAuction)
 {
     if (currentAuction == nullptr)
     {
@@ -353,7 +354,8 @@ void FileManager::parseBidLine(const std::string &line, Auction *currentAuction)
 
     try
     {
-        std::istringstream iss(line.substr(BID_PREFIX_LENGTH));
+        std::string lineStr(line);
+        std::istringstream iss(lineStr.substr(BID_PREFIX_LENGTH));
         std::string auctionId;
         std::string clientId;
         std::string clientName;
@@ -387,19 +389,22 @@ void FileManager::parseBidLine(const std::string &line, Auction *currentAuction)
         auto bid = std::make_shared<Bid>(clientId, clientName, amount);
         currentAuction->addBidDirect(bid);
     }
-    catch (const std::invalid_argument &)
+    catch (const std::invalid_argument &e)
     {
         // Skip invalid bid data
+        (void)e; // Suppress unused variable warning
     }
-    catch (const AuctionManagerException &)
+    catch (const AuctionManagerException &e)
     {
         // Skip auction manager errors
+        (void)e; // Suppress unused variable warning
     }
 }
 
-std::shared_ptr<Auction> FileManager::parseAuctionLine(const std::string &line)
+std::shared_ptr<Auction> FileManager::parseAuctionLine(std::string_view line)
 {
-    std::istringstream iss(line);
+    std::string lineStr(line);
+    std::istringstream iss(lineStr);
     std::string id;
     std::string propertyId;
     std::string propertyAddress;
@@ -433,14 +438,16 @@ std::shared_ptr<Auction> FileManager::parseAuctionLine(const std::string &line)
         }
         return auction;
     }
-    catch (const std::invalid_argument &)
+    catch (const std::invalid_argument &e)
     {
         // Skip invalid auction data
+        (void)e; // Suppress unused variable warning
         return nullptr;
     }
-    catch (const AuctionManagerException &)
+    catch (const AuctionManagerException &e)
     {
         // Skip auction manager errors
+        (void)e; // Suppress unused variable warning
         return nullptr;
     }
 }

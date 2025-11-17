@@ -32,13 +32,13 @@ class AuctionsWidget : public QWidget
 
   private:
     void setupUI();
-    void showAuctionDetails(Auction *auction);
+    void showAuctionDetails(const Auction *auction);
     bool hasActiveTransactions(const std::string &propertyId);
     QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &viewAction,
                                  const std::function<void()> &deleteAction, [[maybe_unused]] bool isView = false);
     void selectRowById(QTableWidget *table, const QString &id) const;
-    QString getSelectedIdFromTable(QTableWidget *table) const;
-    bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
+    QString getSelectedIdFromTable(const QTableWidget *table) const;
+    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;
     QTableWidget *auctionsTable;

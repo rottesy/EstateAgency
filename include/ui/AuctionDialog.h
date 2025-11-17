@@ -40,7 +40,7 @@ class AuctionDialog : public QDialog
 
   private:
     void setupUI();
-    void loadAuctionData(Auction *auction);
+    void loadAuctionData(const Auction *auction);
     void updatePropertyInfo();
     void createTransactionFromAuction();
 

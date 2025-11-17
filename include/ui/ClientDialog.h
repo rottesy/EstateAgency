@@ -25,7 +25,7 @@ class ClientDialog : public QDialog
 
   private:
     void setupUI();
-    void loadClientData(Client *client);
+    void loadClientData(const Client *client);
 
     QLineEdit *idEdit;
     QLineEdit *nameEdit;

@@ -20,7 +20,7 @@ void DashboardWidget::setupUI()
                           "margin-bottom: 10px;");
     mainLayout->addWidget(header);
 
-    auto createMetricWidget = [](const QString &label, const QString &color, QLabel **valuePtr) -> QWidget *
+    auto createMetricWidget = [](const QString &label, const QString &color, QLabel **valuePtr)
     {
         auto *widget = new QWidget;
         widget->setFixedHeight(160);
@@ -97,7 +97,7 @@ void DashboardWidget::setupUI()
     buttonsLayout->setSpacing(20);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto createModernButton = [](const QString &text, const QString &color) -> QPushButton *
+    auto createModernButton = [](const QString &text, const QString &color)
     {
         auto *btn = new QPushButton(text);
         btn->setStyleSheet(QString("QPushButton {"
@@ -152,7 +152,7 @@ void DashboardWidget::updateStats()
 
     int availableProperties = 0;
     auto properties = agency->getPropertyManager().getAllProperties();
-    for (Property *prop : properties)
+    for (const Property *prop : properties)
     {
         if (prop && prop->getIsAvailable())
         {

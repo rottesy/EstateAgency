@@ -97,7 +97,7 @@ void ClientsWidget::updateTable()
     TableHelper::clearTable(clientsTable);
     auto clients = agency->getClientManager().getAllClients();
 
-    for (Client *client : clients)
+    for (const Client *client : clients)
     {
         if (!client)
             continue;
@@ -242,7 +242,7 @@ void ClientsWidget::searchClients()
         clients = agency->getClientManager().searchByName(searchText.toStdString());
     }
 
-    for (Client *client : clients)
+    for (const Client *client : clients)
     {
         if (!client)
             continue;
@@ -283,7 +283,7 @@ void ClientsWidget::clientSelectionChanged()
     }
 }
 
-void ClientsWidget::showClientDetails(Client *client)
+void ClientsWidget::showClientDetails(const Client *client)
 {
     if (!client)
         return;
@@ -333,12 +333,12 @@ void ClientsWidget::showClientTransactions(const std::string &clientId)
     else
     {
         int num = 1;
-        for (Transaction *trans : transactions)
+        for (const Transaction *trans : transactions)
         {
             if (!trans)
                 continue;
 
-            Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
+            const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
             html += "<div style='margin-bottom: 15px;'>";
             html += "<h4 style='font-weight: bold; margin-bottom: 5px;'>Сделка #" + QString::number(num) + "</h4>";
             html += "<p><b>ID сделки:</b> " + QString::fromStdString(trans->getId()) + "</p>";
@@ -406,9 +406,12 @@ void ClientsWidget::selectRowById(QTableWidget *table, const QString &id) const
     }
 }
 
-QString ClientsWidget::getSelectedIdFromTable(QTableWidget *table) const { return TableHelper::getSelectedId(table); }
+QString ClientsWidget::getSelectedIdFromTable(const QTableWidget *table) const
+{
+    return TableHelper::getSelectedId(table);
+}
 
-bool ClientsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
+bool ClientsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {
