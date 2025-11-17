@@ -25,7 +25,7 @@ class PropertyDialog : public QDialog
         TypeCommercial
     };
 
-    explicit PropertyDialog(QWidget *parent = nullptr, Property *editProperty = nullptr);
+    explicit PropertyDialog(QWidget *parent = nullptr, const Property *editProperty = nullptr);
     ~PropertyDialog() override;
 
     PropertyType getPropertyType() const;

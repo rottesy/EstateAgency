@@ -195,7 +195,7 @@ void TransactionsWidget::editTransaction()
         return;
 
     QString id = getSelectedIdFromTable(transactionsTable);
-    Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString());
+    const Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString());
     if (!trans)
         return;
 

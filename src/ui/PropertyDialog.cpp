@@ -10,7 +10,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-PropertyDialog::PropertyDialog(QWidget *parent, Property *editProperty) : QDialog(parent)
+PropertyDialog::PropertyDialog(QWidget *parent, const Property *editProperty) : QDialog(parent)
 {
     setStyleSheet(R"(
         QDialog {

@@ -20,7 +20,7 @@ void DashboardWidget::setupUI()
                           "margin-bottom: 10px;");
     mainLayout->addWidget(header);
 
-    auto createLabelWidget = [](const QString &label, const QString &color) -> QLabel *
+    auto createLabelWidget = [](const QString &label, const QString &color)
     {
         auto *labelWidget = new QLabel(label);
         labelWidget->setStyleSheet(QString("color: %1; "
@@ -31,7 +31,7 @@ void DashboardWidget::setupUI()
         return labelWidget;
     };
 
-    auto createValueLabel = [](const QString &color) -> QLabel *
+    auto createValueLabel = [](const QString &color)
     {
         auto *valueLabel = new QLabel("0");
         valueLabel->setStyleSheet(QString("color: %1; "
@@ -109,7 +109,7 @@ void DashboardWidget::setupUI()
     buttonsLayout->setSpacing(20);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto createButtonStyle = [](const QString &color) -> QString
+    auto createButtonStyle = [](const QString &color)
     {
         return QString("QPushButton {"
                        "    background-color: transparent;"
