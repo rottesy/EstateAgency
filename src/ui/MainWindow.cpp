@@ -80,9 +80,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Неверный аргумент: %1").arg(e.what()));
     }
-    catch (const std::logic_error &e)
+    catch (const std::domain_error &e)
     {
-        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Логическая ошибка: %1").arg(e.what()));
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка домена: %1").arg(e.what()));
+    }
+    catch (const std::length_error &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка длины: %1").arg(e.what()));
+    }
+    catch (const std::out_of_range &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Выход за границы: %1").arg(e.what()));
     }
 }
 
@@ -584,9 +592,17 @@ void MainWindow::saveAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
     }
-    catch (const std::logic_error &e)
+    catch (const std::domain_error &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Логическая ошибка: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
+    }
+    catch (const std::length_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
+    }
+    catch (const std::out_of_range &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
     }
 }
 
@@ -637,8 +653,16 @@ void MainWindow::loadAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
     }
-    catch (const std::logic_error &e)
+    catch (const std::domain_error &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Логическая ошибка: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
+    }
+    catch (const std::length_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
+    }
+    catch (const std::out_of_range &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
     }
 }
