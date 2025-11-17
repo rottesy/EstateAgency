@@ -12,6 +12,8 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 #include <functional>
+#include <ranges>
+#include <string_view>
 
 TransactionsWidget::TransactionsWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency)
 {
@@ -100,7 +102,7 @@ void TransactionsWidget::updateTable()
     TableHelper::clearTable(transactionsTable);
     auto transactions = agency->getTransactionManager().getAllTransactions();
 
-    for (Transaction *trans : transactions)
+    for (const Transaction *trans : transactions)
     {
         if (!trans)
             continue;
@@ -108,8 +110,8 @@ void TransactionsWidget::updateTable()
         int row = transactionsTable->rowCount();
         transactionsTable->insertRow(row);
 
-        Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
-        Client *client = agency->getClientManager().findClient(trans->getClientId());
+        const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
+        const Client *client = agency->getClientManager().findClient(trans->getClientId());
 
         transactionsTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(trans->getId())));
         transactionsTable->setItem(row, 1,
@@ -130,7 +132,8 @@ void TransactionsWidget::updateTable()
 
 void TransactionsWidget::addTransaction()
 {
-    QStringList propertyIds, clientIds;
+    QStringList propertyIds;
+    QStringList clientIds;
     auto properties = agency->getPropertyManager().getAllProperties();
     auto clients = agency->getClientManager().getAllClients();
 
@@ -140,12 +143,12 @@ void TransactionsWidget::addTransaction()
         return;
     }
 
-    for (Property *p : properties)
+    for (const Property *p : properties)
     {
         if (p)
             propertyIds << QString::fromStdString(p->getId() + " - " + p->getAddress());
     }
-    for (Client *c : clients)
+    for (const Client *c : clients)
     {
         if (c)
             clientIds << QString::fromStdString(c->getId() + " - " + c->getName());
@@ -167,8 +170,8 @@ void TransactionsWidget::addTransaction()
                                                        dialog.getFinalPrice(), status, dialog.getNotes().toStdString());
             agency->getTransactionManager().addTransaction(trans);
 
-            Property *prop = agency->getPropertyManager().findProperty(propertyId);
-            if (prop &&
+            if (Property *prop = agency->getPropertyManager().findProperty(propertyId);
+                prop &&
                 (status == Constants::TransactionStatus::PENDING || status == Constants::TransactionStatus::COMPLETED))
                 prop->setAvailable(false);
 
@@ -196,16 +199,17 @@ void TransactionsWidget::editTransaction()
     if (!trans)
         return;
 
-    QStringList propertyIds, clientIds;
+    QStringList propertyIds;
+    QStringList clientIds;
     auto properties = agency->getPropertyManager().getAllProperties();
     auto clients = agency->getClientManager().getAllClients();
 
-    for (Property *p : properties)
+    for (const Property *p : properties)
     {
         if (p)
             propertyIds << QString::fromStdString(p->getId() + " - " + p->getAddress());
     }
-    for (Client *c : clients)
+    for (const Client *c : clients)
     {
         if (c)
             clientIds << QString::fromStdString(c->getId() + " - " + c->getName());
@@ -232,8 +236,7 @@ void TransactionsWidget::editTransaction()
                                               dialog.getFinalPrice(), status, dialog.getNotes().toStdString());
             agency->getTransactionManager().addTransaction(newTrans);
 
-            Property *prop = agency->getPropertyManager().findProperty(propertyId);
-            if (prop)
+            if (Property *prop = agency->getPropertyManager().findProperty(propertyId); prop)
                 prop->setAvailable(status == "cancelled");
 
             if (oldProp && oldPropertyId != propertyId && !hasActiveTransactions(oldPropertyId))
@@ -263,7 +266,7 @@ void TransactionsWidget::deleteTransaction()
 
     if (ret == QMessageBox::Yes)
     {
-        Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString());
+        const Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString());
         std::string propertyId = trans ? trans->getPropertyId() : "";
 
         agency->getTransactionManager().removeTransaction(id.toStdString());
@@ -306,14 +309,13 @@ void TransactionsWidget::searchTransactions()
 
     if (isNumericOnly && searchText.length() >= 6 && searchText.length() <= 8)
     {
-        Transaction *trans = agency->getTransactionManager().findTransaction(searchText.toStdString());
-        if (trans)
+        if (const Transaction *trans = agency->getTransactionManager().findTransaction(searchText.toStdString()); trans)
         {
             int row = transactionsTable->rowCount();
             transactionsTable->insertRow(row);
 
-            Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
-            Client *client = agency->getClientManager().findClient(trans->getClientId());
+            const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
+            const Client *client = agency->getClientManager().findClient(trans->getClientId());
 
             transactionsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(trans->getId())));
             transactionsTable->setItem(row, 1,
@@ -348,13 +350,13 @@ void TransactionsWidget::transactionSelectionChanged()
     }
 }
 
-void TransactionsWidget::showTransactionDetails(Transaction *trans)
+void TransactionsWidget::showTransactionDetails(const Transaction *trans)
 {
     if (!trans)
         return;
 
-    Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
-    Client *client = agency->getClientManager().findClient(trans->getClientId());
+    const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
+    const Client *client = agency->getClientManager().findClient(trans->getClientId());
 
     QString html;
     html += "<html><body style='font-family: Arial, sans-serif;'>";
@@ -391,39 +393,60 @@ void TransactionsWidget::showTransactionDetails(Transaction *trans)
     transactionDetailsText->setHtml(html);
 }
 
-bool TransactionsWidget::validateTransaction(const std::string &propertyId, const std::string &clientId,
-                                             const std::string &status, const std::string &excludeTransactionId)
+bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::string_view clientId,
+                                             std::string_view status, std::string_view excludeTransactionId)
 {
-    Property *prop = agency->getPropertyManager().findProperty(propertyId);
+    const Property *prop = agency->getPropertyManager().findProperty(std::string(propertyId));
     if (!prop)
     {
-        QMessageBox::warning(this, "Ошибка валидации",
-                             QString("Недвижимость с ID '%1' не найдена!").arg(QString::fromStdString(propertyId)));
+        QMessageBox::warning(
+            this, "Ошибка валидации",
+            QString("Недвижимость с ID '%1' не найдена!").arg(QString::fromStdString(std::string(propertyId))));
         return false;
     }
 
-    Client *client = agency->getClientManager().findClient(clientId);
-    if (!client)
+    if (const Client *client = agency->getClientManager().findClient(std::string(clientId)); !client)
     {
         QMessageBox::warning(this, "Ошибка валидации",
-                             QString("Клиент с ID '%1' не найден!").arg(QString::fromStdString(clientId)));
+                             QString("Клиент с ID '%1' не найден!").arg(QString::fromStdString(std::string(clientId))));
         return false;
     }
 
+    // Проверка доступности недвижимости для сделок со статусом pending или completed
     if (status == "pending" || status == "completed")
     {
-        auto existingTrans = agency->getTransactionManager().getTransactionsByProperty(propertyId);
-        for (Transaction *t : existingTrans)
+        // Проверяем, редактируем ли мы существующую сделку
+        bool isEditing = !std::string(excludeTransactionId).empty();
+        const Transaction *existingTrans = nullptr;
+        if (isEditing)
         {
-            if (t && !excludeTransactionId.empty() && t->getId() == excludeTransactionId)
-                continue;
+            existingTrans = agency->getTransactionManager().findTransaction(std::string(excludeTransactionId));
+        }
 
-            if (t && (t->getStatus() == "pending" || t->getStatus() == "completed"))
+        // Если создаем новую сделку или меняем недвижимость при редактировании - проверяем доступность
+        if (!isEditing || (existingTrans && existingTrans->getPropertyId() != std::string(propertyId)))
+        {
+            if (!prop->getIsAvailable())
             {
                 QMessageBox::warning(this, "Ошибка валидации",
-                                     "Недвижимость уже используется в другой активной сделке!");
+                                     QString("Недвижимость с ID '%1' уже выкуплена и недоступна для новых сделок!")
+                                         .arg(QString::fromStdString(std::string(propertyId))));
                 return false;
             }
+        }
+
+        // Проверяем наличие других активных сделок для этой недвижимости
+        auto existingTransList = agency->getTransactionManager().getTransactionsByProperty(std::string(propertyId));
+        if (std::ranges::any_of(existingTransList,
+                                [&excludeTransactionId](const Transaction *t)
+                                {
+                                    return t && !std::string(excludeTransactionId).empty() &&
+                                           t->getId() != std::string(excludeTransactionId) &&
+                                           (t->getStatus() == "pending" || t->getStatus() == "completed");
+                                }))
+        {
+            QMessageBox::warning(this, "Ошибка валидации", "Недвижимость уже используется в другой активной сделке!");
+            return false;
         }
     }
 
@@ -433,13 +456,12 @@ bool TransactionsWidget::validateTransaction(const std::string &propertyId, cons
 bool TransactionsWidget::hasActiveTransactions(const std::string &propertyId)
 {
     auto transactions = agency->getTransactionManager().getTransactionsByProperty(propertyId);
-    for (Transaction *t : transactions)
-    {
-        if (t && (t->getStatus() == Constants::TransactionStatus::PENDING ||
-                  t->getStatus() == Constants::TransactionStatus::COMPLETED))
-            return true;
-    }
-    return false;
+    return std::ranges::any_of(transactions,
+                               [](const Transaction *t)
+                               {
+                                   return t && (t->getStatus() == Constants::TransactionStatus::PENDING ||
+                                                t->getStatus() == Constants::TransactionStatus::COMPLETED);
+                               });
 }
 
 QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QString &id,
@@ -492,12 +514,12 @@ void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id) c
     }
 }
 
-QString TransactionsWidget::getSelectedIdFromTable(QTableWidget *table) const
+QString TransactionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
 {
     return TableHelper::getSelectedId(table);
 }
 
-bool TransactionsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
+bool TransactionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {

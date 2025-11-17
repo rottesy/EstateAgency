@@ -274,8 +274,7 @@ void ClientsWidget::clientSelectionChanged()
     if (row >= 0)
     {
         QString id = clientsTable->item(row, 0)->text();
-        Client *client = agency->getClientManager().findClient(id.toStdString());
-        if (client)
+        if (const Client *client = agency->getClientManager().findClient(id.toStdString()); client)
         {
             showClientDetails(client);
             showClientTransactions(id.toStdString());

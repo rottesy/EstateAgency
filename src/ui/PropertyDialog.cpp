@@ -203,7 +203,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
     descriptionEdit->setPlainText(QString::fromStdString(prop->getDescription()));
     availableCheck->setChecked(prop->getIsAvailable());
 
-    if (auto *apt = dynamic_cast<Apartment *>(prop))
+    if (const auto *apt = dynamic_cast<const Apartment *>(prop))
     {
         typeCombo->setCurrentIndex(0);
         roomsSpin->setValue(apt->getRooms());
@@ -211,7 +211,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
         balconyCheck->setChecked(apt->getHasBalcony());
         elevatorCheck->setChecked(apt->getHasElevator());
     }
-    else if (auto *house = dynamic_cast<House *>(prop))
+    else if (const auto *house = dynamic_cast<const House *>(prop))
     {
         typeCombo->setCurrentIndex(1);
         floorsSpin->setValue(house->getFloors());
@@ -220,7 +220,7 @@ void PropertyDialog::loadPropertyData(Property *prop)
         garageCheck->setChecked(house->getHasGarage());
         gardenCheck->setChecked(house->getHasGarden());
     }
-    else if (auto *comm = dynamic_cast<CommercialProperty *>(prop))
+    else if (const auto *comm = dynamic_cast<const CommercialProperty *>(prop))
     {
         typeCombo->setCurrentIndex(2);
         businessTypeEdit->setText(QString::fromStdString(comm->getBusinessType()));
@@ -304,8 +304,7 @@ void PropertyDialog::validateAndAccept()
         return;
     }
 
-    int type = typeCombo->currentIndex();
-    if (type == 2 && businessTypeEdit->text().isEmpty())
+    if (int type = typeCombo->currentIndex(); type == 2 && businessTypeEdit->text().isEmpty())
     {
         QMessageBox::warning(this, "Ошибка", "Тип бизнеса не может быть пустым");
         return;

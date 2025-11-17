@@ -388,9 +388,8 @@ void AuctionDialog::addBid()
 
     double bidAmount = bidAmountSpin->value();
 
-    auto bid = std::make_shared<Bid>(clientId.toStdString(), client->getName(), bidAmount);
-
-    if (!currentAuction->addBid(bid))
+    if (auto bid = std::make_shared<Bid>(clientId.toStdString(), client->getName(), bidAmount);
+        !currentAuction->addBid(bid))
     {
         double currentHighest = currentAuction->getCurrentHighestBid();
         double minBid = (currentHighest > 0) ? currentHighest + 0.01 : currentAuction->getStartingPrice();

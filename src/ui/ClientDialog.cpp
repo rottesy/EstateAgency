@@ -7,7 +7,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 
-ClientDialog::ClientDialog(QWidget *parent, Client *editClient) : QDialog(parent)
+ClientDialog::ClientDialog(QWidget *parent, const Client *editClient) : QDialog(parent)
 {
     setStyleSheet(R"(
         QDialog {

@@ -153,7 +153,7 @@ void TransactionDialog::setupUI()
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
-void TransactionDialog::loadTransactionData(Transaction *trans)
+void TransactionDialog::loadTransactionData(const Transaction *trans)
 {
     idEdit->setText(QString::fromStdString(trans->getId()));
     QString propertyId = QString::fromStdString(trans->getPropertyId());
@@ -265,7 +265,7 @@ void TransactionDialog::updatePriceFromProperty()
     QString propId = (separatorIndex > 0) ? propIdText.left(separatorIndex) : propIdText;
 
     EstateAgency *agency = EstateAgency::getInstance();
-    Property *prop = agency->getPropertyManager().findProperty(propId.toStdString());
+    const Property *prop = agency->getPropertyManager().findProperty(propId.toStdString());
 
     if (prop)
     {
@@ -294,7 +294,7 @@ void TransactionDialog::updatePriceDifference()
     QString propId = (separatorIndex > 0) ? propIdText.left(separatorIndex) : propIdText;
 
     EstateAgency *agency = EstateAgency::getInstance();
-    Property *prop = agency->getPropertyManager().findProperty(propId.toStdString());
+    const Property *prop = agency->getPropertyManager().findProperty(propId.toStdString());
 
     if (prop)
     {
@@ -329,8 +329,7 @@ QString TransactionDialog::getId() const { return idEdit->text(); }
 QString TransactionDialog::getPropertyId() const
 {
     QString text = propertyCombo->currentText();
-    int separatorIndex = text.indexOf(" - ");
-    if (separatorIndex > 0)
+    if (int separatorIndex = text.indexOf(" - "); separatorIndex > 0)
     {
         return text.left(separatorIndex);
     }
@@ -339,8 +338,7 @@ QString TransactionDialog::getPropertyId() const
 QString TransactionDialog::getClientId() const
 {
     QString text = clientCombo->currentText();
-    int separatorIndex = text.indexOf(" - ");
-    if (separatorIndex > 0)
+    if (int separatorIndex = text.indexOf(" - "); separatorIndex > 0)
     {
         return text.left(separatorIndex);
     }

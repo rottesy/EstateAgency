@@ -44,16 +44,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     }
     catch (const FileManagerException &e)
     {
-        QMessageBox::critical(nullptr, "Ошибка инициализации",
-                              QString("Ошибка при инициализации приложения: %1").arg(e.what()));
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка файлового менеджера: %1").arg(e.what()));
     }
     catch (const std::filesystem::filesystem_error &e)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (...)
+    catch (const std::exception &e)
     {
-        QMessageBox::critical(nullptr, "Ошибка инициализации", "Неизвестная ошибка при инициализации приложения");
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка при инициализации: %1").arg(e.what()));
     }
 }
 
@@ -525,15 +524,15 @@ void MainWindow::saveAllData()
     }
     catch (const FileManagerException &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка сохранения: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
     }
     catch (const std::filesystem::filesystem_error &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (...)
+    catch (const std::exception &e)
     {
-        QMessageBox::warning(this, "Ошибка", "Неизвестная ошибка при сохранении данных");
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка при сохранении: %1").arg(e.what()));
     }
 }
 
@@ -554,14 +553,14 @@ void MainWindow::loadAllData()
     }
     catch (const FileManagerException &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка загрузки: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
     }
     catch (const std::filesystem::filesystem_error &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (...)
+    catch (const std::exception &e)
     {
-        QMessageBox::warning(this, "Ошибка", "Неизвестная ошибка при загрузке данных");
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка при загрузке: %1").arg(e.what()));
     }
 }

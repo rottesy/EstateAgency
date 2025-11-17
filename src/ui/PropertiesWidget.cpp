@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 #include <functional>
+#include <ranges>
 
 PropertiesWidget::PropertiesWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency)
 {
@@ -102,7 +103,7 @@ void PropertiesWidget::updateTable()
     TableHelper::clearTable(propertiesTable);
     auto properties = agency->getPropertyManager().getAllProperties();
 
-    for (Property *prop : properties)
+    for (const Property *prop : properties)
     {
         if (!prop)
             continue;
@@ -302,7 +303,7 @@ void PropertiesWidget::searchProperties()
         properties = agency->getPropertyManager().searchByAddress(searchText.toStdString(), "", "");
     }
 
-    for (Property *prop : properties)
+    for (const Property *prop : properties)
     {
         int row = propertiesTable->rowCount();
         propertiesTable->insertRow(row);
@@ -331,7 +332,7 @@ void PropertiesWidget::propertySelectionChanged()
     int row = propertiesTable->currentRow();
     if (row >= 0 && row < propertiesTable->rowCount())
     {
-        QTableWidgetItem *item = propertiesTable->item(row, 0);
+        const QTableWidgetItem *item = propertiesTable->item(row, 0);
         if (item)
         {
             QString id = item->text();
@@ -345,7 +346,7 @@ void PropertiesWidget::propertySelectionChanged()
     }
 }
 
-void PropertiesWidget::showPropertyDetails(Property *prop)
+void PropertiesWidget::showPropertyDetails(const Property *prop)
 {
     if (!prop)
         return;
@@ -372,14 +373,14 @@ void PropertiesWidget::showPropertyDetails(Property *prop)
     html += "<h3 style='font-weight: bold; margin-top: 20px; margin-bottom: "
             "10px;'>ДОПОЛНИТЕЛЬНЫЕ ХАРАКТЕРИСТИКИ</h3>";
 
-    if (auto *apt = dynamic_cast<Apartment *>(prop))
+    if (const auto *apt = dynamic_cast<const Apartment *>(prop))
     {
         html += "<p><b>Комнат:</b> " + QString::number(apt->getRooms()) + "</p>";
         html += "<p><b>Этаж:</b> " + QString::number(apt->getFloor()) + "</p>";
         html += "<p><b>Балкон:</b> " + QString(apt->getHasBalcony() ? "Да" : "Нет") + "</p>";
         html += "<p><b>Лифт:</b> " + QString(apt->getHasElevator() ? "Да" : "Нет") + "</p>";
     }
-    else if (auto *house = dynamic_cast<House *>(prop))
+    else if (const auto *house = dynamic_cast<const House *>(prop))
     {
         html += "<p><b>Этажей:</b> " + QString::number(house->getFloors()) + "</p>";
         html += "<p><b>Комнат:</b> " + QString::number(house->getRooms()) + "</p>";
@@ -387,7 +388,7 @@ void PropertiesWidget::showPropertyDetails(Property *prop)
         html += "<p><b>Гараж:</b> " + QString(house->getHasGarage() ? "Да" : "Нет") + "</p>";
         html += "<p><b>Сад:</b> " + QString(house->getHasGarden() ? "Да" : "Нет") + "</p>";
     }
-    else if (auto *comm = dynamic_cast<CommercialProperty *>(prop))
+    else if (const auto *comm = dynamic_cast<const CommercialProperty *>(prop))
     {
         html += "<p><b>Тип бизнеса:</b> " + QString::fromStdString(comm->getBusinessType()) + "</p>";
         html += "<p><b>Парковка:</b> " + QString(comm->getHasParking() ? "Да" : "Нет") + "</p>";
@@ -429,12 +430,12 @@ void PropertiesWidget::showPropertyTransactions(const std::string &propertyId)
     else
     {
         int num = 1;
-        for (Transaction *trans : transactions)
+        for (const Transaction *trans : transactions)
         {
             if (!trans)
                 continue;
 
-            Client *client = agency->getClientManager().findClient(trans->getClientId());
+            const Client *client = agency->getClientManager().findClient(trans->getClientId());
             html += "<div style='margin-bottom: 15px;'>";
             html += "<h4 style='font-weight: bold; margin-bottom: 5px;'>Сделка #" + QString::number(num) + "</h4>";
             html += "<p><b>ID сделки:</b> " + QString::fromStdString(trans->getId()) + "</p>";
@@ -501,12 +502,12 @@ void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id) con
     }
 }
 
-QString PropertiesWidget::getSelectedIdFromTable(QTableWidget *table) const
+QString PropertiesWidget::getSelectedIdFromTable(const QTableWidget *table) const
 {
     return TableHelper::getSelectedId(table);
 }
 
-bool PropertiesWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
+bool PropertiesWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {
@@ -521,12 +522,5 @@ bool PropertiesWidget::checkTableSelection(QTableWidget *table, const QString &e
 
 bool PropertiesWidget::isNumericId(const QString &text) const
 {
-    for (QChar ch : text)
-    {
-        if (!ch.isDigit())
-        {
-            return false;
-        }
-    }
-    return true;
+    return std::ranges::all_of(text, [](const QChar &ch) { return ch.isDigit(); });
 }

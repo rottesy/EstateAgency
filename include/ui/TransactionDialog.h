@@ -34,7 +34,7 @@ class TransactionDialog : public QDialog
 
   private:
     void setupUI();
-    void loadTransactionData(Transaction *trans);
+    void loadTransactionData(const Transaction *trans);
     void updatePriceFromProperty();
     void updatePriceDifference();
 

@@ -97,7 +97,7 @@ void AuctionsWidget::updateTable()
     auctionsTable->setRowCount(0);
     auto auctions = agency->getAuctionManager().getAllAuctions();
 
-    for (Auction *auction : auctions)
+    for (const Auction *auction : auctions)
     {
         if (!auction)
             continue;
@@ -319,8 +319,7 @@ void AuctionsWidget::auctionSelectionChanged()
         if (item)
         {
             QString id = item->text();
-            Auction *auction = agency->getAuctionManager().findAuction(id.toStdString());
-            if (auction)
+            if (const Auction *auction = agency->getAuctionManager().findAuction(id.toStdString()); auction)
                 showAuctionDetails(auction);
         }
     }
