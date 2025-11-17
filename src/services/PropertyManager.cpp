@@ -1,4 +1,5 @@
 #include "../../include/services/PropertyManager.h"
+#include "../../include/core/Utils.h"
 #include "../../include/entities/Apartment.h"
 #include "../../include/entities/CommercialProperty.h"
 #include "../../include/entities/House.h"
@@ -158,15 +159,15 @@ std::vector<Property *> PropertyManager::searchByAddress(const std::string &city
                        [](unsigned char c) { return std::tolower(c); });
 
         bool matches = true;
-        if (!lowerCity.empty() && propCity.find(lowerCity) == std::string::npos)
+        if (!lowerCity.empty() && !Utils::stringContains(propCity, lowerCity))
         {
             matches = false;
         }
-        if (!lowerStreet.empty() && propStreet.find(lowerStreet) == std::string::npos)
+        if (!lowerStreet.empty() && !Utils::stringContains(propStreet, lowerStreet))
         {
             matches = false;
         }
-        if (!lowerHouse.empty() && propHouse.find(lowerHouse) == std::string::npos)
+        if (!lowerHouse.empty() && !Utils::stringContains(propHouse, lowerHouse))
         {
             matches = false;
         }

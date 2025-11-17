@@ -331,7 +331,7 @@ void FileManager::loadAuctions(AuctionManager &manager, const std::string &filen
             continue;
         }
 
-        if (line.length() >= BID_PREFIX_LENGTH && line.substr(0, BID_PREFIX_LENGTH) == BID_PREFIX)
+        if (line.starts_with(BID_PREFIX))
         {
             if (currentAuction == nullptr)
             {

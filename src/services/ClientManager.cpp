@@ -1,4 +1,5 @@
 #include "../../include/services/ClientManager.h"
+#include "../../include/core/Utils.h"
 #include <algorithm>
 #include <cctype>
 
@@ -61,7 +62,7 @@ std::vector<Client *> ClientManager::searchByName(const std::string &name) const
         std::string clientName = client->getName();
         std::transform(clientName.begin(), clientName.end(), clientName.begin(),
                        [](unsigned char c) { return std::tolower(c); });
-        if (clientName.find(lowerName) != std::string::npos)
+        if (Utils::stringContains(clientName, lowerName))
         {
             result.push_back(client.get());
         }

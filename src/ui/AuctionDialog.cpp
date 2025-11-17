@@ -14,6 +14,7 @@
 #include <cctype>
 #include <chrono>
 #include <ctime>
+#include <format>
 #include <iomanip>
 #include <sstream>
 
@@ -639,7 +640,7 @@ void AuctionDialog::createTransactionFromAuction()
     {
         if (transactionId.length() < 8)
         {
-            transactionId = originalId + std::to_string(suffix % 10);
+            transactionId = std::format("{}{}", originalId, suffix % 10);
             if (transactionId.length() > 8)
             {
                 transactionId = transactionId.substr(0, 8);
@@ -647,7 +648,7 @@ void AuctionDialog::createTransactionFromAuction()
         }
         else
         {
-            transactionId = originalId.substr(0, 6) + std::to_string(suffix % 100);
+            transactionId = std::format("{}{}", originalId.substr(0, 6), suffix % 100);
         }
         suffix++;
         if (suffix > 999)

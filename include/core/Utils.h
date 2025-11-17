@@ -58,6 +58,12 @@ inline bool isNumericId(const QString &str)
     }
     return std::ranges::all_of(str, [](const QChar &ch) { return ch.isDigit(); });
 }
+
+// Helper function to check if string contains substring (C++20 compatible)
+inline bool stringContains(const std::string &str, const std::string &substr)
+{
+    return str.find(substr) != std::string::npos;
+}
 } // namespace Utils
 
 #endif
