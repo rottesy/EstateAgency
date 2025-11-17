@@ -18,7 +18,7 @@ class PropertyDialog : public QDialog
     Q_OBJECT
 
   public:
-    enum PropertyType
+    enum class PropertyType
     {
         TypeApartment,
         TypeHouse,
@@ -26,7 +26,7 @@ class PropertyDialog : public QDialog
     };
 
     explicit PropertyDialog(QWidget *parent = nullptr, Property *editProperty = nullptr);
-    ~PropertyDialog();
+    ~PropertyDialog() override;
 
     PropertyType getPropertyType() const;
 
@@ -96,6 +96,3 @@ class PropertyDialog : public QDialog
 };
 
 #endif
-
-
-

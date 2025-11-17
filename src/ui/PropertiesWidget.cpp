@@ -139,14 +139,14 @@ void PropertiesWidget::addProperty()
             double area = dialog.getArea();
             QString description = dialog.getDescription();
 
-            if (dialog.getPropertyType() == PropertyDialog::TypeApartment)
+            if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeApartment)
             {
                 agency->getPropertyManager().addApartment(
                     Utils::toString(id), Utils::toString(city), Utils::toString(street), Utils::toString(house), price,
                     area, Utils::toString(description), dialog.getRooms(), dialog.getFloor(), dialog.getHasBalcony(),
                     dialog.getHasElevator());
             }
-            else if (dialog.getPropertyType() == PropertyDialog::TypeHouse)
+            else if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeHouse)
             {
                 agency->getPropertyManager().addHouse(
                     Utils::toString(id), Utils::toString(city), Utils::toString(street), Utils::toString(house), price,
@@ -204,14 +204,14 @@ void PropertiesWidget::editProperty()
             double area = dialog.getArea();
             QString description = dialog.getDescription();
 
-            if (dialog.getPropertyType() == PropertyDialog::TypeApartment)
+            if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeApartment)
             {
                 agency->getPropertyManager().addApartment(
                     Utils::toString(newId), Utils::toString(city), Utils::toString(street), Utils::toString(house),
                     price, area, Utils::toString(description), dialog.getRooms(), dialog.getFloor(),
                     dialog.getHasBalcony(), dialog.getHasElevator());
             }
-            else if (dialog.getPropertyType() == PropertyDialog::TypeHouse)
+            else if (dialog.getPropertyType() == PropertyDialog::PropertyType::TypeHouse)
             {
                 agency->getPropertyManager().addHouse(
                     Utils::toString(newId), Utils::toString(city), Utils::toString(street), Utils::toString(house),

@@ -19,7 +19,7 @@ class TransactionDialog : public QDialog
     explicit TransactionDialog(QWidget *parent = nullptr, Transaction *editTransaction = nullptr,
                                const QStringList &propertyIds = QStringList(),
                                const QStringList &clientIds = QStringList());
-    ~TransactionDialog();
+    ~TransactionDialog() override;
 
     QString getId() const;
     QString getPropertyId() const;

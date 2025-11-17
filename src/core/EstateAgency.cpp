@@ -4,7 +4,6 @@
 
 namespace
 {
-constexpr const char *DATA_DIRECTORY = "data";
 constexpr const char *PROPERTIES_FILE = "properties.txt";
 constexpr const char *CLIENTS_FILE = "clients.txt";
 constexpr const char *TRANSACTIONS_FILE = "transactions.txt";

@@ -4,24 +4,25 @@
 #include <QString>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <string_view>
 
 namespace TableHelper
 {
-inline int getSelectedRow(QTableWidget *table)
+inline int getSelectedRow(const QTableWidget *table)
 {
     if (!table)
         return -1;
     return table->currentRow();
 }
 
-inline bool isValidRow(QTableWidget *table, int row)
+inline bool isValidRow(const QTableWidget *table, int row)
 {
     if (!table)
         return false;
     return row >= 0 && row < table->rowCount();
 }
 
-inline QString getSelectedId(QTableWidget *table, int column = 0)
+inline QString getSelectedId(const QTableWidget *table, int column = 0)
 {
     if (!table)
         return QString();
@@ -32,7 +33,7 @@ inline QString getSelectedId(QTableWidget *table, int column = 0)
         return QString();
     }
 
-    QTableWidgetItem *item = table->item(row, column);
+    const QTableWidgetItem *item = table->item(row, column);
     return item ? item->text() : QString();
 }
 
@@ -44,7 +45,7 @@ inline void clearTable(QTableWidget *table)
     }
 }
 
-inline QString getTransactionStatusText(const std::string &status)
+inline QString getTransactionStatusText(std::string_view status)
 {
     if (status == "pending")
         return "В ожидании";
@@ -53,7 +54,7 @@ inline QString getTransactionStatusText(const std::string &status)
     return "Отменена";
 }
 
-inline QString getAuctionStatusText(const std::string &status)
+inline QString getAuctionStatusText(std::string_view status)
 {
     if (status == "active")
         return "Активен";
@@ -73,7 +74,7 @@ inline QString getPropertyTypeText(const std::string &type)
     return QString::fromStdString(type);
 }
 
-inline bool hasValidSelection(QTableWidget *table) { return isValidRow(table, getSelectedRow(table)); }
+inline bool hasValidSelection(const QTableWidget *table) { return isValidRow(table, getSelectedRow(table)); }
 } // namespace TableHelper
 
 #endif // TABLE_HELPER_H

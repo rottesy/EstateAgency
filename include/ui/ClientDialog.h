@@ -13,7 +13,7 @@ class ClientDialog : public QDialog
 
   public:
     explicit ClientDialog(QWidget *parent = nullptr, Client *editClient = nullptr);
-    ~ClientDialog();
+    ~ClientDialog() override;
 
     QString getId() const;
     QString getName() const;

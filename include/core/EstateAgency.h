@@ -6,6 +6,7 @@
 #include "../services/PropertyManager.h"
 #include "../services/TransactionManager.h"
 #include <string>
+#include <string_view>
 
 class EstateAgency
 {
@@ -33,7 +34,7 @@ class EstateAgency
     void saveAllData();
     void loadAllData();
 
-    void setDataDirectory(const std::string &dir) { dataDirectory = dir; }
+    void setDataDirectory(std::string_view dir) { dataDirectory = std::string(dir); }
     std::string getDataDirectory() const { return dataDirectory; }
 };
 

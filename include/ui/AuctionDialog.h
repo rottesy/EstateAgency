@@ -22,7 +22,7 @@ class AuctionDialog : public QDialog
   public:
     explicit AuctionDialog(QWidget *parent = nullptr, Auction *editAuction = nullptr,
                            const QStringList &propertyIds = QStringList());
-    ~AuctionDialog();
+    ~AuctionDialog() override;
 
     QString getId() const;
     QString getPropertyId() const;
