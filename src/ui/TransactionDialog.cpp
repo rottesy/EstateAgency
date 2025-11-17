@@ -15,7 +15,7 @@
 
 TransactionDialog::TransactionDialog(QWidget *parent, Transaction *editTransaction, const QStringList &propertyIds,
                                      const QStringList &clientIds)
-    : QDialog(parent), propertyIds(propertyIds), clientIds(clientIds), isUpdatingFromProperty(false)
+    : QDialog(parent), propertyIds(propertyIds), clientIds(clientIds)
 {
     setStyleSheet(R"(
         QDialog {
@@ -235,9 +235,7 @@ void TransactionDialog::validateAndAccept()
         return;
     }
 
-    if (propertyCombo->currentIndex() >= 0)
-    {
-    }
+    // Property validation is handled in updatePriceFromProperty
 
     accept();
 }

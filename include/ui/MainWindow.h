@@ -11,7 +11,6 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 
-
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -33,7 +32,7 @@ class MainWindow : public QMainWindow
     void setupNewUI();
     void applyStyles();
     void updateDashboardStats();
-    void showStatusMessage(const QString &message, int timeout = 3000);
+    void showStatusMessage(const QString &message, int timeout = 3000) const;
 
     EstateAgency *agency;
 
@@ -48,6 +47,3 @@ class MainWindow : public QMainWindow
 };
 
 #endif
-
-
-

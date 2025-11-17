@@ -36,7 +36,7 @@ class ClientsWidget : public QWidget
     void showClientTransactions(const std::string &clientId);
     QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
                                  const std::function<void()> &deleteAction);
-    void selectRowById(QTableWidget *table, const QString &id);
+    void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(QTableWidget *table) const;
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
 

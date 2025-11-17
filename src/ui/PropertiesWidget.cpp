@@ -6,6 +6,7 @@
 #include "../../include/entities/CommercialProperty.h"
 #include "../../include/entities/House.h"
 #include "../../include/entities/Transaction.h"
+#include "../../include/services/PropertyManager.h"
 #include "../../include/ui/PropertyDialog.h"
 #include "../../include/ui/TableHelper.h"
 #include <QAbstractItemView>
@@ -163,7 +164,12 @@ void PropertiesWidget::addProperty()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const PropertyManagerException &e)
+        {
+            QMessageBox::warning(this, Constants::Messages::ERROR,
+                                 QString("%1: %2").arg(Constants::ErrorMessages::ADD_ERROR, e.what()));
+        }
+        catch (const std::invalid_argument &e)
         {
             QMessageBox::warning(this, Constants::Messages::ERROR,
                                  QString("%1: %2").arg(Constants::ErrorMessages::ADD_ERROR, e.what()));
@@ -223,7 +229,12 @@ void PropertiesWidget::editProperty()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const PropertyManagerException &e)
+        {
+            QMessageBox::warning(this, Constants::Messages::ERROR,
+                                 QString("%1: %2").arg(Constants::ErrorMessages::EDIT_ERROR, e.what()));
+        }
+        catch (const std::invalid_argument &e)
         {
             QMessageBox::warning(this, Constants::Messages::ERROR,
                                  QString("%1: %2").arg(Constants::ErrorMessages::EDIT_ERROR, e.what()));
@@ -440,8 +451,9 @@ void PropertiesWidget::showPropertyTransactions(const std::string &propertyId)
     propertyDetailsText->setHtml(html);
 }
 
-QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
-                                               std::function<void()> deleteAction)
+QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QString &id,
+                                               const std::function<void()> &editAction,
+                                               const std::function<void()> &deleteAction)
 {
     auto *actionsWidget = new QWidget;
     auto *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -475,7 +487,7 @@ QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QStrin
     return actionsWidget;
 }
 
-void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id)
+void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     if (!table)
         return;
@@ -489,7 +501,10 @@ void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id)
     }
 }
 
-QString PropertiesWidget::getSelectedIdFromTable(QTableWidget *table) { return TableHelper::getSelectedId(table); }
+QString PropertiesWidget::getSelectedIdFromTable(QTableWidget *table) const
+{
+    return TableHelper::getSelectedId(table);
+}
 
 bool PropertiesWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
 {
@@ -497,14 +512,14 @@ bool PropertiesWidget::checkTableSelection(QTableWidget *table, const QString &e
     {
         if (!errorMessage.isEmpty())
         {
-            QMessageBox::information(this, Constants::Messages::INFORMATION, errorMessage);
+            QMessageBox::information(this, QString("Информация"), errorMessage);
         }
         return false;
     }
     return true;
 }
 
-bool PropertiesWidget::isNumericId(const QString &text)
+bool PropertiesWidget::isNumericId(const QString &text) const
 {
     for (QChar ch : text)
     {

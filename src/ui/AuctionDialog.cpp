@@ -202,7 +202,7 @@ void AuctionDialog::setupUI()
         bidsLayout->addWidget(bidsTable);
 
         auto *addBidGroup = new QGroupBox("Добавить ставку");
-        QFormLayout *bidFormLayout = new QFormLayout(addBidGroup);
+        auto *bidFormLayout = new QFormLayout(addBidGroup);
 
         clientCombo = new QComboBox;
 
@@ -639,7 +639,9 @@ void AuctionDialog::createTransactionFromAuction()
         {
             transactionId = originalId + std::to_string(suffix % 10);
             if (transactionId.length() > 8)
+            {
                 transactionId = transactionId.substr(0, 8);
+            }
         }
         else
         {
@@ -664,7 +666,7 @@ void AuctionDialog::createTransactionFromAuction()
                 transactionId = cleanId + std::string(6 - cleanId.length(), '0');
             }
             auto now = std::time(nullptr);
-            transactionId += std::to_string((now % 100));
+            transactionId += std::to_string(now % 100);
             if (transactionId.length() > 8)
                 transactionId = transactionId.substr(0, 8);
             suffix = 1;

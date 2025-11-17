@@ -4,6 +4,7 @@
 #include "../../include/entities/Client.h"
 #include "../../include/entities/Property.h"
 #include "../../include/entities/Transaction.h"
+#include "../../include/services/TransactionManager.h"
 #include "../../include/ui/TableHelper.h"
 #include "../../include/ui/TransactionDialog.h"
 #include <QAbstractItemView>
@@ -174,7 +175,11 @@ void TransactionsWidget::addTransaction()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const TransactionManagerException &e)
+        {
+            QMessageBox::warning(this, "Ошибка", QString("Ошибка добавления: %1").arg(e.what()));
+        }
+        catch (const std::invalid_argument &e)
         {
             QMessageBox::warning(this, "Ошибка", QString("Ошибка добавления: %1").arg(e.what()));
         }
@@ -237,7 +242,11 @@ void TransactionsWidget::editTransaction()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const TransactionManagerException &e)
+        {
+            QMessageBox::warning(this, "Ошибка", QString("Ошибка редактирования: %1").arg(e.what()));
+        }
+        catch (const std::invalid_argument &e)
         {
             QMessageBox::warning(this, "Ошибка", QString("Ошибка редактирования: %1").arg(e.what()));
         }
@@ -434,7 +443,8 @@ bool TransactionsWidget::hasActiveTransactions(const std::string &propertyId)
 }
 
 QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QString &id,
-                                                 std::function<void()> editAction, std::function<void()> deleteAction)
+                                                 const std::function<void()> &editAction,
+                                                 const std::function<void()> &deleteAction)
 {
     auto *actionsWidget = new QWidget;
     auto *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -468,7 +478,7 @@ QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QStr
     return actionsWidget;
 }
 
-void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id)
+void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     if (!table)
         return;
@@ -482,14 +492,17 @@ void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id)
     }
 }
 
-QString TransactionsWidget::getSelectedIdFromTable(QTableWidget *table) { return TableHelper::getSelectedId(table); }
+QString TransactionsWidget::getSelectedIdFromTable(QTableWidget *table) const
+{
+    return TableHelper::getSelectedId(table);
+}
 
 bool TransactionsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {
         if (!errorMessage.isEmpty())
-            QMessageBox::information(this, Constants::Messages::INFORMATION, errorMessage);
+            QMessageBox::information(this, QString("Информация"), errorMessage);
         return false;
     }
     return true;

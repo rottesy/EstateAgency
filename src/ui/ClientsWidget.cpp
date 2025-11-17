@@ -392,7 +392,7 @@ QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &
     return actionsWidget;
 }
 
-void ClientsWidget::selectRowById(QTableWidget *table, const QString &id)
+void ClientsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     if (!table)
         return;
@@ -414,7 +414,7 @@ bool ClientsWidget::checkTableSelection(QTableWidget *table, const QString &erro
     {
         if (!errorMessage.isEmpty())
         {
-            QMessageBox::information(this, "Информация", errorMessage);
+            QMessageBox::information(this, QString("Информация"), errorMessage);
         }
         return false;
     }

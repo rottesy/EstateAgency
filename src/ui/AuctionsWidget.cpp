@@ -449,7 +449,7 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
     return actionsWidget;
 }
 
-void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id)
+void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     if (!table)
         return;
@@ -470,7 +470,7 @@ bool AuctionsWidget::checkTableSelection(QTableWidget *table, const QString &err
     if (!table || !TableHelper::hasValidSelection(table))
     {
         if (!errorMessage.isEmpty())
-            QMessageBox::information(this, "Информация", errorMessage);
+            QMessageBox::information(this, QString("Информация"), errorMessage);
         return false;
     }
     return true;

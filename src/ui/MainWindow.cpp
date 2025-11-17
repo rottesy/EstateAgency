@@ -1,5 +1,6 @@
 #include "../../include/ui/MainWindow.h"
 #include "../../include/core/Constants.h"
+#include "../../include/services/FileManager.h"
 #include <QFrame>
 #include <QLabel>
 #include <QListWidget>
@@ -10,6 +11,7 @@
 #include <QStackedWidget>
 #include <QStatusBar>
 #include <QTimer>
+#include <filesystem>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -40,10 +42,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                                updateDashboardStats();
                            });
     }
-    catch (const std::exception &e)
+    catch (const FileManagerException &e)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации",
                               QString("Ошибка при инициализации приложения: %1").arg(e.what()));
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
     catch (...)
     {
@@ -470,7 +476,7 @@ void MainWindow::updateDashboardStats()
     }
 }
 
-void MainWindow::showStatusMessage(const QString &message, int timeout)
+void MainWindow::showStatusMessage(const QString &message, int timeout) const
 {
     if (statusBar())
     {
@@ -517,9 +523,13 @@ void MainWindow::saveAllData()
         showStatusMessage("Данные сохранены", 3000);
         QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
     }
-    catch (const std::exception &e)
+    catch (const FileManagerException &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка сохранения: %1").arg(e.what()));
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
     catch (...)
     {
@@ -542,9 +552,13 @@ void MainWindow::loadAllData()
         showStatusMessage("Данные загружены", 3000);
         QMessageBox::information(this, "Успех", "Данные успешно загружены");
     }
-    catch (const std::exception &e)
+    catch (const FileManagerException &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка загрузки: %1").arg(e.what()));
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
     catch (...)
     {

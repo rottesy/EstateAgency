@@ -34,12 +34,12 @@ class PropertiesWidget : public QWidget
     void setupUI();
     void showPropertyDetails(Property *prop);
     void showPropertyTransactions(const std::string &propertyId);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
-                                 std::function<void()> deleteAction);
-    void selectRowById(QTableWidget *table, const QString &id);
-    QString getSelectedIdFromTable(QTableWidget *table);
+    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
+                                 const std::function<void()> &deleteAction);
+    void selectRowById(QTableWidget *table, const QString &id) const;
+    QString getSelectedIdFromTable(QTableWidget *table) const;
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
-    bool isNumericId(const QString &text);
+    bool isNumericId(const QString &text) const;
 
     EstateAgency *agency;
     QTableWidget *propertiesTable;
@@ -51,6 +51,3 @@ class PropertiesWidget : public QWidget
 };
 
 #endif
-
-
-

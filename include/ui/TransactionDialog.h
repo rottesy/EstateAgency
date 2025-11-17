@@ -1,7 +1,6 @@
 #ifndef TRANSACTION_DIALOG_H
 #define TRANSACTION_DIALOG_H
 
-#include "../core/EstateAgency.h"
 #include "../entities/Transaction.h"
 #include <QComboBox>
 #include <QDialog>
@@ -18,7 +17,8 @@ class TransactionDialog : public QDialog
 
   public:
     explicit TransactionDialog(QWidget *parent = nullptr, Transaction *editTransaction = nullptr,
-                      const QStringList &propertyIds = QStringList(), const QStringList &clientIds = QStringList());
+                               const QStringList &propertyIds = QStringList(),
+                               const QStringList &clientIds = QStringList());
     ~TransactionDialog();
 
     QString getId() const;
@@ -49,7 +49,7 @@ class TransactionDialog : public QDialog
     QLabel *differenceLabel;
     QStringList propertyIds;
     QStringList clientIds;
-    bool isUpdatingFromProperty;
+    bool isUpdatingFromProperty = false;
 };
 
 #endif

@@ -36,10 +36,10 @@ class TransactionsWidget : public QWidget
     bool validateTransaction(const std::string &propertyId, const std::string &clientId, const std::string &status,
                              const std::string &excludeId = "");
     bool hasActiveTransactions(const std::string &propertyId);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
-                                 std::function<void()> deleteAction);
-    void selectRowById(QTableWidget *table, const QString &id);
-    QString getSelectedIdFromTable(QTableWidget *table);
+    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
+                                 const std::function<void()> &deleteAction);
+    void selectRowById(QTableWidget *table, const QString &id) const;
+    QString getSelectedIdFromTable(QTableWidget *table) const;
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;
