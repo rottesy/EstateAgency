@@ -35,13 +35,12 @@ class TransactionManager
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Transaction>> &getTransactions() const { return transactions; }
-    void setTransactions(std::vector<std::shared_ptr<Transaction>> &&transactions)
+    void setTransactions(std::vector<std::shared_ptr<Transaction>> &&newTransactions)
     {
-        this->transactions = std::move(transactions);
+        transactions = std::move(newTransactions);
     }
 
     size_t getCount() const { return transactions.size(); }
 };
 
 #endif
-

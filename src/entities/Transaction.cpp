@@ -63,26 +63,26 @@ bool Transaction::operator==(const Transaction &other) const { return id == othe
 
 bool Transaction::operator<(const Transaction &other) const { return date < other.date; }
 
-void Transaction::setStatus(const std::string &status)
+void Transaction::setStatus(const std::string &newStatus)
 {
-    if (status != Constants::TransactionStatus::PENDING && status != Constants::TransactionStatus::COMPLETED &&
-        status != Constants::TransactionStatus::CANCELLED)
+    if (newStatus != Constants::TransactionStatus::PENDING && newStatus != Constants::TransactionStatus::COMPLETED &&
+        newStatus != Constants::TransactionStatus::CANCELLED)
     {
         throw std::invalid_argument("Invalid status");
     }
-    this->status = status;
+    status = newStatus;
 }
 
-void Transaction::setFinalPrice(double price)
+void Transaction::setFinalPrice(double newPrice)
 {
-    if (price <= MIN_PRICE)
+    if (newPrice <= MIN_PRICE)
     {
         throw std::invalid_argument("Final price must be positive");
     }
-    finalPrice = price;
+    finalPrice = newPrice;
 }
 
-void Transaction::setNotes(const std::string &notes) { this->notes = notes; }
+void Transaction::setNotes(const std::string &newNotes) { notes = newNotes; }
 
 std::string Transaction::toString() const
 {

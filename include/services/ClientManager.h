@@ -34,10 +34,9 @@ class ClientManager
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Client>> &getClients() const { return clients; }
-    void setClients(std::vector<std::shared_ptr<Client>> &&clients) { this->clients = std::move(clients); }
+    void setClients(std::vector<std::shared_ptr<Client>> &&newClients) { clients = std::move(newClients); }
 
     size_t getCount() const { return clients.size(); }
 };
 
 #endif
-

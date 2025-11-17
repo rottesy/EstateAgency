@@ -59,29 +59,29 @@ Property *House::clone() const
                      rooms, landArea, hasGarage, hasGarden);
 }
 
-void House::setFloors(int floors)
+void House::setFloors(int newFloors)
 {
-    if (floors < MIN_FLOORS || floors > MAX_FLOORS)
+    if (newFloors < MIN_FLOORS || newFloors > MAX_FLOORS)
     {
         throw std::invalid_argument("Number of floors must be between 1 and 10");
     }
-    this->floors = floors;
+    floors = newFloors;
 }
 
-void House::setRooms(int rooms)
+void House::setRooms(int newRooms)
 {
-    if (rooms < MIN_ROOMS || rooms > MAX_ROOMS)
+    if (newRooms < MIN_ROOMS || newRooms > MAX_ROOMS)
     {
         throw std::invalid_argument("Number of rooms must be between 1 and 50");
     }
-    this->rooms = rooms;
+    rooms = newRooms;
 }
 
-void House::setLandArea(double landArea)
+void House::setLandArea(double newLandArea)
 {
-    if (landArea < MIN_LAND_AREA || landArea > MAX_LAND_AREA)
+    if (newLandArea < MIN_LAND_AREA || newLandArea > MAX_LAND_AREA)
     {
         throw std::invalid_argument("Land area must be between 0 and 10000 m²");
     }
-    this->landArea = landArea;
+    landArea = newLandArea;
 }

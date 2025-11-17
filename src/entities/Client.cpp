@@ -50,31 +50,31 @@ bool Client::operator==(const Client &other) const { return id == other.id; }
 
 bool Client::operator<(const Client &other) const { return name < other.name; }
 
-void Client::setName(const std::string &name)
+void Client::setName(const std::string &newName)
 {
-    if (name.empty())
+    if (newName.empty())
     {
         throw std::invalid_argument("Name cannot be empty");
     }
-    this->name = name;
+    name = newName;
 }
 
-void Client::setPhone(const std::string &phone)
+void Client::setPhone(const std::string &newPhone)
 {
-    if (!validatePhone(phone))
+    if (!validatePhone(newPhone))
     {
         throw std::invalid_argument("Invalid phone number format");
     }
-    this->phone = phone;
+    phone = newPhone;
 }
 
-void Client::setEmail(const std::string &email)
+void Client::setEmail(const std::string &newEmail)
 {
-    if (!validateEmail(email))
+    if (!validateEmail(newEmail))
     {
         throw std::invalid_argument("Invalid email format");
     }
-    this->email = email;
+    email = newEmail;
 }
 
 bool Client::validateId(const std::string &id)

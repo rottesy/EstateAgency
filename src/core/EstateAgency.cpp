@@ -13,14 +13,15 @@ constexpr const char *AUCTIONS_FILE = "auctions.txt";
 
 EstateAgency *EstateAgency::instance = nullptr;
 
-EstateAgency::EstateAgency() : dataDirectory(DATA_DIRECTORY)
+EstateAgency::EstateAgency()
 {
     try
     {
         std::filesystem::create_directories(dataDirectory);
     }
-    catch (const std::exception &)
+    catch (const std::filesystem::filesystem_error &)
     {
+        // Ignore filesystem errors during initialization
     }
 }
 
@@ -54,8 +55,13 @@ void EstateAgency::saveAllData()
         FileManager::saveTransactions(transactionManager, dataDirectory + "/" + TRANSACTIONS_FILE);
         FileManager::saveAuctions(auctionManager, dataDirectory + "/" + AUCTIONS_FILE);
     }
-    catch (const std::exception &e)
+    catch (const FileManagerException &)
     {
+        // Ignore file manager errors during save
+    }
+    catch (const std::filesystem::filesystem_error &)
+    {
+        // Ignore filesystem errors during save
     }
 }
 
@@ -68,7 +74,12 @@ void EstateAgency::loadAllData()
         FileManager::loadTransactions(transactionManager, dataDirectory + "/" + TRANSACTIONS_FILE);
         FileManager::loadAuctions(auctionManager, dataDirectory + "/" + AUCTIONS_FILE);
     }
-    catch (const std::exception &e)
+    catch (const FileManagerException &)
     {
+        // Ignore file manager errors during load
+    }
+    catch (const std::filesystem::filesystem_error &)
+    {
+        // Ignore filesystem errors during load
     }
 }

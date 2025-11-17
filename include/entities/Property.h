@@ -14,7 +14,7 @@ class Property
     double price;
     double area;
     std::string description;
-    bool isAvailable;
+    bool isAvailable = true;
 
   public:
     Property(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
@@ -29,7 +29,6 @@ class Property
     friend std::ostream &operator<<(std::ostream &os, const Property &prop);
 
     bool operator==(const Property &other) const;
-    bool operator!=(const Property &other) const;
     bool operator<(const Property &other) const;
     bool operator>(const Property &other) const;
 

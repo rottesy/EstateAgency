@@ -2,7 +2,6 @@
 #define AUCTION_H
 
 #include "Bid.h"
-#include "Property.h"
 #include <iostream>
 #include <memory>
 #include <string>
@@ -17,7 +16,7 @@ class Auction
     double startingPrice;
     double buyoutPrice;
     std::vector<std::shared_ptr<Bid>> bids;
-    std::string status;
+    std::string status = "active";
     std::string createdAt;
     std::string completedAt;
 
@@ -59,4 +58,3 @@ class Auction
 std::ostream &operator<<(std::ostream &os, const Auction &auction);
 
 #endif
-

@@ -197,7 +197,11 @@ void AuctionsWidget::addAuction()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &e)
+        {
+            QMessageBox::warning(this, "Ошибка", QString("Ошибка создания аукциона: %1").arg(e.what()));
+        }
+        catch (const AuctionManagerException &e)
         {
             QMessageBox::warning(this, "Ошибка", QString("Ошибка создания аукциона: %1").arg(e.what()));
         }
@@ -409,8 +413,9 @@ bool AuctionsWidget::hasActiveTransactions(const std::string &propertyId)
     return false;
 }
 
-QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString &id, std::function<void()> viewAction,
-                                             std::function<void()> deleteAction, bool isView)
+QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString &id,
+                                             const std::function<void()> &viewAction,
+                                             const std::function<void()> &deleteAction, [[maybe_unused]] bool isView)
 {
     QWidget *actionsWidget = new QWidget;
     QHBoxLayout *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -444,7 +449,7 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
     return actionsWidget;
 }
 
-void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id)
+void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     if (!table)
         return;

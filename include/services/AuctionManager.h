@@ -2,7 +2,6 @@
 #define AUCTION_MANAGER_H
 
 #include "../entities/Auction.h"
-#include <algorithm>
 #include <memory>
 #include <vector>
 
@@ -35,10 +34,9 @@ class AuctionManager
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Auction>> &getAuctions() const { return auctions; }
-    void setAuctions(std::vector<std::shared_ptr<Auction>> &&auctions) { this->auctions = std::move(auctions); }
+    void setAuctions(std::vector<std::shared_ptr<Auction>> &&newAuctions) { auctions = std::move(newAuctions); }
 
     size_t getCount() const { return auctions.size(); }
 };
 
 #endif
-

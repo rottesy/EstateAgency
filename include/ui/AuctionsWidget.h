@@ -34,9 +34,9 @@ class AuctionsWidget : public QWidget
     void setupUI();
     void showAuctionDetails(Auction *auction);
     bool hasActiveTransactions(const std::string &propertyId);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, std::function<void()> viewAction,
-                                 std::function<void()> deleteAction, bool isView = false);
-    void selectRowById(QTableWidget *table, const QString &id);
+    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &viewAction,
+                                 const std::function<void()> &deleteAction, [[maybe_unused]] bool isView = false);
+    void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(QTableWidget *table);
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
 

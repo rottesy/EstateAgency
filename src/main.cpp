@@ -14,12 +14,12 @@ int main(int argc, char *argv[])
 
     try
     {
-        app.setStyle(APPLICATION_STYLE);
+        QApplication::setStyle(APPLICATION_STYLE);
 
         MainWindow window;
         window.show();
 
-        return app.exec();
+        return QApplication::exec();
     }
     catch (const std::exception &e)
     {

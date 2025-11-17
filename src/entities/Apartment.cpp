@@ -52,20 +52,20 @@ Property *Apartment::clone() const
                          floor, hasBalcony, hasElevator);
 }
 
-void Apartment::setRooms(int rooms)
+void Apartment::setRooms(int newRooms)
 {
-    if (rooms < MIN_ROOMS || rooms > MAX_ROOMS)
+    if (newRooms < MIN_ROOMS || newRooms > MAX_ROOMS)
     {
         throw std::invalid_argument("Number of rooms must be between 1 and 10");
     }
-    this->rooms = rooms;
+    rooms = newRooms;
 }
 
-void Apartment::setFloor(int floor)
+void Apartment::setFloor(int newFloor)
 {
-    if (floor < MIN_FLOOR || floor > MAX_FLOOR)
+    if (newFloor < MIN_FLOOR || newFloor > MAX_FLOOR)
     {
         throw std::invalid_argument("Floor must be between 1 and 100");
     }
-    this->floor = floor;
+    floor = newFloor;
 }

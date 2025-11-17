@@ -6,8 +6,7 @@
 
 Property::Property(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
                    double price, double area, const std::string &description)
-    : id(id), city(city), street(street), house(house), price(price), area(area), description(description),
-      isAvailable(true)
+    : id(id), city(city), street(street), house(house), price(price), area(area), description(description)
 {
     if (!validateId(id))
     {
@@ -48,8 +47,6 @@ std::ostream &operator<<(std::ostream &os, const Property &prop)
 }
 
 bool Property::operator==(const Property &other) const { return id == other.id; }
-
-bool Property::operator!=(const Property &other) const { return !(*this == other); }
 
 bool Property::operator<(const Property &other) const { return price < other.price; }
 
@@ -139,4 +136,3 @@ bool Property::validateAddressPart(const std::string &part)
 
     return std::any_of(part.begin(), part.end(), [](char c) { return std::isprint(static_cast<unsigned char>(c)); });
 }
-

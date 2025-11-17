@@ -15,7 +15,7 @@ class EstateAgency
     ClientManager clientManager;
     TransactionManager transactionManager;
     AuctionManager auctionManager;
-    std::string dataDirectory;
+    std::string dataDirectory = "data";
 
     EstateAgency();
 

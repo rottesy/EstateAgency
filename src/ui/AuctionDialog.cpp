@@ -16,8 +16,7 @@
 #include <sstream>
 
 AuctionDialog::AuctionDialog(QWidget *parent, Auction *editAuction, const QStringList &propertyIds)
-    : QDialog(parent), isViewMode(editAuction != nullptr), currentAuction(editAuction),
-      agency(EstateAgency::getInstance()), propertyIds(propertyIds)
+    : QDialog(parent), isViewMode(editAuction != nullptr), currentAuction(editAuction), propertyIds(propertyIds)
 {
     setStyleSheet(R"(
         QDialog {
@@ -687,7 +686,11 @@ void AuctionDialog::createTransactionFromAuction()
             prop->setAvailable(false);
         }
     }
-    catch (const std::exception &e)
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка создания сделки: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка создания сделки: %1").arg(e.what()));
     }

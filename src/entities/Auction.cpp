@@ -18,7 +18,7 @@ constexpr int PRICE_PRECISION = 2;
 Auction::Auction(const std::string &id, const std::string &propertyId, const std::string &propertyAddress,
                  double startingPrice)
     : id(id), propertyId(propertyId), propertyAddress(propertyAddress), startingPrice(startingPrice),
-      buyoutPrice(startingPrice * BUYOUT_MULTIPLIER), status(Constants::AuctionStatus::ACTIVE), completedAt("")
+      buyoutPrice(startingPrice * BUYOUT_MULTIPLIER)
 {
     if (startingPrice <= MIN_PRICE)
     {

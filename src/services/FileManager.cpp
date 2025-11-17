@@ -137,8 +137,14 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
                 properties.push_back(std::move(commercial));
             }
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &)
         {
+            // Skip invalid property data
+            continue;
+        }
+        catch (const PropertyManagerException &)
+        {
+            // Skip property manager errors
             continue;
         }
     }
@@ -197,8 +203,14 @@ void FileManager::loadClients(ClientManager &manager, const std::string &filenam
             auto client = std::make_shared<Client>(id, name, phone, email);
             clients.push_back(client);
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &)
         {
+            // Skip invalid client data
+            continue;
+        }
+        catch (const ClientManagerException &)
+        {
+            // Skip client manager errors
             continue;
         }
     }
@@ -260,8 +272,14 @@ void FileManager::loadTransactions(TransactionManager &manager, const std::strin
             auto transaction = std::make_shared<Transaction>(id, propertyId, clientId, finalPrice, status, notes);
             transactions.push_back(transaction);
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &)
         {
+            // Skip invalid transaction data
+            continue;
+        }
+        catch (const TransactionManagerException &)
+        {
+            // Skip transaction manager errors
             continue;
         }
     }
@@ -352,8 +370,14 @@ void FileManager::loadAuctions(AuctionManager &manager, const std::string &filen
                 auto bid = std::make_shared<Bid>(clientId, clientName, amount);
                 currentAuction->addBidDirect(bid);
             }
-            catch (const std::exception &e)
+            catch (const std::invalid_argument &)
             {
+                // Skip invalid bid data
+                continue;
+            }
+            catch (const AuctionManagerException &)
+            {
+                // Skip auction manager errors
                 continue;
             }
         }
@@ -388,8 +412,14 @@ void FileManager::loadAuctions(AuctionManager &manager, const std::string &filen
                 auctions.push_back(auction);
                 currentAuction = auction.get();
             }
-            catch (const std::exception &e)
+            catch (const std::invalid_argument &)
             {
+                // Skip invalid auction data
+                continue;
+            }
+            catch (const AuctionManagerException &)
+            {
+                // Skip auction manager errors
                 continue;
             }
         }

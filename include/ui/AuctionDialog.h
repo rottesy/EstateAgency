@@ -21,7 +21,7 @@ class AuctionDialog : public QDialog
 
   public:
     explicit AuctionDialog(QWidget *parent = nullptr, Auction *editAuction = nullptr,
-                  const QStringList &propertyIds = QStringList());
+                           const QStringList &propertyIds = QStringList());
     ~AuctionDialog();
 
     QString getId() const;
@@ -46,7 +46,7 @@ class AuctionDialog : public QDialog
 
     bool isViewMode;
     Auction *currentAuction;
-    EstateAgency *agency;
+    EstateAgency *agency = EstateAgency::getInstance();
 
     QLineEdit *idEdit;
     QComboBox *propertyCombo;
