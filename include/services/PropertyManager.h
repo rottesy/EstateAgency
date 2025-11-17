@@ -4,6 +4,7 @@
 #include "../entities/Property.h"
 #include <algorithm>
 #include <memory>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -27,19 +28,23 @@ template <typename T> class ContainerManager
 
     void remove(const std::string &id)
     {
-        auto it = std::remove_if(items.begin(), items.end(),
-                                 [&id](const std::shared_ptr<T> &item) { return item->getId() == id; });
-        if (it != items.end())
+        auto removed =
+            std::ranges::remove_if(items, [&id](const std::shared_ptr<T> &item) { return item->getId() == id; });
+        if (removed.begin() != items.end())
         {
-            items.erase(it, items.end());
+            items.erase(removed.begin(), items.end());
         }
     }
 
     std::shared_ptr<T> findById(const std::string &id) const
     {
-        auto it = std::find_if(items.begin(), items.end(),
-                               [&id](const std::shared_ptr<T> &item) { return item->getId() == id; });
-        return (it != items.end()) ? *it : nullptr;
+        if (auto it =
+                std::ranges::find_if(items, [&id](const std::shared_ptr<T> &item) { return item->getId() == id; });
+            it != items.end())
+        {
+            return *it;
+        }
+        return nullptr;
     }
 
     size_t size() const { return items.size(); }

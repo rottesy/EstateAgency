@@ -20,9 +20,9 @@ void AuctionManager::addAuction(std::shared_ptr<Auction> auction)
 
 bool AuctionManager::removeAuction(const std::string &id)
 {
-    auto removed = std::ranges::remove_if(auctions, [&id](const std::shared_ptr<Auction> &auction)
-                                          { return auction->getId() == id; });
-    if (removed.begin() != auctions.end())
+    if (auto removed = std::ranges::remove_if(auctions, [&id](const std::shared_ptr<Auction> &auction)
+                                              { return auction->getId() == id; });
+        removed.begin() != auctions.end())
     {
         auctions.erase(removed.begin(), auctions.end());
         return true;

@@ -45,7 +45,7 @@ class Property
     void setPrice(double newPrice);
     void setArea(double newArea);
     void setAddress(const std::string &city, const std::string &street, const std::string &house);
-    void setDescription(const std::string &newDesc);
+    void setDescription(std::string_view newDesc);
     void setAvailable(bool available) { isAvailable = available; }
 
     static bool validatePrice(double price);

@@ -22,9 +22,9 @@ void ClientManager::addClient(std::shared_ptr<Client> client)
 
 bool ClientManager::removeClient(const std::string &id)
 {
-    auto removed =
-        std::ranges::remove_if(clients, [&id](const std::shared_ptr<Client> &client) { return client->getId() == id; });
-    if (removed.begin() != clients.end())
+    if (auto removed = std::ranges::remove_if(clients, [&id](const std::shared_ptr<Client> &client)
+                                              { return client->getId() == id; });
+        removed.begin() != clients.end())
     {
         clients.erase(removed.begin(), clients.end());
         return true;

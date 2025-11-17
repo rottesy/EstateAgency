@@ -40,31 +40,31 @@ bool Client::operator==(const Client &other) const { return id == other.id; }
 
 std::strong_ordering Client::operator<=>(const Client &other) const { return name <=> other.name; }
 
-void Client::setName(const std::string &newName)
+void Client::setName(std::string_view newName)
 {
     if (newName.empty())
     {
         throw std::invalid_argument("Name cannot be empty");
     }
-    name = newName;
+    name = std::string(newName);
 }
 
-void Client::setPhone(const std::string &newPhone)
+void Client::setPhone(std::string_view newPhone)
 {
     if (!validatePhone(newPhone))
     {
         throw std::invalid_argument("Invalid phone number format");
     }
-    phone = newPhone;
+    phone = std::string(newPhone);
 }
 
-void Client::setEmail(const std::string &newEmail)
+void Client::setEmail(std::string_view newEmail)
 {
     if (!validateEmail(newEmail))
     {
         throw std::invalid_argument("Invalid email format");
     }
-    email = newEmail;
+    email = std::string(newEmail);
 }
 
 bool Client::validateId(std::string_view id)

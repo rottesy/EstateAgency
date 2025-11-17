@@ -50,14 +50,14 @@ bool Transaction::operator==(const Transaction &other) const { return id == othe
 
 std::strong_ordering Transaction::operator<=>(const Transaction &other) const { return date <=> other.date; }
 
-void Transaction::setStatus(const std::string &newStatus)
+void Transaction::setStatus(std::string_view newStatus)
 {
     if (newStatus != Constants::TransactionStatus::PENDING && newStatus != Constants::TransactionStatus::COMPLETED &&
         newStatus != Constants::TransactionStatus::CANCELLED)
     {
         throw std::invalid_argument("Invalid status");
     }
-    status = newStatus;
+    status = std::string(newStatus);
 }
 
 void Transaction::setFinalPrice(double newPrice)
@@ -69,7 +69,7 @@ void Transaction::setFinalPrice(double newPrice)
     finalPrice = newPrice;
 }
 
-void Transaction::setNotes(const std::string &newNotes) { notes = newNotes; }
+void Transaction::setNotes(std::string_view newNotes) { notes = std::string(newNotes); }
 
 std::string Transaction::toString() const
 {

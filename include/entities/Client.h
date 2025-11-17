@@ -29,9 +29,9 @@ class Client
     std::string getEmail() const { return email; }
     std::string getRegistrationDate() const { return registrationDate; }
 
-    void setName(const std::string &name);
-    void setPhone(const std::string &phone);
-    void setEmail(const std::string &email);
+    void setName(std::string_view name);
+    void setPhone(std::string_view phone);
+    void setEmail(std::string_view email);
 
     static bool validateId(std::string_view id);
     static bool validatePhone(std::string_view phone);

@@ -35,9 +35,9 @@ class Transaction
     std::string getStatus() const { return status; }
     std::string getNotes() const { return notes; }
 
-    void setStatus(const std::string &status);
+    void setStatus(std::string_view status);
     void setFinalPrice(double price);
-    void setNotes(const std::string &notes);
+    void setNotes(std::string_view notes);
 
     static bool validateId(std::string_view id);
 
