@@ -1,11 +1,8 @@
 #ifndef BID_H
 #define BID_H
 
-#include "Client.h"
-#include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
 #include <string>
 
 class Bid
@@ -31,9 +28,14 @@ class Bid
 
     std::string toString() const;
     std::string toFileString() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Bid &bid)
+    {
+        os << "Client: " << bid.clientName << " (ID: " << bid.clientId << ")\n"
+           << "Amount: " << std::fixed << std::setprecision(2) << bid.amount << " руб.\n"
+           << "Time: " << bid.timestamp;
+        return os;
+    }
 };
 
-std::ostream &operator<<(std::ostream &os, const Bid &bid);
-
 #endif
-

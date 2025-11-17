@@ -34,10 +34,10 @@ class ClientsWidget : public QWidget
     void setupUI();
     void showClientDetails(Client *client);
     void showClientTransactions(const std::string &clientId);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
-                                 std::function<void()> deleteAction);
+    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
+                                 const std::function<void()> &deleteAction);
     void selectRowById(QTableWidget *table, const QString &id);
-    QString getSelectedIdFromTable(QTableWidget *table);
+    QString getSelectedIdFromTable(QTableWidget *table) const;
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;

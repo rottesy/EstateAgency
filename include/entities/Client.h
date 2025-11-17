@@ -36,9 +36,16 @@ class Client
     static bool validateEmail(const std::string &email);
 
     std::string toString() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Client &client)
+    {
+        os << "ID: " << client.id << "\n"
+           << "Name: " << client.name << "\n"
+           << "Phone: " << client.phone << "\n"
+           << "Email: " << client.email << "\n"
+           << "Registration Date: " << client.registrationDate;
+        return os;
+    }
 };
 
-std::ostream &operator<<(std::ostream &os, const Client &client);
-
 #endif
-

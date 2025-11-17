@@ -2,6 +2,7 @@
 #define AUCTION_H
 
 #include "Bid.h"
+#include <iomanip>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -23,8 +24,6 @@ class Auction
   public:
     Auction(const std::string &id, const std::string &propertyId, const std::string &propertyAddress,
             double startingPrice);
-
-    friend std::ostream &operator<<(std::ostream &os, const Auction &auction);
 
     bool operator==(const Auction &other) const;
     bool operator<(const Auction &other) const;
@@ -53,8 +52,18 @@ class Auction
     bool wasBuyout() const;
     std::string toString() const;
     std::string toFileString() const;
-};
 
-std::ostream &operator<<(std::ostream &os, const Auction &auction);
+    friend std::ostream &operator<<(std::ostream &os, const Auction &auction)
+    {
+        os << "Auction ID: " << auction.id << "\n"
+           << "Property: " << auction.propertyAddress << " (ID: " << auction.propertyId << ")\n"
+           << "Starting Price: " << std::fixed << std::setprecision(2) << auction.startingPrice << " руб.\n"
+           << "Buyout Price: " << std::fixed << std::setprecision(2) << auction.buyoutPrice << " руб.\n"
+           << "Status: " << auction.status << "\n"
+           << "Bids Count: " << auction.bids.size() << "\n"
+           << "Created: " << auction.createdAt;
+        return os;
+    }
+};
 
 #endif

@@ -449,7 +449,7 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
     return actionsWidget;
 }
 
-void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
+void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id)
 {
     if (!table)
         return;
@@ -463,14 +463,14 @@ void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
     }
 }
 
-QString AuctionsWidget::getSelectedIdFromTable(QTableWidget *table) { return TableHelper::getSelectedId(table); }
+QString AuctionsWidget::getSelectedIdFromTable(QTableWidget *table) const { return TableHelper::getSelectedId(table); }
 
 bool AuctionsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
 {
     if (!table || !TableHelper::hasValidSelection(table))
     {
         if (!errorMessage.isEmpty())
-            QMessageBox::information(this, Constants::Messages::INFORMATION, errorMessage);
+            QMessageBox::information(this, "Информация", errorMessage);
         return false;
     }
     return true;

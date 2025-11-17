@@ -122,9 +122,9 @@ void DashboardWidget::setupUI()
         return btn;
     };
 
-    QPushButton *saveBtn = createModernButton("Сохранить", "#00D4AA");
-    QPushButton *loadBtn = createModernButton("Загрузить", "#5B9FFF");
-    QPushButton *refreshBtn = createModernButton("Обновить", "#FFB020");
+    saveBtn = createModernButton("Сохранить", "#00D4AA");
+    loadBtn = createModernButton("Загрузить", "#5B9FFF");
+    refreshBtn = createModernButton("Обновить", "#FFB020");
 
     connect(saveBtn, &QPushButton::clicked, this, &DashboardWidget::saveRequested);
     connect(loadBtn, &QPushButton::clicked, this, &DashboardWidget::loadRequested);

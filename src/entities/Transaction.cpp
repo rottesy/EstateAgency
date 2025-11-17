@@ -47,18 +47,6 @@ Transaction::Transaction(const std::string &id, const std::string &propertyId, c
     this->date = oss.str();
 }
 
-std::ostream &operator<<(std::ostream &os, const Transaction &trans)
-{
-    os << "Transaction ID: " << trans.id << "\n"
-       << "Property ID: " << trans.propertyId << "\n"
-       << "Client ID: " << trans.clientId << "\n"
-       << "Date: " << trans.date << "\n"
-       << "Final Price: " << std::fixed << std::setprecision(2) << trans.finalPrice << " руб.\n"
-       << "Status: " << trans.status << "\n"
-       << "Notes: " << trans.notes;
-    return os;
-}
-
 bool Transaction::operator==(const Transaction &other) const { return id == other.id; }
 
 bool Transaction::operator<(const Transaction &other) const { return date < other.date; }

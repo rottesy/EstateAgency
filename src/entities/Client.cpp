@@ -36,16 +36,6 @@ Client::Client(const std::string &id, const std::string &name, const std::string
     registrationDate = oss.str();
 }
 
-std::ostream &operator<<(std::ostream &os, const Client &client)
-{
-    os << "ID: " << client.id << "\n"
-       << "Name: " << client.name << "\n"
-       << "Phone: " << client.phone << "\n"
-       << "Email: " << client.email << "\n"
-       << "Registration Date: " << client.registrationDate;
-    return os;
-}
-
 bool Client::operator==(const Client &other) const { return id == other.id; }
 
 bool Client::operator<(const Client &other) const { return name < other.name; }

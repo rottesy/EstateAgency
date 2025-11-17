@@ -36,8 +36,8 @@ class AuctionsWidget : public QWidget
     bool hasActiveTransactions(const std::string &propertyId);
     QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &viewAction,
                                  const std::function<void()> &deleteAction, [[maybe_unused]] bool isView = false);
-    void selectRowById(QTableWidget *table, const QString &id) const;
-    QString getSelectedIdFromTable(QTableWidget *table);
+    void selectRowById(QTableWidget *table, const QString &id);
+    QString getSelectedIdFromTable(QTableWidget *table) const;
     bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;

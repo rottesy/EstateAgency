@@ -32,18 +32,6 @@ Auction::Auction(const std::string &id, const std::string &propertyId, const std
     createdAt = oss.str();
 }
 
-std::ostream &operator<<(std::ostream &os, const Auction &auction)
-{
-    os << "Auction ID: " << auction.id << "\n"
-       << "Property: " << auction.propertyAddress << " (ID: " << auction.propertyId << ")\n"
-       << "Starting Price: " << std::fixed << std::setprecision(PRICE_PRECISION) << auction.startingPrice << " руб.\n"
-       << "Buyout Price: " << std::fixed << std::setprecision(PRICE_PRECISION) << auction.buyoutPrice << " руб.\n"
-       << "Status: " << auction.status << "\n"
-       << "Bids Count: " << auction.bids.size() << "\n"
-       << "Created: " << auction.createdAt;
-    return os;
-}
-
 bool Auction::operator==(const Auction &other) const { return id == other.id; }
 
 bool Auction::operator<(const Auction &other) const { return createdAt < other.createdAt; }

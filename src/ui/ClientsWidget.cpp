@@ -4,6 +4,7 @@
 #include "../../include/entities/Client.h"
 #include "../../include/entities/Property.h"
 #include "../../include/entities/Transaction.h"
+#include "../../include/services/ClientManager.h"
 #include "../../include/ui/ClientDialog.h"
 #include "../../include/ui/TableHelper.h"
 #include <QAbstractItemView>
@@ -131,7 +132,12 @@ void ClientsWidget::addClient()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &e)
+        {
+            QMessageBox::warning(this, Constants::Messages::ERROR,
+                                 QString("%1: %2").arg(Constants::ErrorMessages::ADD_ERROR, e.what()));
+        }
+        catch (const ClientManagerException &e)
         {
             QMessageBox::warning(this, Constants::Messages::ERROR,
                                  QString("%1: %2").arg(Constants::ErrorMessages::ADD_ERROR, e.what()));
@@ -164,7 +170,12 @@ void ClientsWidget::editClient()
             refresh();
             emit dataChanged();
         }
-        catch (const std::exception &e)
+        catch (const std::invalid_argument &e)
+        {
+            QMessageBox::warning(this, Constants::Messages::ERROR,
+                                 QString("%1: %2").arg(Constants::ErrorMessages::EDIT_ERROR, e.what()));
+        }
+        catch (const ClientManagerException &e)
         {
             QMessageBox::warning(this, Constants::Messages::ERROR,
                                  QString("%1: %2").arg(Constants::ErrorMessages::EDIT_ERROR, e.what()));
@@ -345,8 +356,9 @@ void ClientsWidget::showClientTransactions(const std::string &clientId)
     clientDetailsText->setHtml(html);
 }
 
-QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
-                                            std::function<void()> deleteAction)
+QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &id,
+                                            const std::function<void()> &editAction,
+                                            const std::function<void()> &deleteAction)
 {
     QWidget *actionsWidget = new QWidget;
     QHBoxLayout *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -394,7 +406,7 @@ void ClientsWidget::selectRowById(QTableWidget *table, const QString &id)
     }
 }
 
-QString ClientsWidget::getSelectedIdFromTable(QTableWidget *table) { return TableHelper::getSelectedId(table); }
+QString ClientsWidget::getSelectedIdFromTable(QTableWidget *table) const { return TableHelper::getSelectedId(table); }
 
 bool ClientsWidget::checkTableSelection(QTableWidget *table, const QString &errorMessage)
 {
@@ -402,7 +414,7 @@ bool ClientsWidget::checkTableSelection(QTableWidget *table, const QString &erro
     {
         if (!errorMessage.isEmpty())
         {
-            QMessageBox::information(this, Constants::Messages::INFORMATION, errorMessage);
+            QMessageBox::information(this, "Информация", errorMessage);
         }
         return false;
     }

@@ -1,7 +1,6 @@
 #include "../../include/entities/Property.h"
 #include <algorithm>
 #include <cctype>
-#include <iomanip>
 #include <stdexcept>
 
 Property::Property(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
@@ -32,18 +31,6 @@ Property::Property(const std::string &id, const std::string &city, const std::st
     {
         throw std::invalid_argument("Invalid area: must be positive");
     }
-}
-
-std::ostream &operator<<(std::ostream &os, const Property &prop)
-{
-    os << "ID: " << prop.id << "\n"
-       << "Type: " << prop.getType() << "\n"
-       << "Address: " << prop.city << ", " << prop.street << ", " << prop.house << "\n"
-       << "Price: " << std::fixed << std::setprecision(2) << prop.price << " руб.\n"
-       << "Area: " << prop.area << " м²\n"
-       << "Description: " << prop.description << "\n"
-       << "Available: " << (prop.isAvailable ? "Yes" : "No");
-    return os;
 }
 
 bool Property::operator==(const Property &other) const { return id == other.id; }

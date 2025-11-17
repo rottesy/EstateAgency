@@ -1,6 +1,8 @@
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
+#include <iomanip>
+#include <iostream>
 #include <string>
 
 class Transaction
@@ -39,9 +41,18 @@ class Transaction
 
     std::string toString() const;
     std::string toFileString() const;
+
+    friend std::ostream &operator<<(std::ostream &os, const Transaction &trans)
+    {
+        os << "Transaction ID: " << trans.id << "\n"
+           << "Property ID: " << trans.propertyId << "\n"
+           << "Client ID: " << trans.clientId << "\n"
+           << "Date: " << trans.date << "\n"
+           << "Final Price: " << std::fixed << std::setprecision(2) << trans.finalPrice << " руб.\n"
+           << "Status: " << trans.status << "\n"
+           << "Notes: " << trans.notes;
+        return os;
+    }
 };
 
-std::ostream &operator<<(std::ostream &os, const Transaction &trans);
-
 #endif
-

@@ -1,6 +1,7 @@
 #ifndef PROPERTY_H
 #define PROPERTY_H
 
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -26,8 +27,6 @@ class Property
     virtual std::string toFileString() const = 0;
     virtual Property *clone() const = 0;
 
-    friend std::ostream &operator<<(std::ostream &os, const Property &prop);
-
     bool operator==(const Property &other) const;
     bool operator<(const Property &other) const;
     bool operator>(const Property &other) const;
@@ -52,8 +51,18 @@ class Property
     static bool validateArea(double area);
     static bool validateId(const std::string &id);
     static bool validateAddressPart(const std::string &part);
-};
 
-std::ostream &operator<<(std::ostream &os, const Property &prop);
+    friend std::ostream &operator<<(std::ostream &os, const Property &prop)
+    {
+        os << "ID: " << prop.id << "\n"
+           << "Type: " << prop.getType() << "\n"
+           << "Address: " << prop.city << ", " << prop.street << ", " << prop.house << "\n"
+           << "Price: " << std::fixed << std::setprecision(2) << prop.price << " руб.\n"
+           << "Area: " << prop.area << " м²\n"
+           << "Description: " << prop.description << "\n"
+           << "Available: " << (prop.isAvailable ? "Yes" : "No");
+        return os;
+    }
+};
 
 #endif

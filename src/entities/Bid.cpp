@@ -26,14 +26,6 @@ Bid::Bid(const std::string &clientId, const std::string &clientName, double amou
     timestamp = oss.str();
 }
 
-std::ostream &operator<<(std::ostream &os, const Bid &bid)
-{
-    os << "Client: " << bid.clientName << " (ID: " << bid.clientId << ")\n"
-       << "Amount: " << std::fixed << std::setprecision(PRICE_PRECISION) << bid.amount << " руб.\n"
-       << "Time: " << bid.timestamp;
-    return os;
-}
-
 bool Bid::operator==(const Bid &other) const { return clientId == other.clientId && amount == other.amount; }
 
 bool Bid::operator<(const Bid &other) const
