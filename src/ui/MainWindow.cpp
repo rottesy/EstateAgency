@@ -605,8 +605,28 @@ void MainWindow::loadAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (const std::exception &e)
+    catch (const PropertyManagerException &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка при загрузке: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
+    }
+    catch (const ClientManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
+    }
+    catch (const AuctionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
+    }
+    catch (const std::runtime_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка выполнения: %1").arg(e.what()));
+    }
+    catch (const std::bad_alloc &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
     }
 }

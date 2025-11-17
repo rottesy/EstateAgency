@@ -109,7 +109,7 @@ void DashboardWidget::setupUI()
     buttonsLayout->setSpacing(20);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto createButtonStyle = [](const QString &color)
+    auto createBaseButtonStyle = [](const QString &color)
     {
         return QString("QPushButton {"
                        "    background-color: transparent;"
@@ -121,16 +121,21 @@ void DashboardWidget::setupUI()
                        "    font-weight: 400;"
                        "    letter-spacing: 1px;"
                        "    min-width: 180px;"
-                       "}"
-                       "QPushButton:hover {"
+                       "}");
+    };
+    auto createButtonHoverStyle = [](const QString &color)
+    {
+        return QString("QPushButton:hover {"
                        "    background-color: %1;"
                        "    color: #1e1e1e;"
                        "}"
                        "QPushButton:pressed {"
-                       "    background-color: %2;"
+                       "    background-color: %1;"
                        "}")
-            .arg(color, color);
+            .arg(color);
     };
+    auto createButtonStyle = [&createBaseButtonStyle, &createButtonHoverStyle](const QString &color)
+    { return createBaseButtonStyle(color) + createButtonHoverStyle(color); };
 
     auto createModernButton = [&createButtonStyle](const QString &text, const QString &color)
     {

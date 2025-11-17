@@ -10,20 +10,27 @@ constexpr int MIN_FLOOR = 1;
 constexpr int MAX_FLOOR = 100;
 } // namespace
 
-Apartment::Apartment(const std::string &id, const std::string &city, const std::string &street,
-                     const std::string &house, double price, double area, const std::string &description, int rooms,
-                     int floor, bool hasBalcony, bool hasElevator)
-    : Property(id, city, street, house, price, area, description), rooms(rooms), floor(floor), hasBalcony(hasBalcony),
-      hasElevator(hasElevator)
+Apartment::Apartment(const ApartmentParams &params)
+    : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,
+               params.base.area, params.base.description),
+      rooms(params.rooms), floor(params.floor), hasBalcony(params.hasBalcony), hasElevator(params.hasElevator)
 {
-    if (rooms < MIN_ROOMS || rooms > MAX_ROOMS)
+    if (params.rooms < MIN_ROOMS || params.rooms > MAX_ROOMS)
     {
         throw std::invalid_argument("Number of rooms must be between 1 and 10");
     }
-    if (floor < MIN_FLOOR || floor > MAX_FLOOR)
+    if (params.floor < MIN_FLOOR || params.floor > MAX_FLOOR)
     {
         throw std::invalid_argument("Floor must be between 1 and 100");
     }
+}
+
+Apartment::Apartment(const std::string &id, const std::string &city, const std::string &street,
+                     const std::string &house, double price, double area, const std::string &description, int rooms,
+                     int floor, bool hasBalcony, bool hasElevator)
+    : Apartment(
+          ApartmentParams{{id, city, street, house, price, area, description}, rooms, floor, hasBalcony, hasElevator})
+{
 }
 
 std::string Apartment::getType() const { return "Apartment"; }

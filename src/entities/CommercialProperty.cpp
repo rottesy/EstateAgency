@@ -9,21 +9,32 @@ constexpr int MIN_PARKING_SPACES = 0;
 constexpr int MAX_PARKING_SPACES = 1000;
 } // namespace
 
+CommercialProperty::CommercialProperty(const CommercialPropertyParams &params)
+    : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,
+               params.base.area, params.base.description),
+      businessType(params.businessType), hasParking(params.hasParking), parkingSpaces(params.parkingSpaces),
+      isVisibleFromStreet(params.isVisibleFromStreet)
+{
+    if (params.businessType.empty())
+    {
+        throw std::invalid_argument("Business type cannot be empty");
+    }
+    if (params.parkingSpaces < MIN_PARKING_SPACES || params.parkingSpaces > MAX_PARKING_SPACES)
+    {
+        throw std::invalid_argument("Parking spaces must be between 0 and 1000");
+    }
+}
+
 CommercialProperty::CommercialProperty(const std::string &id, const std::string &city, const std::string &street,
                                        const std::string &house, double price, double area,
                                        const std::string &description, const std::string &businessType, bool hasParking,
                                        int parkingSpaces, bool isVisibleFromStreet)
-    : Property(id, city, street, house, price, area, description), businessType(businessType), hasParking(hasParking),
-      parkingSpaces(parkingSpaces), isVisibleFromStreet(isVisibleFromStreet)
+    : CommercialProperty(CommercialPropertyParams{{id, city, street, house, price, area, description},
+                                                  businessType,
+                                                  hasParking,
+                                                  parkingSpaces,
+                                                  isVisibleFromStreet})
 {
-    if (businessType.empty())
-    {
-        throw std::invalid_argument("Business type cannot be empty");
-    }
-    if (parkingSpaces < MIN_PARKING_SPACES || parkingSpaces > MAX_PARKING_SPACES)
-    {
-        throw std::invalid_argument("Parking spaces must be between 0 and 1000");
-    }
 }
 
 std::string CommercialProperty::getType() const { return "Commercial"; }

@@ -22,14 +22,11 @@ void PropertyManager::addProperty(std::unique_ptr<Property> property)
     properties.push_back(std::move(property));
 }
 
-void PropertyManager::addApartment(const std::string &id, const std::string &city, const std::string &street,
-                                   const std::string &house, double price, double area, const std::string &description,
-                                   int rooms, int floor, bool hasBalcony, bool hasElevator)
+void PropertyManager::addApartment(const ApartmentParams &params)
 {
     try
     {
-        auto apartment = std::make_unique<Apartment>(id, city, street, house, price, area, description, rooms, floor,
-                                                     hasBalcony, hasElevator);
+        auto apartment = std::make_unique<Apartment>(params);
         addProperty(std::move(apartment));
     }
     catch (const std::exception &e)
@@ -38,14 +35,19 @@ void PropertyManager::addApartment(const std::string &id, const std::string &cit
     }
 }
 
-void PropertyManager::addHouse(const std::string &id, const std::string &city, const std::string &street,
-                               const std::string &house, double price, double area, const std::string &description,
-                               int floors, int rooms, double landArea, bool hasGarage, bool hasGarden)
+void PropertyManager::addApartment(const std::string &id, const std::string &city, const std::string &street,
+                                   const std::string &house, double price, double area, const std::string &description,
+                                   int rooms, int floor, bool hasBalcony, bool hasElevator)
+{
+    addApartment(
+        ApartmentParams{{id, city, street, house, price, area, description}, rooms, floor, hasBalcony, hasElevator});
+}
+
+void PropertyManager::addHouse(const HouseParams &params)
 {
     try
     {
-        auto houseObj = std::make_unique<House>(id, city, street, house, price, area, description, floors, rooms,
-                                                landArea, hasGarage, hasGarden);
+        auto houseObj = std::make_unique<House>(params);
         addProperty(std::move(houseObj));
     }
     catch (const std::exception &e)
@@ -54,22 +56,37 @@ void PropertyManager::addHouse(const std::string &id, const std::string &city, c
     }
 }
 
-void PropertyManager::addCommercialProperty(const std::string &id, const std::string &city, const std::string &street,
-                                            const std::string &house, double price, double area,
-                                            const std::string &description, const std::string &businessType,
-                                            bool hasParking, int parkingSpaces, bool isVisibleFromStreet)
+void PropertyManager::addHouse(const std::string &id, const std::string &city, const std::string &street,
+                               const std::string &house, double price, double area, const std::string &description,
+                               int floors, int rooms, double landArea, bool hasGarage, bool hasGarden)
+{
+    addHouse(HouseParams{
+        {id, city, street, house, price, area, description}, floors, rooms, landArea, hasGarage, hasGarden});
+}
+
+void PropertyManager::addCommercialProperty(const CommercialPropertyParams &params)
 {
     try
     {
-        auto commercial =
-            std::make_unique<CommercialProperty>(id, city, street, house, price, area, description, businessType,
-                                                 hasParking, parkingSpaces, isVisibleFromStreet);
+        auto commercial = std::make_unique<CommercialProperty>(params);
         addProperty(std::move(commercial));
     }
     catch (const std::exception &e)
     {
         throw PropertyManagerException(std::string("Failed to add commercial property: ") + e.what());
     }
+}
+
+void PropertyManager::addCommercialProperty(const std::string &id, const std::string &city, const std::string &street,
+                                            const std::string &house, double price, double area,
+                                            const std::string &description, const std::string &businessType,
+                                            bool hasParking, int parkingSpaces, bool isVisibleFromStreet)
+{
+    addCommercialProperty(CommercialPropertyParams{{id, city, street, house, price, area, description},
+                                                   businessType,
+                                                   hasParking,
+                                                   parkingSpaces,
+                                                   isVisibleFromStreet});
 }
 
 bool PropertyManager::removeProperty(const std::string &id)

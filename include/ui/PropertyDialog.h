@@ -63,34 +63,46 @@ class PropertyDialog : public QDialog
     void loadPropertyData(const Property *prop);
     void updateTypeSpecificFields();
 
-    QComboBox *typeCombo;
-    QLineEdit *idEdit;
-    QLineEdit *cityEdit;
-    QLineEdit *streetEdit;
-    QLineEdit *houseEdit;
-    QDoubleSpinBox *priceSpin;
-    QDoubleSpinBox *areaSpin;
-    QTextEdit *descriptionEdit;
-    QCheckBox *availableCheck;
+    struct CommonFields
+    {
+        QComboBox *typeCombo;
+        QLineEdit *idEdit;
+        QLineEdit *cityEdit;
+        QLineEdit *streetEdit;
+        QLineEdit *houseEdit;
+        QDoubleSpinBox *priceSpin;
+        QDoubleSpinBox *areaSpin;
+        QTextEdit *descriptionEdit;
+        QCheckBox *availableCheck;
+    } common;
 
-    QGroupBox *apartmentGroup;
-    QSpinBox *roomsSpin;
-    QSpinBox *floorSpin;
-    QCheckBox *balconyCheck;
-    QCheckBox *elevatorCheck;
+    struct ApartmentFields
+    {
+        QGroupBox *group;
+        QSpinBox *roomsSpin;
+        QSpinBox *floorSpin;
+        QCheckBox *balconyCheck;
+        QCheckBox *elevatorCheck;
+    } apartment;
 
-    QGroupBox *houseGroup;
-    QSpinBox *floorsSpin;
-    QSpinBox *houseRoomsSpin;
-    QDoubleSpinBox *landAreaSpin;
-    QCheckBox *garageCheck;
-    QCheckBox *gardenCheck;
+    struct HouseFields
+    {
+        QGroupBox *group;
+        QSpinBox *floorsSpin;
+        QSpinBox *roomsSpin;
+        QDoubleSpinBox *landAreaSpin;
+        QCheckBox *garageCheck;
+        QCheckBox *gardenCheck;
+    } house;
 
-    QGroupBox *commercialGroup;
-    QLineEdit *businessTypeEdit;
-    QCheckBox *parkingCheck;
-    QSpinBox *parkingSpacesSpin;
-    QCheckBox *visibleFromStreetCheck;
+    struct CommercialFields
+    {
+        QGroupBox *group;
+        QLineEdit *businessTypeEdit;
+        QCheckBox *parkingCheck;
+        QSpinBox *parkingSpacesSpin;
+        QCheckBox *visibleFromStreetCheck;
+    } commercial;
 
     QDialogButtonBox *buttonBox;
 };

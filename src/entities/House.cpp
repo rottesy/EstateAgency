@@ -1,4 +1,5 @@
 #include "../../include/entities/House.h"
+#include "../../include/entities/PropertyParams.h"
 #include <sstream>
 #include <stdexcept>
 
@@ -12,24 +13,32 @@ constexpr double MIN_LAND_AREA = 0.0;
 constexpr double MAX_LAND_AREA = 10000.0;
 } // namespace
 
-House::House(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
-             double price, double area, const std::string &description, int floors, int rooms, double landArea,
-             bool hasGarage, bool hasGarden)
-    : Property(id, city, street, house, price, area, description), floors(floors), rooms(rooms), landArea(landArea),
-      hasGarage(hasGarage), hasGarden(hasGarden)
+House::House(const HouseParams &params)
+    : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,
+               params.base.area, params.base.description),
+      floors(params.floors), rooms(params.rooms), landArea(params.landArea), hasGarage(params.hasGarage),
+      hasGarden(params.hasGarden)
 {
-    if (floors < MIN_FLOORS || floors > MAX_FLOORS)
+    if (params.floors < MIN_FLOORS || params.floors > MAX_FLOORS)
     {
         throw std::invalid_argument("Number of floors must be between 1 and 10");
     }
-    if (rooms < MIN_ROOMS || rooms > MAX_ROOMS)
+    if (params.rooms < MIN_ROOMS || params.rooms > MAX_ROOMS)
     {
         throw std::invalid_argument("Number of rooms must be between 1 and 50");
     }
-    if (landArea < MIN_LAND_AREA || landArea > MAX_LAND_AREA)
+    if (params.landArea < MIN_LAND_AREA || params.landArea > MAX_LAND_AREA)
     {
         throw std::invalid_argument("Land area must be between 0 and 10000 m²");
     }
+}
+
+House::House(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
+             double price, double area, const std::string &description, int floors, int rooms, double landArea,
+             bool hasGarage, bool hasGarden)
+    : House(HouseParams{
+          {id, city, street, house, price, area, description}, floors, rooms, landArea, hasGarage, hasGarden})
+{
 }
 
 std::string House::getType() const { return "House"; }

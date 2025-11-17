@@ -2,6 +2,7 @@
 #define HOUSE_H
 
 #include "Property.h"
+#include "PropertyParams.h"
 
 class House : public Property
 {
@@ -13,6 +14,7 @@ class House : public Property
     bool hasGarden;
 
   public:
+    explicit House(const HouseParams &params);
     House(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
           double price, double area, const std::string &description, int floors, int rooms, double landArea,
           bool hasGarage, bool hasGarden);
@@ -34,4 +36,3 @@ class House : public Property
 };
 
 #endif
-

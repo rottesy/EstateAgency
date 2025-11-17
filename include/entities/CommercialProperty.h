@@ -2,6 +2,7 @@
 #define COMMERCIAL_PROPERTY_H
 
 #include "Property.h"
+#include "PropertyParams.h"
 #include <string_view>
 
 class CommercialProperty : public Property
@@ -13,6 +14,7 @@ class CommercialProperty : public Property
     bool isVisibleFromStreet;
 
   public:
+    explicit CommercialProperty(const CommercialPropertyParams &params);
     CommercialProperty(const std::string &id, const std::string &city, const std::string &street,
                        const std::string &house, double price, double area, const std::string &description,
                        const std::string &businessType, bool hasParking, int parkingSpaces, bool isVisibleFromStreet);
