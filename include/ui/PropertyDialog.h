@@ -74,7 +74,8 @@ class PropertyDialog : public QDialog
         QDoubleSpinBox *areaSpin;
         QTextEdit *descriptionEdit;
         QCheckBox *availableCheck;
-    } common;
+    };
+    CommonFields common;
 
     struct ApartmentFields
     {
@@ -83,7 +84,8 @@ class PropertyDialog : public QDialog
         QSpinBox *floorSpin;
         QCheckBox *balconyCheck;
         QCheckBox *elevatorCheck;
-    } apartment;
+    };
+    ApartmentFields apartment;
 
     struct HouseFields
     {
@@ -93,7 +95,8 @@ class PropertyDialog : public QDialog
         QDoubleSpinBox *landAreaSpin;
         QCheckBox *garageCheck;
         QCheckBox *gardenCheck;
-    } house;
+    };
+    HouseFields house;
 
     struct CommercialFields
     {
@@ -102,7 +105,8 @@ class PropertyDialog : public QDialog
         QCheckBox *parkingCheck;
         QSpinBox *parkingSpacesSpin;
         QCheckBox *visibleFromStreetCheck;
-    } commercial;
+    };
+    CommercialFields commercial;
 
     QDialogButtonBox *buttonBox;
 };
