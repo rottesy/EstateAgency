@@ -1,0 +1,52 @@
+#ifndef CLIENTSWIDGET_H
+#define CLIENTSWIDGET_H
+
+#include "../core/EstateAgency.h"
+#include "../entities/Client.h"
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSplitter>
+#include <QTableWidget>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include <QWidget>
+
+class ClientsWidget : public QWidget
+{
+    Q_OBJECT
+
+  public:
+    explicit ClientsWidget(EstateAgency *agency, QWidget *parent = nullptr);
+    void refresh();
+    void updateTable();
+
+  signals:
+    void dataChanged();
+
+  private slots:
+    void addClient();
+    void editClient();
+    void deleteClient();
+    void searchClients();
+    void clientSelectionChanged();
+
+  private:
+    void setupUI();
+    void showClientDetails(Client *client);
+    void showClientTransactions(const std::string &clientId);
+    QWidget *createActionButtons(QTableWidget *table, const QString &id, std::function<void()> editAction,
+                                 std::function<void()> deleteAction);
+    void selectRowById(QTableWidget *table, const QString &id);
+    QString getSelectedIdFromTable(QTableWidget *table);
+    bool checkTableSelection(QTableWidget *table, const QString &errorMessage);
+
+    EstateAgency *agency;
+    QTableWidget *clientsTable;
+    QPushButton *addClientBtn;
+    QPushButton *refreshClientBtn;
+    QPushButton *searchClientBtn;
+    QLineEdit *searchClientEdit;
+    QTextEdit *clientDetailsText;
+};
+
+#endif

@@ -1,5 +1,7 @@
-#include "../include/MainWindow.h"
+#include "../include/ui/MainWindow.h"
 #include <QApplication>
+#include <QLoggingCategory>
+#include <exception>
 
 namespace
 {
@@ -10,10 +12,23 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    app.setStyle(APPLICATION_STYLE);
+    try
+    {
+        app.setStyle(APPLICATION_STYLE);
 
-    MainWindow window;
-    window.show();
+        MainWindow window;
+        window.show();
 
-    return app.exec();
+        return app.exec();
+    }
+    catch (const std::exception &e)
+    {
+        qCritical() << "Exception caught:" << e.what();
+        return 1;
+    }
+    catch (...)
+    {
+        qCritical() << "Unknown exception caught";
+        return 1;
+    }
 }

@@ -17,44 +17,49 @@ set(INCLUDE_DIR include)
 # Исходные файлы
 set(SOURCES
     src/main.cpp
-    src/Property.cpp
-    src/Apartment.cpp
-    src/House.cpp
-    src/CommercialProperty.cpp
-    src/Client.cpp
-    src/Transaction.cpp
-    src/Bid.cpp
-    src/Auction.cpp
-    src/PropertyManager.cpp
-    src/ClientManager.cpp
-    src/TransactionManager.cpp
-    src/AuctionManager.cpp
-    src/EstateAgency.cpp
-    src/MainWindow.cpp
-    src/PropertyDialog.cpp
-    src/ClientDialog.cpp
-    src/TransactionDialog.cpp
-    src/AuctionDialog.cpp
-    src/HtmlFormatter.cpp
-    src/PropertiesWidget.cpp
-    src/ClientsWidget.cpp
-    src/TransactionsWidget.cpp
-    src/AuctionsWidget.cpp
-    src/DashboardWidget.cpp
+    # Entities
+    src/entities/Property.cpp
+    src/entities/Apartment.cpp
+    src/entities/House.cpp
+    src/entities/CommercialProperty.cpp
+    src/entities/Client.cpp
+    src/entities/Transaction.cpp
+    src/entities/Bid.cpp
+    src/entities/Auction.cpp
+    # Services
+    src/services/PropertyManager.cpp
+    src/services/ClientManager.cpp
+    src/services/TransactionManager.cpp
+    src/services/AuctionManager.cpp
+    src/services/FileManager.cpp
+    # Core
+    src/core/EstateAgency.cpp
+    # UI
+    src/ui/MainWindow.cpp
+    src/ui/PropertyDialog.cpp
+    src/ui/ClientDialog.cpp
+    src/ui/TransactionDialog.cpp
+    src/ui/AuctionDialog.cpp
+    src/ui/HtmlFormatter.cpp
+    src/ui/PropertiesWidget.cpp
+    src/ui/ClientsWidget.cpp
+    src/ui/TransactionsWidget.cpp
+    src/ui/AuctionsWidget.cpp
+    src/ui/DashboardWidget.cpp
 )
 
 # Заголовочные файлы для MOC
 set(HEADERS
-    include/MainWindow.h
-    include/PropertyDialog.h
-    include/ClientDialog.h
-    include/TransactionDialog.h
-    include/AuctionDialog.h
-    include/PropertiesWidget.h
-    include/ClientsWidget.h
-    include/TransactionsWidget.h
-    include/AuctionsWidget.h
-    include/DashboardWidget.h
+    include/ui/MainWindow.h
+    include/ui/PropertyDialog.h
+    include/ui/ClientDialog.h
+    include/ui/TransactionDialog.h
+    include/ui/AuctionDialog.h
+    include/ui/PropertiesWidget.h
+    include/ui/ClientsWidget.h
+    include/ui/TransactionsWidget.h
+    include/ui/AuctionsWidget.h
+    include/ui/DashboardWidget.h
 )
 
 # Создание исполняемого файла
@@ -74,6 +79,10 @@ endif()
 # Установка директории включения
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/${INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/entities)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/services)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/core)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include/ui)
 
 # Для сборки в Release
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
