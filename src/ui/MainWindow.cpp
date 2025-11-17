@@ -72,13 +72,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
     }
-    catch (const std::runtime_error &e)
-    {
-        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка выполнения: %1").arg(e.what()));
-    }
     catch (const std::bad_alloc &e)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Недостаточно памяти: %1").arg(e.what()));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Неверный аргумент: %1").arg(e.what()));
+    }
+    catch (const std::logic_error &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Логическая ошибка: %1").arg(e.what()));
     }
 }
 
@@ -572,13 +576,17 @@ void MainWindow::saveAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
     }
-    catch (const std::runtime_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка выполнения: %1").arg(e.what()));
-    }
     catch (const std::bad_alloc &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
+    }
+    catch (const std::logic_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Логическая ошибка: %1").arg(e.what()));
     }
 }
 
@@ -621,12 +629,16 @@ void MainWindow::loadAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
     }
-    catch (const std::runtime_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка выполнения: %1").arg(e.what()));
-    }
     catch (const std::bad_alloc &e)
     {
         QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
+    }
+    catch (const std::logic_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Логическая ошибка: %1").arg(e.what()));
     }
 }

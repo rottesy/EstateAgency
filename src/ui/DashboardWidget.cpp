@@ -121,7 +121,8 @@ void DashboardWidget::setupUI()
                        "    font-weight: 400;"
                        "    letter-spacing: 1px;"
                        "    min-width: 180px;"
-                       "}");
+                       "}")
+            .arg(color);
     };
     auto createButtonHoverStyle = [](const QString &color)
     {
