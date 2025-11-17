@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-void FileManager::saveProperties(PropertyManager &manager, const std::string &filename)
+void FileManager::saveProperties(const PropertyManager &manager, const std::string &filename)
 {
     const auto &properties = manager.getProperties();
     std::ofstream file(filename);
@@ -46,10 +46,18 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
         {
             if (type == "APARTMENT")
             {
-                std::string id, city, street, house, desc, avail;
-                double price, area;
-                int rooms, floor;
-                int balcony, elevator;
+                std::string id;
+                std::string city;
+                std::string street;
+                std::string house;
+                std::string desc;
+                std::string avail;
+                double price;
+                double area;
+                int rooms;
+                int floor;
+                int balcony;
+                int elevator;
 
                 std::getline(iss, id, FILE_DELIMITER);
                 std::getline(iss, city, FILE_DELIMITER);
@@ -76,10 +84,19 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
             }
             else if (type == "HOUSE")
             {
-                std::string id, city, street, house, desc, avail;
-                double price, area, landArea;
-                int floors, rooms;
-                int garage, garden;
+                std::string id;
+                std::string city;
+                std::string street;
+                std::string house;
+                std::string desc;
+                std::string avail;
+                double price;
+                double area;
+                double landArea;
+                int floors;
+                int rooms;
+                int garage;
+                int garden;
 
                 std::getline(iss, id, FILE_DELIMITER);
                 std::getline(iss, city, FILE_DELIMITER);
@@ -108,9 +125,17 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
             }
             else if (type == "COMMERCIAL")
             {
-                std::string id, city, street, house, desc, avail, businessType;
-                double price, area;
-                int parking, visible;
+                std::string id;
+                std::string city;
+                std::string street;
+                std::string house;
+                std::string desc;
+                std::string avail;
+                std::string businessType;
+                double price;
+                double area;
+                int parking;
+                int visible;
                 int parkingSpaces;
 
                 std::getline(iss, id, FILE_DELIMITER);
@@ -153,7 +178,7 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
     manager.setProperties(std::move(properties));
 }
 
-void FileManager::saveClients(ClientManager &manager, const std::string &filename)
+void FileManager::saveClients(const ClientManager &manager, const std::string &filename)
 {
     const auto &clients = manager.getClients();
     std::ofstream file(filename);
@@ -190,7 +215,11 @@ void FileManager::loadClients(ClientManager &manager, const std::string &filenam
         }
 
         std::istringstream iss(line);
-        std::string id, name, phone, email, regDate;
+        std::string id;
+        std::string name;
+        std::string phone;
+        std::string email;
+        std::string regDate;
 
         std::getline(iss, id, FILE_DELIMITER);
         std::getline(iss, name, FILE_DELIMITER);
@@ -219,7 +248,7 @@ void FileManager::loadClients(ClientManager &manager, const std::string &filenam
     manager.setClients(std::move(clients));
 }
 
-void FileManager::saveTransactions(TransactionManager &manager, const std::string &filename)
+void FileManager::saveTransactions(const TransactionManager &manager, const std::string &filename)
 {
     const auto &transactions = manager.getTransactions();
     std::ofstream file(filename);
@@ -255,7 +284,12 @@ void FileManager::loadTransactions(TransactionManager &manager, const std::strin
         }
 
         std::istringstream iss(line);
-        std::string id, propertyId, clientId, date, status, notes;
+        std::string id;
+        std::string propertyId;
+        std::string clientId;
+        std::string date;
+        std::string status;
+        std::string notes;
         double finalPrice;
 
         std::getline(iss, id, FILE_DELIMITER);
@@ -288,7 +322,7 @@ void FileManager::loadTransactions(TransactionManager &manager, const std::strin
     manager.setTransactions(std::move(transactions));
 }
 
-void FileManager::saveAuctions(AuctionManager &manager, const std::string &filename)
+void FileManager::saveAuctions(const AuctionManager &manager, const std::string &filename)
 {
     const auto &auctions = manager.getAuctions();
     std::ofstream file(filename);
@@ -308,6 +342,107 @@ void FileManager::saveAuctions(AuctionManager &manager, const std::string &filen
         }
     }
     file.close();
+}
+
+void FileManager::parseBidLine(const std::string &line, Auction *currentAuction)
+{
+    if (currentAuction == nullptr)
+    {
+        return;
+    }
+
+    try
+    {
+        std::istringstream iss(line.substr(BID_PREFIX_LENGTH));
+        std::string auctionId;
+        std::string clientId;
+        std::string clientName;
+        std::string amountStr;
+        std::string timestamp;
+
+        if (!std::getline(iss, auctionId, FILE_DELIMITER) || auctionId.empty())
+        {
+            return;
+        }
+        if (!std::getline(iss, clientId, FILE_DELIMITER) || clientId.empty())
+        {
+            return;
+        }
+        if (!std::getline(iss, clientName, FILE_DELIMITER))
+        {
+            return;
+        }
+        if (!std::getline(iss, amountStr, FILE_DELIMITER) || amountStr.empty())
+        {
+            return;
+        }
+        std::getline(iss, timestamp, FILE_DELIMITER);
+
+        double amount = std::stod(amountStr);
+        if (amount <= 0.0)
+        {
+            return;
+        }
+
+        auto bid = std::make_shared<Bid>(clientId, clientName, amount);
+        currentAuction->addBidDirect(bid);
+    }
+    catch (const std::invalid_argument &)
+    {
+        // Skip invalid bid data
+    }
+    catch (const AuctionManagerException &)
+    {
+        // Skip auction manager errors
+    }
+}
+
+std::shared_ptr<Auction> FileManager::parseAuctionLine(const std::string &line)
+{
+    std::istringstream iss(line);
+    std::string id;
+    std::string propertyId;
+    std::string propertyAddress;
+    std::string startingPriceStr;
+    std::string buyoutPriceStr;
+    std::string status;
+    std::string createdAt;
+    std::string completedAt;
+
+    std::getline(iss, id, FILE_DELIMITER);
+    std::getline(iss, propertyId, FILE_DELIMITER);
+    std::getline(iss, propertyAddress, FILE_DELIMITER);
+    std::getline(iss, startingPriceStr, FILE_DELIMITER);
+    std::getline(iss, buyoutPriceStr, FILE_DELIMITER);
+    std::getline(iss, status, FILE_DELIMITER);
+    std::getline(iss, createdAt, FILE_DELIMITER);
+    std::getline(iss, completedAt, FILE_DELIMITER);
+
+    try
+    {
+        double startingPrice = std::stod(startingPriceStr);
+        auto auction = std::make_shared<Auction>(id, propertyId, propertyAddress, startingPrice);
+
+        if (status == Constants::AuctionStatus::COMPLETED)
+        {
+            auction->complete();
+        }
+        else if (status == Constants::AuctionStatus::CANCELLED)
+        {
+            auction->cancel();
+        }
+        return auction;
+    }
+    catch (const std::invalid_argument &)
+    {
+        // Skip invalid auction data
+        return nullptr;
+    }
+    catch (const AuctionManagerException &)
+    {
+        // Skip auction manager errors
+        return nullptr;
+    }
 }
 
 void FileManager::loadAuctions(AuctionManager &manager, const std::string &filename)
@@ -333,94 +468,15 @@ void FileManager::loadAuctions(AuctionManager &manager, const std::string &filen
 
         if (line.starts_with(BID_PREFIX))
         {
-            if (currentAuction == nullptr)
-            {
-                continue;
-            }
-
-            try
-            {
-                std::istringstream iss(line.substr(BID_PREFIX_LENGTH));
-                std::string auctionId, clientId, clientName, amountStr, timestamp;
-
-                if (!std::getline(iss, auctionId, FILE_DELIMITER) || auctionId.empty())
-                {
-                    continue;
-                }
-                if (!std::getline(iss, clientId, FILE_DELIMITER) || clientId.empty())
-                {
-                    continue;
-                }
-                if (!std::getline(iss, clientName, FILE_DELIMITER))
-                {
-                    continue;
-                }
-                if (!std::getline(iss, amountStr, FILE_DELIMITER) || amountStr.empty())
-                {
-                    continue;
-                }
-                std::getline(iss, timestamp, FILE_DELIMITER);
-
-                double amount = std::stod(amountStr);
-                if (amount <= 0.0)
-                {
-                    continue;
-                }
-
-                auto bid = std::make_shared<Bid>(clientId, clientName, amount);
-                currentAuction->addBidDirect(bid);
-            }
-            catch (const std::invalid_argument &)
-            {
-                // Skip invalid bid data
-                continue;
-            }
-            catch (const AuctionManagerException &)
-            {
-                // Skip auction manager errors
-                continue;
-            }
+            parseBidLine(line, currentAuction);
         }
         else
         {
-            std::istringstream iss(line);
-            std::string id, propertyId, propertyAddress, startingPriceStr, buyoutPriceStr, status, createdAt,
-                completedAt;
-
-            std::getline(iss, id, FILE_DELIMITER);
-            std::getline(iss, propertyId, FILE_DELIMITER);
-            std::getline(iss, propertyAddress, FILE_DELIMITER);
-            std::getline(iss, startingPriceStr, FILE_DELIMITER);
-            std::getline(iss, buyoutPriceStr, FILE_DELIMITER);
-            std::getline(iss, status, FILE_DELIMITER);
-            std::getline(iss, createdAt, FILE_DELIMITER);
-            std::getline(iss, completedAt, FILE_DELIMITER);
-
-            try
+            auto auction = parseAuctionLine(line);
+            if (auction != nullptr)
             {
-                double startingPrice = std::stod(startingPriceStr);
-                auto auction = std::make_shared<Auction>(id, propertyId, propertyAddress, startingPrice);
-
-                if (status == Constants::AuctionStatus::COMPLETED)
-                {
-                    auction->complete();
-                }
-                else if (status == Constants::AuctionStatus::CANCELLED)
-                {
-                    auction->cancel();
-                }
                 auctions.push_back(auction);
                 currentAuction = auction.get();
-            }
-            catch (const std::invalid_argument &)
-            {
-                // Skip invalid auction data
-                continue;
-            }
-            catch (const AuctionManagerException &)
-            {
-                // Skip auction manager errors
-                continue;
             }
         }
     }

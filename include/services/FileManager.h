@@ -17,7 +17,6 @@
 #include <string>
 #include <vector>
 
-
 class FileManagerException : public std::exception
 {
   private:
@@ -36,12 +35,16 @@ class FileManager
     static constexpr char UNAVAILABLE_CHAR = '0';
     static constexpr size_t BID_PREFIX_LENGTH = 4;
 
+    // Вспомогательные функции для загрузки аукционов
+    static void parseBidLine(const std::string &line, Auction *currentAuction);
+    static std::shared_ptr<Auction> parseAuctionLine(const std::string &line);
+
   public:
     // Сохранение данных через менеджеры
-    static void saveProperties(PropertyManager &manager, const std::string &filename);
-    static void saveClients(ClientManager &manager, const std::string &filename);
-    static void saveTransactions(TransactionManager &manager, const std::string &filename);
-    static void saveAuctions(AuctionManager &manager, const std::string &filename);
+    static void saveProperties(const PropertyManager &manager, const std::string &filename);
+    static void saveClients(const ClientManager &manager, const std::string &filename);
+    static void saveTransactions(const TransactionManager &manager, const std::string &filename);
+    static void saveAuctions(const AuctionManager &manager, const std::string &filename);
 
     // Загрузка данных через менеджеры
     static void loadProperties(PropertyManager &manager, const std::string &filename);

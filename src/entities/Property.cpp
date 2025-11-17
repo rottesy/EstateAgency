@@ -95,8 +95,9 @@ bool Property::validateArea(double area)
 
 bool Property::validateId(std::string_view id)
 {
-    if (constexpr size_t MIN_ID_LENGTH = 6, MAX_ID_LENGTH = 8;
-        id.empty() || id.length() < MIN_ID_LENGTH || id.length() > MAX_ID_LENGTH)
+    constexpr size_t MIN_ID_LENGTH = 6;
+    constexpr size_t MAX_ID_LENGTH = 8;
+    if (id.empty() || id.length() < MIN_ID_LENGTH || id.length() > MAX_ID_LENGTH)
     {
         return false;
     }
@@ -106,7 +107,8 @@ bool Property::validateId(std::string_view id)
 
 bool Property::validateAddressPart(std::string_view part)
 {
-    if (constexpr size_t MAX_ADDRESS_LENGTH = 100; part.empty() || part.length() > MAX_ADDRESS_LENGTH)
+    constexpr size_t MAX_ADDRESS_LENGTH = 100;
+    if (part.empty() || part.length() > MAX_ADDRESS_LENGTH)
     {
         return false;
     }
