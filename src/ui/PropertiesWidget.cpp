@@ -186,7 +186,7 @@ void PropertiesWidget::editProperty()
     }
 
     QString id = getSelectedIdFromTable(propertiesTable);
-    Property *prop = agency->getPropertyManager().findProperty(Utils::toString(id));
+    const Property *prop = agency->getPropertyManager().findProperty(Utils::toString(id));
     if (!prop)
         return;
 

@@ -1,6 +1,10 @@
 #include "../../include/ui/MainWindow.h"
 #include "../../include/core/Constants.h"
+#include "../../include/services/AuctionManager.h"
+#include "../../include/services/ClientManager.h"
 #include "../../include/services/FileManager.h"
+#include "../../include/services/PropertyManager.h"
+#include "../../include/services/TransactionManager.h"
 #include <QFrame>
 #include <QLabel>
 #include <QListWidget>
@@ -12,6 +16,7 @@
 #include <QStatusBar>
 #include <QTimer>
 #include <filesystem>
+#include <stdexcept>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -50,9 +55,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     {
         QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (const std::exception &e)
+    catch (const PropertyManagerException &e)
     {
-        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка при инициализации: %1").arg(e.what()));
+        QMessageBox::critical(nullptr, "Ошибка инициализации",
+                              QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
+    }
+    catch (const ClientManagerException &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка менеджера сделок: %1").arg(e.what()));
+    }
+    catch (const AuctionManagerException &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
+    }
+    catch (const std::runtime_error &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Ошибка выполнения: %1").arg(e.what()));
+    }
+    catch (const std::bad_alloc &e)
+    {
+        QMessageBox::critical(nullptr, "Ошибка инициализации", QString("Недостаточно памяти: %1").arg(e.what()));
     }
 }
 
@@ -530,9 +556,29 @@ void MainWindow::saveAllData()
     {
         QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
     }
-    catch (const std::exception &e)
+    catch (const PropertyManagerException &e)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка при сохранении: %1").arg(e.what()));
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
+    }
+    catch (const ClientManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
+    }
+    catch (const AuctionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
+    }
+    catch (const std::runtime_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка выполнения: %1").arg(e.what()));
+    }
+    catch (const std::bad_alloc &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
     }
 }
 
