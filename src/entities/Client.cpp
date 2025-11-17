@@ -8,7 +8,7 @@
 #include <regex>
 #include <sstream>
 #include <stdexcept>
-
+#include <string_view>
 
 namespace
 {
@@ -67,7 +67,7 @@ void Client::setEmail(const std::string &newEmail)
     email = newEmail;
 }
 
-bool Client::validateId(const std::string &id)
+bool Client::validateId(std::string_view id)
 {
     if (id.empty() || id.length() < MIN_ID_LENGTH || id.length() > MAX_ID_LENGTH)
     {
@@ -77,16 +77,16 @@ bool Client::validateId(const std::string &id)
     return std::ranges::all_of(id, [](char c) { return std::isdigit(static_cast<unsigned char>(c)); });
 }
 
-bool Client::validatePhone(const std::string &phone)
+bool Client::validatePhone(std::string_view phone)
 {
     static const std::regex pattern(R"(\+375\d{9})");
-    return std::regex_match(phone, pattern);
+    return std::regex_match(phone.begin(), phone.end(), pattern);
 }
 
-bool Client::validateEmail(const std::string &email)
+bool Client::validateEmail(std::string_view email)
 {
     static const std::regex pattern(R"([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})");
-    return std::regex_match(email, pattern);
+    return std::regex_match(email.begin(), email.end(), pattern);
 }
 
 std::string Client::toString() const

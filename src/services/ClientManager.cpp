@@ -2,6 +2,8 @@
 #include "../../include/core/Utils.h"
 #include <algorithm>
 #include <cctype>
+#include <ranges>
+#include <string_view>
 
 ClientManager::ClientManager() = default;
 
@@ -20,12 +22,11 @@ void ClientManager::addClient(std::shared_ptr<Client> client)
 
 bool ClientManager::removeClient(const std::string &id)
 {
-    auto it = std::remove_if(clients.begin(), clients.end(),
-                             [&id](const std::shared_ptr<Client> &client) { return client->getId() == id; });
-
-    if (it != clients.end())
+    auto removed =
+        std::ranges::remove_if(clients, [&id](const std::shared_ptr<Client> &client) { return client->getId() == id; });
+    if (removed.begin() != clients.end())
     {
-        clients.erase(it, clients.end());
+        clients.erase(removed.begin(), clients.end());
         return true;
     }
     return false;
@@ -33,10 +34,13 @@ bool ClientManager::removeClient(const std::string &id)
 
 Client *ClientManager::findClient(const std::string &id) const
 {
-    auto it = std::find_if(clients.begin(), clients.end(),
-                           [&id](const std::shared_ptr<Client> &client) { return client->getId() == id; });
-
-    return (it != clients.end()) ? it->get() : nullptr;
+    if (auto it = std::ranges::find_if(clients,
+                                       [&id](const std::shared_ptr<Client> &client) { return client->getId() == id; });
+        it != clients.end())
+    {
+        return it->get();
+    }
+    return nullptr;
 }
 
 std::vector<Client *> ClientManager::getAllClients() const
@@ -50,18 +54,16 @@ std::vector<Client *> ClientManager::getAllClients() const
     return result;
 }
 
-std::vector<Client *> ClientManager::searchByName(const std::string &name) const
+std::vector<Client *> ClientManager::searchByName(std::string_view name) const
 {
     std::vector<Client *> result;
-    std::string lowerName = name;
-    std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    std::string lowerName(name.data(), name.size());
+    std::ranges::transform(lowerName, lowerName.begin(), [](unsigned char c) { return std::tolower(c); });
 
     for (const auto &client : clients)
     {
         std::string clientName = client->getName();
-        std::transform(clientName.begin(), clientName.end(), clientName.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(clientName, clientName.begin(), [](unsigned char c) { return std::tolower(c); });
         if (Utils::stringContains(clientName, lowerName))
         {
             result.push_back(client.get());
@@ -70,7 +72,7 @@ std::vector<Client *> ClientManager::searchByName(const std::string &name) const
     return result;
 }
 
-std::vector<Client *> ClientManager::searchByPhone(const std::string &phone) const
+std::vector<Client *> ClientManager::searchByPhone(std::string_view phone) const
 {
     std::vector<Client *> result;
     for (const auto &client : clients)

@@ -4,6 +4,7 @@
 #include <compare>
 #include <ranges>
 #include <stdexcept>
+#include <string_view>
 
 Property::Property(const std::string &id, const std::string &city, const std::string &street, const std::string &house,
                    double price, double area, const std::string &description)
@@ -92,7 +93,7 @@ bool Property::validateArea(double area)
     return area > MIN_AREA && area <= MAX_AREA;
 }
 
-bool Property::validateId(const std::string &id)
+bool Property::validateId(std::string_view id)
 {
     constexpr size_t MIN_ID_LENGTH = 6;
     constexpr size_t MAX_ID_LENGTH = 8;
@@ -105,7 +106,7 @@ bool Property::validateId(const std::string &id)
     return std::ranges::all_of(id, [](char c) { return std::isdigit(static_cast<unsigned char>(c)); });
 }
 
-bool Property::validateAddressPart(const std::string &part)
+bool Property::validateAddressPart(std::string_view part)
 {
     constexpr size_t MAX_ADDRESS_LENGTH = 100;
 
@@ -114,5 +115,5 @@ bool Property::validateAddressPart(const std::string &part)
         return false;
     }
 
-    return std::any_of(part.begin(), part.end(), [](char c) { return std::isprint(static_cast<unsigned char>(c)); });
+    return std::ranges::any_of(part, [](char c) { return std::isprint(static_cast<unsigned char>(c)); });
 }

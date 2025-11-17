@@ -86,7 +86,7 @@ std::string Transaction::toFileString() const
     return oss.str();
 }
 
-bool Transaction::validateId(const std::string &id)
+bool Transaction::validateId(std::string_view id)
 {
     if (id.empty() || id.length() < MIN_ID_LENGTH || id.length() > MAX_ID_LENGTH)
     {

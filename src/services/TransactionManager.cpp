@@ -1,5 +1,7 @@
 #include "../../include/services/TransactionManager.h"
 #include <algorithm>
+#include <ranges>
+#include <string_view>
 
 TransactionManager::TransactionManager() = default;
 
@@ -18,12 +20,11 @@ void TransactionManager::addTransaction(std::shared_ptr<Transaction> transaction
 
 bool TransactionManager::removeTransaction(const std::string &id)
 {
-    auto it = std::remove_if(transactions.begin(), transactions.end(),
-                             [&id](const std::shared_ptr<Transaction> &trans) { return trans->getId() == id; });
-
-    if (it != transactions.end())
+    auto removed = std::ranges::remove_if(transactions, [&id](const std::shared_ptr<Transaction> &trans)
+                                          { return trans->getId() == id; });
+    if (removed.begin() != transactions.end())
     {
-        transactions.erase(it, transactions.end());
+        transactions.erase(removed.begin(), transactions.end());
         return true;
     }
     return false;
@@ -31,10 +32,13 @@ bool TransactionManager::removeTransaction(const std::string &id)
 
 Transaction *TransactionManager::findTransaction(const std::string &id) const
 {
-    auto it = std::find_if(transactions.begin(), transactions.end(),
-                           [&id](const std::shared_ptr<Transaction> &trans) { return trans->getId() == id; });
-
-    return (it != transactions.end()) ? it->get() : nullptr;
+    if (auto it = std::ranges::find_if(transactions, [&id](const std::shared_ptr<Transaction> &trans)
+                                       { return trans->getId() == id; });
+        it != transactions.end())
+    {
+        return it->get();
+    }
+    return nullptr;
 }
 
 std::vector<Transaction *> TransactionManager::getAllTransactions() const
@@ -48,7 +52,7 @@ std::vector<Transaction *> TransactionManager::getAllTransactions() const
     return result;
 }
 
-std::vector<Transaction *> TransactionManager::getTransactionsByClient(const std::string &clientId) const
+std::vector<Transaction *> TransactionManager::getTransactionsByClient(std::string_view clientId) const
 {
     std::vector<Transaction *> result;
     for (const auto &trans : transactions)
@@ -61,7 +65,7 @@ std::vector<Transaction *> TransactionManager::getTransactionsByClient(const std
     return result;
 }
 
-std::vector<Transaction *> TransactionManager::getTransactionsByProperty(const std::string &propertyId) const
+std::vector<Transaction *> TransactionManager::getTransactionsByProperty(std::string_view propertyId) const
 {
     std::vector<Transaction *> result;
     for (const auto &trans : transactions)
@@ -74,7 +78,7 @@ std::vector<Transaction *> TransactionManager::getTransactionsByProperty(const s
     return result;
 }
 
-std::vector<Transaction *> TransactionManager::getTransactionsByStatus(const std::string &status) const
+std::vector<Transaction *> TransactionManager::getTransactionsByStatus(std::string_view status) const
 {
     std::vector<Transaction *> result;
     for (const auto &trans : transactions)

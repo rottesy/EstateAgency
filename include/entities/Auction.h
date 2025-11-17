@@ -33,7 +33,7 @@ class Auction
     void addBidDirect(std::shared_ptr<Bid> bid);
 
     double getCurrentHighestBid() const;
-    Bid *getHighestBid() const;
+    const Bid *getHighestBid() const;
 
     void complete();
     void cancel();

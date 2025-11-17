@@ -450,7 +450,7 @@ void AuctionDialog::completeAuction()
         return;
     }
 
-    Bid *winner = currentAuction->getHighestBid();
+    const Bid *winner = currentAuction->getHighestBid();
     if (!winner)
     {
         int ret =
@@ -517,7 +517,7 @@ void AuctionDialog::refreshAuctionInfo()
         double highestBid = currentAuction->getCurrentHighestBid();
         if (highestBid > 0)
         {
-            Bid *highest = currentAuction->getHighestBid();
+            const Bid *highest = currentAuction->getHighestBid();
             QString bidText = QString("Текущая максимальная ставка: %1 руб. (клиент: %2)")
                                   .arg(QString::number(highestBid, 'f', 2))
                                   .arg(QString::fromStdString(highest ? highest->getClientName() : "неизвестно"));
@@ -592,7 +592,7 @@ void AuctionDialog::createTransactionFromAuction()
     if (!currentAuction || !agency)
         return;
 
-    Bid *winner = currentAuction->getHighestBid();
+    const Bid *winner = currentAuction->getHighestBid();
     if (!winner)
     {
         return;

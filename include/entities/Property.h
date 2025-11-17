@@ -5,6 +5,7 @@
 #include <format>
 #include <iostream>
 #include <string>
+#include <string_view>
 
 class Property
 {
@@ -49,8 +50,8 @@ class Property
 
     static bool validatePrice(double price);
     static bool validateArea(double area);
-    static bool validateId(const std::string &id);
-    static bool validateAddressPart(const std::string &part);
+    static bool validateId(std::string_view id);
+    static bool validateAddressPart(std::string_view part);
 
     friend std::ostream &operator<<(std::ostream &os, const Property &prop)
     {

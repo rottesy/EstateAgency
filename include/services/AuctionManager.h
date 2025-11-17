@@ -3,6 +3,7 @@
 
 #include "../entities/Auction.h"
 #include <memory>
+#include <string_view>
 #include <vector>
 
 class AuctionManagerException : public std::exception
@@ -30,7 +31,7 @@ class AuctionManager
     std::vector<Auction *> getAllAuctions() const;
     std::vector<Auction *> getActiveAuctions() const;
     std::vector<Auction *> getCompletedAuctions() const;
-    std::vector<Auction *> getAuctionsByProperty(const std::string &propertyId) const;
+    std::vector<Auction *> getAuctionsByProperty(std::string_view propertyId) const;
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Auction>> &getAuctions() const { return auctions; }

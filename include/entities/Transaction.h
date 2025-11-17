@@ -5,6 +5,7 @@
 #include <format>
 #include <iostream>
 #include <string>
+#include <string_view>
 
 class Transaction
 {
@@ -38,7 +39,7 @@ class Transaction
     void setFinalPrice(double price);
     void setNotes(const std::string &notes);
 
-    static bool validateId(const std::string &id);
+    static bool validateId(std::string_view id);
 
     std::string toString() const;
     std::string toFileString() const;

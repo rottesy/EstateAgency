@@ -2,6 +2,7 @@
 #define COMMERCIAL_PROPERTY_H
 
 #include "Property.h"
+#include <string_view>
 
 class CommercialProperty : public Property
 {
@@ -26,9 +27,8 @@ class CommercialProperty : public Property
     int getParkingSpaces() const { return parkingSpaces; }
     bool getIsVisibleFromStreet() const { return isVisibleFromStreet; }
 
-    void setBusinessType(const std::string &type);
+    void setBusinessType(std::string_view type);
     void setParkingSpaces(int spaces);
 };
 
 #endif
-

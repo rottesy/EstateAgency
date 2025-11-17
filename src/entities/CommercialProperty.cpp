@@ -1,6 +1,7 @@
 #include "../../include/entities/CommercialProperty.h"
 #include <sstream>
 #include <stdexcept>
+#include <string_view>
 
 namespace
 {
@@ -51,13 +52,13 @@ Property *CommercialProperty::clone() const
                                   businessType, hasParking, parkingSpaces, isVisibleFromStreet);
 }
 
-void CommercialProperty::setBusinessType(const std::string &type)
+void CommercialProperty::setBusinessType(std::string_view type)
 {
     if (type.empty())
     {
         throw std::invalid_argument("Business type cannot be empty");
     }
-    businessType = type;
+    businessType = std::string(type);
 }
 
 void CommercialProperty::setParkingSpaces(int spaces)

@@ -1,5 +1,7 @@
 #include "../../include/services/AuctionManager.h"
 #include <algorithm>
+#include <ranges>
+#include <string_view>
 
 AuctionManager::AuctionManager() = default;
 
@@ -18,12 +20,11 @@ void AuctionManager::addAuction(std::shared_ptr<Auction> auction)
 
 bool AuctionManager::removeAuction(const std::string &id)
 {
-    auto it = std::remove_if(auctions.begin(), auctions.end(),
-                             [&id](const std::shared_ptr<Auction> &auction) { return auction->getId() == id; });
-
-    if (it != auctions.end())
+    auto removed = std::ranges::remove_if(auctions, [&id](const std::shared_ptr<Auction> &auction)
+                                          { return auction->getId() == id; });
+    if (removed.begin() != auctions.end())
     {
-        auctions.erase(it, auctions.end());
+        auctions.erase(removed.begin(), auctions.end());
         return true;
     }
     return false;
@@ -31,10 +32,13 @@ bool AuctionManager::removeAuction(const std::string &id)
 
 Auction *AuctionManager::findAuction(const std::string &id) const
 {
-    auto it = std::find_if(auctions.begin(), auctions.end(),
-                           [&id](const std::shared_ptr<Auction> &auction) { return auction->getId() == id; });
-
-    return (it != auctions.end()) ? it->get() : nullptr;
+    if (auto it = std::ranges::find_if(auctions, [&id](const std::shared_ptr<Auction> &auction)
+                                       { return auction->getId() == id; });
+        it != auctions.end())
+    {
+        return it->get();
+    }
+    return nullptr;
 }
 
 std::vector<Auction *> AuctionManager::getAllAuctions() const
@@ -74,7 +78,7 @@ std::vector<Auction *> AuctionManager::getCompletedAuctions() const
     return result;
 }
 
-std::vector<Auction *> AuctionManager::getAuctionsByProperty(const std::string &propertyId) const
+std::vector<Auction *> AuctionManager::getAuctionsByProperty(std::string_view propertyId) const
 {
     std::vector<Auction *> result;
     for (const auto &auction : auctions)

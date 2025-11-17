@@ -3,7 +3,6 @@
 #include "../../include/core/Utils.h"
 #include <compare>
 #include <format>
-#include <sstream>
 #include <stdexcept>
 
 namespace
@@ -54,8 +53,8 @@ bool Auction::addBid(std::shared_ptr<Bid> bid)
         return true;
     }
 
-    double minBid = (currentHighest > NO_BID) ? currentHighest + MIN_BID_INCREMENT : startingPrice;
-    if (bid->getAmount() < minBid)
+    if (double minBid = (currentHighest > NO_BID) ? currentHighest + MIN_BID_INCREMENT : startingPrice;
+        bid->getAmount() < minBid)
     {
         return false;
     }
@@ -84,14 +83,14 @@ double Auction::getCurrentHighestBid() const
     return maxBid;
 }
 
-Bid *Auction::getHighestBid() const
+const Bid *Auction::getHighestBid() const
 {
     if (bids.empty())
     {
         return nullptr;
     }
 
-    Bid *highest = nullptr;
+    const Bid *highest = nullptr;
     double maxBid = NO_BID;
     for (const auto &bid : bids)
     {
@@ -129,7 +128,7 @@ bool Auction::wasBuyout() const
         return false;
     }
 
-    Bid *highest = getHighestBid();
+    const Bid *highest = getHighestBid();
     return highest != nullptr && highest->getAmount() >= buyoutPrice;
 }
 

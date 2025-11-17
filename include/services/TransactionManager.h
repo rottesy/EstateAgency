@@ -4,6 +4,7 @@
 #include "../entities/Transaction.h"
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class TransactionManagerException : public std::exception
@@ -29,9 +30,9 @@ class TransactionManager
     Transaction *findTransaction(const std::string &id) const;
 
     std::vector<Transaction *> getAllTransactions() const;
-    std::vector<Transaction *> getTransactionsByClient(const std::string &clientId) const;
-    std::vector<Transaction *> getTransactionsByProperty(const std::string &propertyId) const;
-    std::vector<Transaction *> getTransactionsByStatus(const std::string &status) const;
+    std::vector<Transaction *> getTransactionsByClient(std::string_view clientId) const;
+    std::vector<Transaction *> getTransactionsByProperty(std::string_view propertyId) const;
+    std::vector<Transaction *> getTransactionsByStatus(std::string_view status) const;
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Transaction>> &getTransactions() const { return transactions; }

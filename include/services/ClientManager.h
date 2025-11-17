@@ -4,6 +4,7 @@
 #include "../entities/Client.h"
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 class ClientManagerException : public std::exception
@@ -29,8 +30,8 @@ class ClientManager
     Client *findClient(const std::string &id) const;
 
     std::vector<Client *> getAllClients() const;
-    std::vector<Client *> searchByName(const std::string &name) const;
-    std::vector<Client *> searchByPhone(const std::string &phone) const;
+    std::vector<Client *> searchByName(std::string_view name) const;
+    std::vector<Client *> searchByPhone(std::string_view phone) const;
 
     // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Client>> &getClients() const { return clients; }

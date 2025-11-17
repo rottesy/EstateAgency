@@ -4,6 +4,7 @@
 #include <compare>
 #include <iostream>
 #include <string>
+#include <string_view>
 
 class Client
 {
@@ -32,9 +33,9 @@ class Client
     void setPhone(const std::string &phone);
     void setEmail(const std::string &email);
 
-    static bool validateId(const std::string &id);
-    static bool validatePhone(const std::string &phone);
-    static bool validateEmail(const std::string &email);
+    static bool validateId(std::string_view id);
+    static bool validatePhone(std::string_view phone);
+    static bool validateEmail(std::string_view email);
 
     std::string toString() const;
 

@@ -8,6 +8,7 @@
 #include <ranges>
 #include <sstream>
 #include <string>
+#include <string_view>
 
 #ifdef _WIN32
 #include <time.h>
@@ -60,9 +61,9 @@ inline bool isNumericId(const QString &str)
 }
 
 // Helper function to check if string contains substring (C++20 compatible)
-inline bool stringContains(const std::string &str, const std::string &substr)
+inline bool stringContains(std::string_view str, std::string_view substr)
 {
-    return str.find(substr) != std::string::npos;
+    return str.find(substr) != std::string_view::npos;
 }
 } // namespace Utils
 

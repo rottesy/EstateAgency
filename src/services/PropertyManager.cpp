@@ -5,6 +5,7 @@
 #include "../../include/entities/House.h"
 #include <algorithm>
 #include <cctype>
+#include <ranges>
 
 PropertyManager::PropertyManager() = default;
 
@@ -73,12 +74,11 @@ void PropertyManager::addCommercialProperty(const std::string &id, const std::st
 
 bool PropertyManager::removeProperty(const std::string &id)
 {
-    auto it = std::remove_if(properties.begin(), properties.end(),
-                             [&id](const std::unique_ptr<Property> &prop) { return prop->getId() == id; });
-
-    if (it != properties.end())
+    auto removed = std::ranges::remove_if(properties,
+                                          [&id](const std::unique_ptr<Property> &prop) { return prop->getId() == id; });
+    if (removed.begin() != properties.end())
     {
-        properties.erase(it, properties.end());
+        properties.erase(removed.begin(), properties.end());
         return true;
     }
     return false;
@@ -86,10 +86,13 @@ bool PropertyManager::removeProperty(const std::string &id)
 
 Property *PropertyManager::findProperty(const std::string &id) const
 {
-    auto it = std::find_if(properties.begin(), properties.end(),
-                           [&id](const std::unique_ptr<Property> &prop) { return prop->getId() == id; });
-
-    return (it != properties.end()) ? it->get() : nullptr;
+    if (auto it = std::ranges::find_if(properties,
+                                       [&id](const std::unique_ptr<Property> &prop) { return prop->getId() == id; });
+        it != properties.end())
+    {
+        return it->get();
+    }
+    return nullptr;
 }
 
 std::vector<Property *> PropertyManager::getAllProperties() const
@@ -138,12 +141,9 @@ std::vector<Property *> PropertyManager::searchByAddress(const std::string &city
     std::string lowerCity = city;
     std::string lowerStreet = street;
     std::string lowerHouse = house;
-    std::transform(lowerCity.begin(), lowerCity.end(), lowerCity.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-    std::transform(lowerStreet.begin(), lowerStreet.end(), lowerStreet.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-    std::transform(lowerHouse.begin(), lowerHouse.end(), lowerHouse.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
+    std::ranges::transform(lowerCity, lowerCity.begin(), [](unsigned char c) { return std::tolower(c); });
+    std::ranges::transform(lowerStreet, lowerStreet.begin(), [](unsigned char c) { return std::tolower(c); });
+    std::ranges::transform(lowerHouse, lowerHouse.begin(), [](unsigned char c) { return std::tolower(c); });
 
     for (const auto &prop : properties)
     {
@@ -151,12 +151,9 @@ std::vector<Property *> PropertyManager::searchByAddress(const std::string &city
         std::string propStreet = prop->getStreet();
         std::string propHouse = prop->getHouse();
 
-        std::transform(propCity.begin(), propCity.end(), propCity.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        std::transform(propStreet.begin(), propStreet.end(), propStreet.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
-        std::transform(propHouse.begin(), propHouse.end(), propHouse.begin(),
-                       [](unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(propCity, propCity.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(propStreet, propStreet.begin(), [](unsigned char c) { return std::tolower(c); });
+        std::ranges::transform(propHouse, propHouse.begin(), [](unsigned char c) { return std::tolower(c); });
 
         bool matches = true;
         if (!lowerCity.empty() && !Utils::stringContains(propCity, lowerCity))

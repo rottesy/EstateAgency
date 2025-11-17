@@ -351,7 +351,7 @@ void AuctionsWidget::showAuctionDetails(Auction *auction)
     double currentBid = auction->getCurrentHighestBid();
     if (currentBid > 0)
     {
-        Bid *highest = auction->getHighestBid();
+        const Bid *highest = auction->getHighestBid();
         html += "<p><b>Текущая максимальная ставка:</b> " + QString::number(currentBid, 'f', 2) + " руб.</p>";
         if (highest)
             html += "<p><b>Победитель:</b> " + QString::fromStdString(highest->getClientName()) +
