@@ -31,7 +31,7 @@ class EstateAgency
     TransactionManager &getTransactionManager() { return transactionManager; }
     AuctionManager &getAuctionManager() { return auctionManager; }
 
-    void saveAllData();
+    void saveAllData() const;
     void loadAllData();
 
     void setDataDirectory(std::string_view dir) { dataDirectory = std::string(dir); }

@@ -153,9 +153,11 @@ void ClientsWidget::editClient()
     }
 
     QString id = getSelectedIdFromTable(clientsTable);
-    Client *client = agency->getClientManager().findClient(Utils::toString(id));
-    if (!client)
+    const Client *const client = agency->getClientManager().findClient(Utils::toString(id));
+    if (client == nullptr)
+    {
         return;
+    }
 
     ClientDialog dialog(this, client);
     if (dialog.exec() == QDialog::Accepted)
@@ -231,8 +233,7 @@ void ClientsWidget::searchClients()
     std::vector<Client *> clients;
     if (isNumericOnly && searchText.length() >= 6 && searchText.length() <= 8)
     {
-        Client *client = agency->getClientManager().findClient(searchText.toStdString());
-        if (client)
+        if (Client *client = agency->getClientManager().findClient(searchText.toStdString()); client)
         {
             clients.push_back(client);
         }
@@ -306,8 +307,7 @@ void ClientsWidget::showClientTransactions(const std::string &clientId)
     auto transactions = agency->getTransactionManager().getTransactionsByClient(clientId);
 
     QString html;
-    QString existingHtml = clientDetailsText->toHtml();
-    if (!existingHtml.isEmpty() && !existingHtml.contains("<body>"))
+    if (QString existingHtml = clientDetailsText->toHtml(); !existingHtml.isEmpty() && !existingHtml.contains("<body>"))
     {
         html = "<html><body style='font-family: Arial, sans-serif;'>";
     }

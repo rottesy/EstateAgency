@@ -20,23 +20,19 @@ void DashboardWidget::setupUI()
                           "margin-bottom: 10px;");
     mainLayout->addWidget(header);
 
-    auto createMetricWidget = [](const QString &label, const QString &color, QLabel **valuePtr)
+    auto createLabelWidget = [](const QString &label, const QString &color) -> QLabel *
     {
-        auto *widget = new QWidget;
-        widget->setFixedHeight(160);
-
-        auto *layout = new QVBoxLayout(widget);
-        layout->setContentsMargins(0, 0, 0, 0);
-        layout->setSpacing(12);
-
         auto *labelWidget = new QLabel(label);
         labelWidget->setStyleSheet(QString("color: %1; "
                                            "font-size: 11pt; "
                                            "font-weight: 500; "
                                            "letter-spacing: 2px;")
                                        .arg(color));
-        layout->addWidget(labelWidget);
+        return labelWidget;
+    };
 
+    auto createValueLabel = [](const QString &color) -> QLabel *
+    {
         auto *valueLabel = new QLabel("0");
         valueLabel->setStyleSheet(QString("color: %1; "
                                           "font-size: 50pt; "
@@ -46,6 +42,22 @@ void DashboardWidget::setupUI()
         valueLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
         valueLabel->setMinimumHeight(90);
         valueLabel->setMinimumWidth(120);
+        return valueLabel;
+    };
+
+    auto createMetricWidget =
+        [&createLabelWidget, &createValueLabel](const QString &label, const QString &color, QLabel **valuePtr)
+    {
+        auto *widget = new QWidget;
+        widget->setFixedHeight(160);
+
+        auto *layout = new QVBoxLayout(widget);
+        layout->setContentsMargins(0, 0, 0, 0);
+        layout->setSpacing(12);
+
+        layout->addWidget(createLabelWidget(label, color));
+
+        auto *valueLabel = createValueLabel(color);
         layout->addWidget(valueLabel);
         layout->addStretch();
 
@@ -97,28 +109,33 @@ void DashboardWidget::setupUI()
     buttonsLayout->setSpacing(20);
     buttonsLayout->setContentsMargins(0, 0, 0, 0);
 
-    auto createModernButton = [](const QString &text, const QString &color)
+    auto createButtonStyle = [](const QString &color) -> QString
+    {
+        return QString("QPushButton {"
+                       "    background-color: transparent;"
+                       "    color: %1;"
+                       "    border: 1px solid %1;"
+                       "    border-radius: 0px;"
+                       "    padding: 14px 40px;"
+                       "    font-size: 12pt;"
+                       "    font-weight: 400;"
+                       "    letter-spacing: 1px;"
+                       "    min-width: 180px;"
+                       "}"
+                       "QPushButton:hover {"
+                       "    background-color: %1;"
+                       "    color: #1e1e1e;"
+                       "}"
+                       "QPushButton:pressed {"
+                       "    background-color: %2;"
+                       "}")
+            .arg(color, color);
+    };
+
+    auto createModernButton = [&createButtonStyle](const QString &text, const QString &color)
     {
         auto *btn = new QPushButton(text);
-        btn->setStyleSheet(QString("QPushButton {"
-                                   "    background-color: transparent;"
-                                   "    color: %1;"
-                                   "    border: 1px solid %1;"
-                                   "    border-radius: 0px;"
-                                   "    padding: 14px 40px;"
-                                   "    font-size: 12pt;"
-                                   "    font-weight: 400;"
-                                   "    letter-spacing: 1px;"
-                                   "    min-width: 180px;"
-                                   "}"
-                                   "QPushButton:hover {"
-                                   "    background-color: %1;"
-                                   "    color: #1e1e1e;"
-                                   "}"
-                                   "QPushButton:pressed {"
-                                   "    background-color: %2;"
-                                   "}")
-                               .arg(color, color));
+        btn->setStyleSheet(createButtonStyle(color));
         return btn;
     };
 

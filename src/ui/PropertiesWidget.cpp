@@ -336,8 +336,7 @@ void PropertiesWidget::propertySelectionChanged()
         if (item)
         {
             QString id = item->text();
-            Property *prop = agency->getPropertyManager().findProperty(id.toStdString());
-            if (prop)
+            if (const Property *prop = agency->getPropertyManager().findProperty(id.toStdString()); prop)
             {
                 showPropertyDetails(prop);
                 showPropertyTransactions(id.toStdString());
@@ -405,8 +404,8 @@ void PropertiesWidget::showPropertyTransactions(const std::string &propertyId)
     auto transactions = agency->getTransactionManager().getTransactionsByProperty(propertyId);
 
     QString html;
-    QString existingHtml = propertyDetailsText->toHtml();
-    if (!existingHtml.isEmpty() && !existingHtml.contains("<body>"))
+    if (QString existingHtml = propertyDetailsText->toHtml();
+        !existingHtml.isEmpty() && !existingHtml.contains("<body>"))
     {
         html = "<html><body style='font-family: Arial, sans-serif;'>";
     }

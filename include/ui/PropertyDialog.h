@@ -60,7 +60,7 @@ class PropertyDialog : public QDialog
 
   private:
     void setupUI();
-    void loadPropertyData(Property *prop);
+    void loadPropertyData(const Property *prop);
     void updateTypeSpecificFields();
 
     QComboBox *typeCombo;

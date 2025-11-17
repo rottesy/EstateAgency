@@ -13,8 +13,8 @@
 #include <QVBoxLayout>
 #include <cmath>
 
-TransactionDialog::TransactionDialog(QWidget *parent, Transaction *editTransaction, const QStringList &propertyIds,
-                                     const QStringList &clientIds)
+TransactionDialog::TransactionDialog(QWidget *parent, const Transaction *editTransaction,
+                                     const QStringList &propertyIds, const QStringList &clientIds)
     : QDialog(parent), propertyIds(propertyIds), clientIds(clientIds)
 {
     setStyleSheet(R"(

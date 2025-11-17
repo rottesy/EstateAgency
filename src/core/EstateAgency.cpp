@@ -46,7 +46,7 @@ void EstateAgency::destroyInstance()
     }
 }
 
-void EstateAgency::saveAllData()
+void EstateAgency::saveAllData() const
 {
     try
     {

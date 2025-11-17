@@ -344,8 +344,7 @@ void TransactionsWidget::transactionSelectionChanged()
     if (row >= 0)
     {
         QString id = transactionsTable->item(row, 0)->text();
-        Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString());
-        if (trans)
+        if (const Transaction *trans = agency->getTransactionManager().findTransaction(id.toStdString()); trans)
             showTransactionDetails(trans);
     }
 }
@@ -396,19 +395,20 @@ void TransactionsWidget::showTransactionDetails(const Transaction *trans)
 bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::string_view clientId,
                                              std::string_view status, std::string_view excludeTransactionId)
 {
-    const Property *prop = agency->getPropertyManager().findProperty(std::string(propertyId));
+    const std::string propertyIdStr(propertyId);
+    const Property *prop = agency->getPropertyManager().findProperty(propertyIdStr);
     if (!prop)
     {
-        QMessageBox::warning(
-            this, "Ошибка валидации",
-            QString("Недвижимость с ID '%1' не найдена!").arg(QString::fromStdString(std::string(propertyId))));
+        QMessageBox::warning(this, "Ошибка валидации",
+                             QString("Недвижимость с ID '%1' не найдена!").arg(QString::fromStdString(propertyIdStr)));
         return false;
     }
 
-    if (const Client *client = agency->getClientManager().findClient(std::string(clientId)); !client)
+    const std::string clientIdStr(clientId);
+    if (const Client *client = agency->getClientManager().findClient(clientIdStr); !client)
     {
         QMessageBox::warning(this, "Ошибка валидации",
-                             QString("Клиент с ID '%1' не найден!").arg(QString::fromStdString(std::string(clientId))));
+                             QString("Клиент с ID '%1' не найден!").arg(QString::fromStdString(clientIdStr)));
         return false;
     }
 
@@ -416,32 +416,30 @@ bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::s
     if (status == "pending" || status == "completed")
     {
         // Проверяем, редактируем ли мы существующую сделку
-        bool isEditing = !std::string(excludeTransactionId).empty();
+        const std::string excludeIdStr(excludeTransactionId);
+        const bool isEditing = !excludeIdStr.empty();
         const Transaction *existingTrans = nullptr;
         if (isEditing)
         {
-            existingTrans = agency->getTransactionManager().findTransaction(std::string(excludeTransactionId));
+            existingTrans = agency->getTransactionManager().findTransaction(excludeIdStr);
         }
 
         // Если создаем новую сделку или меняем недвижимость при редактировании - проверяем доступность
-        if (!isEditing || (existingTrans && existingTrans->getPropertyId() != std::string(propertyId)))
+        if ((!isEditing || (existingTrans && existingTrans->getPropertyId() != propertyIdStr)) &&
+            !prop->getIsAvailable())
         {
-            if (!prop->getIsAvailable())
-            {
-                QMessageBox::warning(this, "Ошибка валидации",
-                                     QString("Недвижимость с ID '%1' уже выкуплена и недоступна для новых сделок!")
-                                         .arg(QString::fromStdString(std::string(propertyId))));
-                return false;
-            }
+            QMessageBox::warning(this, "Ошибка валидации",
+                                 QString("Недвижимость с ID '%1' уже выкуплена и недоступна для новых сделок!")
+                                     .arg(QString::fromStdString(propertyIdStr)));
+            return false;
         }
 
         // Проверяем наличие других активных сделок для этой недвижимости
-        auto existingTransList = agency->getTransactionManager().getTransactionsByProperty(std::string(propertyId));
+        auto existingTransList = agency->getTransactionManager().getTransactionsByProperty(propertyIdStr);
         if (std::ranges::any_of(existingTransList,
-                                [&excludeTransactionId](const Transaction *t)
+                                [&excludeIdStr](const Transaction *t)
                                 {
-                                    return t && !std::string(excludeTransactionId).empty() &&
-                                           t->getId() != std::string(excludeTransactionId) &&
+                                    return t && !excludeIdStr.empty() && t->getId() != excludeIdStr &&
                                            (t->getStatus() == "pending" || t->getStatus() == "completed");
                                 }))
         {

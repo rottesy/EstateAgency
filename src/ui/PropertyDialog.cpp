@@ -192,7 +192,7 @@ void PropertyDialog::propertyTypeChanged(int index)
     commercialGroup->setVisible(index == 2);
 }
 
-void PropertyDialog::loadPropertyData(Property *prop)
+void PropertyDialog::loadPropertyData(const Property *prop)
 {
     idEdit->setText(QString::fromStdString(prop->getId()));
     cityEdit->setText(QString::fromStdString(prop->getCity()));
