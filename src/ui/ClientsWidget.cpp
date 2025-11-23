@@ -12,7 +12,6 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include <functional>
 
 ClientsWidget::ClientsWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency) { setupUI(); }
 
@@ -329,42 +328,6 @@ void ClientsWidget::showClientTransactions(const std::string &clientId)
     clientDetailsText->setHtml(html);
 }
 
-QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &id,
-                                            const std::function<void()> &editAction,
-                                            const std::function<void()> &deleteAction)
-{
-    auto *actionsWidget = new QWidget;
-    auto *actionsLayout = new QHBoxLayout(actionsWidget);
-    actionsLayout->setContentsMargins(5, 5, 5, 5);
-    actionsLayout->setSpacing(8);
-
-    auto *editBtn = new QPushButton("Редактировать");
-    editBtn->setMinimumWidth(110);
-    editBtn->setFixedHeight(35);
-    auto *deleteBtn = new QPushButton("Удалить");
-    deleteBtn->setMinimumWidth(90);
-    deleteBtn->setFixedHeight(35);
-
-    connect(editBtn, &QPushButton::clicked, this,
-            [table, id, editAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                editAction();
-            });
-    connect(deleteBtn, &QPushButton::clicked, this,
-            [table, id, deleteAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                deleteAction();
-            });
-
-    actionsLayout->addWidget(editBtn);
-    actionsLayout->addWidget(deleteBtn);
-    actionsLayout->addStretch();
-
-    return actionsWidget;
-}
-
 void ClientsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     TableHelper::selectRowById(table, id);
@@ -395,7 +358,7 @@ void ClientsWidget::addClientToTable(const Client *client)
     clientsTable->setItem(row, 4, new QTableWidgetItem(Utils::toQString(client->getRegistrationDate())));
 
     QString clientId = Utils::toQString(client->getId());
-    QWidget *actionsWidget =
-        createActionButtons(clientsTable, clientId, [this]() { editClient(); }, [this]() { deleteClient(); });
+    QWidget *actionsWidget = TableHelper::createActionButtons(
+        clientsTable, clientId, this, [this]() { editClient(); }, [this]() { deleteClient(); });
     clientsTable->setCellWidget(row, 5, actionsWidget);
 }

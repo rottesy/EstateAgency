@@ -11,7 +11,6 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include <functional>
 #include <ranges>
 #include <string_view>
 
@@ -423,42 +422,6 @@ bool TransactionsWidget::hasActiveTransactions(const std::string &propertyId)
                                });
 }
 
-QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QString &id,
-                                                 const std::function<void()> &editAction,
-                                                 const std::function<void()> &deleteAction)
-{
-    auto *actionsWidget = new QWidget;
-    auto *actionsLayout = new QHBoxLayout(actionsWidget);
-    actionsLayout->setContentsMargins(5, 5, 5, 5);
-    actionsLayout->setSpacing(8);
-
-    auto *editBtn = new QPushButton("Редактировать");
-    editBtn->setMinimumWidth(110);
-    editBtn->setFixedHeight(35);
-    auto *deleteBtn = new QPushButton("Удалить");
-    deleteBtn->setMinimumWidth(90);
-    deleteBtn->setFixedHeight(35);
-
-    connect(editBtn, &QPushButton::clicked, this,
-            [table, id, editAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                editAction();
-            });
-    connect(deleteBtn, &QPushButton::clicked, this,
-            [table, id, deleteAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                deleteAction();
-            });
-
-    actionsLayout->addWidget(editBtn);
-    actionsLayout->addWidget(deleteBtn);
-    actionsLayout->addStretch();
-
-    return actionsWidget;
-}
-
 void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     TableHelper::selectRowById(table, id);
@@ -495,7 +458,7 @@ void TransactionsWidget::addTransactionToTable(const Transaction *trans)
     transactionsTable->setItem(row, 5, new QTableWidgetItem(TableHelper::getTransactionStatusText(trans->getStatus())));
 
     QString transId = Utils::toQString(trans->getId());
-    QWidget *actionsWidget = createActionButtons(
-        transactionsTable, transId, [this]() { editTransaction(); }, [this]() { deleteTransaction(); });
+    QWidget *actionsWidget = TableHelper::createActionButtons(
+        transactionsTable, transId, this, [this]() { editTransaction(); }, [this]() { deleteTransaction(); });
     transactionsTable->setCellWidget(row, 6, actionsWidget);
 }

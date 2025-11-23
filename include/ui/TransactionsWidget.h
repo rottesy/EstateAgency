@@ -37,8 +37,6 @@ class TransactionsWidget : public QWidget
     bool validateTransaction(std::string_view propertyId, std::string_view clientId, std::string_view status,
                              std::string_view excludeId = "");
     bool hasActiveTransactions(const std::string &propertyId);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
-                                 const std::function<void()> &deleteAction);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
     bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);

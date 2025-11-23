@@ -35,8 +35,6 @@ class PropertiesWidget : public QWidget
     void showPropertyDetails(const Property *prop);
     void showPropertyTransactions(const std::string &propertyId);
     void addPropertyToTable(const Property *prop);
-    QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
-                                 const std::function<void()> &deleteAction);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
     bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);

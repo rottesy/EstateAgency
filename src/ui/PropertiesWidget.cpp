@@ -15,7 +15,6 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include <functional>
 #include <ranges>
 
 PropertiesWidget::PropertiesWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency)
@@ -447,42 +446,6 @@ void PropertiesWidget::showPropertyTransactions(const std::string &propertyId)
     propertyDetailsText->setHtml(html);
 }
 
-QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QString &id,
-                                               const std::function<void()> &editAction,
-                                               const std::function<void()> &deleteAction)
-{
-    auto *actionsWidget = new QWidget;
-    auto *actionsLayout = new QHBoxLayout(actionsWidget);
-    actionsLayout->setContentsMargins(5, 5, 5, 5);
-    actionsLayout->setSpacing(8);
-
-    auto *editBtn = new QPushButton("Редактировать");
-    editBtn->setMinimumWidth(110);
-    editBtn->setFixedHeight(35);
-    auto *deleteBtn = new QPushButton("Удалить");
-    deleteBtn->setMinimumWidth(90);
-    deleteBtn->setFixedHeight(35);
-
-    connect(editBtn, &QPushButton::clicked, this,
-            [table, id, editAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                editAction();
-            });
-    connect(deleteBtn, &QPushButton::clicked, this,
-            [table, id, deleteAction]()
-            {
-                TableHelper::selectRowById(table, id);
-                deleteAction();
-            });
-
-    actionsLayout->addWidget(editBtn);
-    actionsLayout->addWidget(deleteBtn);
-    actionsLayout->addStretch();
-
-    return actionsWidget;
-}
-
 void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
     TableHelper::selectRowById(table, id);
@@ -519,7 +482,7 @@ void PropertiesWidget::addPropertyToTable(const Property *prop)
     propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
 
     QString propId = Utils::toQString(prop->getId());
-    QWidget *actionsWidget =
-        createActionButtons(propertiesTable, propId, [this]() { editProperty(); }, [this]() { deleteProperty(); });
+    QWidget *actionsWidget = TableHelper::createActionButtons(
+        propertiesTable, propId, this, [this]() { editProperty(); }, [this]() { deleteProperty(); });
     propertiesTable->setCellWidget(row, 6, actionsWidget);
 }
