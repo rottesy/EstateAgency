@@ -338,7 +338,7 @@ QString ClientsWidget::getSelectedIdFromTable(const QTableWidget *table) const
     return TableHelper::getSelectedId(table);
 }
 
-bool ClientsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage) const
+bool ClientsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     return TableHelper::checkTableSelection(table, errorMessage, this);
 }

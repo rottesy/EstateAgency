@@ -37,7 +37,7 @@ class ClientsWidget : public QWidget
     void addClientToTable(const Client *client);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
-    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage) const;
+    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;
     QTableWidget *clientsTable;

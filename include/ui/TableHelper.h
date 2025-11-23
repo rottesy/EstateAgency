@@ -94,16 +94,12 @@ inline void selectRowById(QTableWidget *table, const QString &id, int column = 0
 }
 
 inline bool checkTableSelection(const QTableWidget *table, const QString &errorMessage,
-                                [[maybe_unused]] const QWidget *parent = nullptr)
+                                [[maybe_unused]] QWidget *parent = nullptr)
 {
     if (!table || !hasValidSelection(table))
     {
         if (!errorMessage.isEmpty() && parent)
-        {
-            // Безопасное использование const_cast: QMessageBox::information не изменяет объект,
-            // а только использует его для позиционирования диалога
-            QMessageBox::information(const_cast<QWidget *>(parent), "Информация", errorMessage);
-        }
+            QMessageBox::information(parent, "Информация", errorMessage);
 
         return false;
     }
@@ -113,7 +109,7 @@ inline bool checkTableSelection(const QTableWidget *table, const QString &errorM
 // Нешаблонная функция для создания кнопок действий
 // Принимает std::function вместо шаблонных параметров
 // Реализация в TableHelper.cpp
-QWidget *createActionButtons(QTableWidget *table, const QString &id, QWidget *parent,
+QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget *parent,
                              const std::function<void()> &editAction, const std::function<void()> &deleteAction,
                              const QString &editText = "Редактировать", int editWidth = 110);
 

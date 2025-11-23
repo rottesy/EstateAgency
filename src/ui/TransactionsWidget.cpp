@@ -432,7 +432,7 @@ QString TransactionsWidget::getSelectedIdFromTable(const QTableWidget *table) co
     return TableHelper::getSelectedId(table);
 }
 
-bool TransactionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage) const
+bool TransactionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     return TableHelper::checkTableSelection(table, errorMessage, this);
 }

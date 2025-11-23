@@ -39,7 +39,7 @@ class TransactionsWidget : public QWidget
     bool hasActiveTransactions(const std::string &propertyId);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
-    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage) const;
+    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;
     QTableWidget *transactionsTable;

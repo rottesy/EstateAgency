@@ -39,7 +39,7 @@ class AuctionsWidget : public QWidget
                                  const std::function<void()> &deleteAction, [[maybe_unused]] bool isView = false);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
-    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage) const;
+    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);
 
     EstateAgency *agency;
     QTableWidget *auctionsTable;

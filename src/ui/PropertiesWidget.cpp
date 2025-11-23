@@ -456,7 +456,7 @@ QString PropertiesWidget::getSelectedIdFromTable(const QTableWidget *table) cons
     return TableHelper::getSelectedId(table);
 }
 
-bool PropertiesWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage) const
+bool PropertiesWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
     return TableHelper::checkTableSelection(table, errorMessage, this);
 }
