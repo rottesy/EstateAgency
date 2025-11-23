@@ -7,13 +7,9 @@
 namespace TableHelper
 {
 
-QWidget *createActionButtons(QTableWidget *table,
-                             const QString &id,
-                             const QWidget * /*parent*/,
-                             const std::function<void()> &editAction,
-                             const std::function<void()> &deleteAction,
-                             const QString &editText,
-                             int editWidth)
+QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget * /*parent*/,
+                             const std::function<void()> &editAction, const std::function<void()> &deleteAction,
+                             const QString &editText, int editWidth)
 {
     auto *actionsWidget = new QWidget;
     auto *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -28,16 +24,16 @@ QWidget *createActionButtons(QTableWidget *table,
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 
-    // ✔ Никаких const_cast — receiver не нужен
+    // Захватываем editAction и deleteAction по значению, чтобы избежать висячих ссылок
     QObject::connect(editBtn, &QPushButton::clicked,
-                     [table, id, &editAction]()
+                     [table, id, editAction]()
                      {
                          selectRowById(table, id);
                          editAction();
                      });
 
     QObject::connect(deleteBtn, &QPushButton::clicked,
-                     [table, id, &deleteAction]()
+                     [table, id, deleteAction]()
                      {
                          selectRowById(table, id);
                          deleteAction();
