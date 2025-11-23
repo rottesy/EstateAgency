@@ -374,13 +374,13 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
     deleteBtn->setFixedHeight(35);
 
     connect(viewBtn, &QPushButton::clicked, this,
-            [this, table, id, viewAction]()
+            [table, id, viewAction]()
             {
                 TableHelper::selectRowById(table, id);
                 viewAction();
             });
     connect(deleteBtn, &QPushButton::clicked, this,
-            [this, table, id, deleteAction]()
+            [table, id, deleteAction]()
             {
                 TableHelper::selectRowById(table, id);
                 deleteAction();

@@ -346,13 +346,13 @@ QWidget *ClientsWidget::createActionButtons(QTableWidget *table, const QString &
     deleteBtn->setFixedHeight(35);
 
     connect(editBtn, &QPushButton::clicked, this,
-            [this, table, id, editAction]()
+            [table, id, editAction]()
             {
                 TableHelper::selectRowById(table, id);
                 editAction();
             });
     connect(deleteBtn, &QPushButton::clicked, this,
-            [this, table, id, deleteAction]()
+            [table, id, deleteAction]()
             {
                 TableHelper::selectRowById(table, id);
                 deleteAction();

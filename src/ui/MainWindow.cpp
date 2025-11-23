@@ -612,6 +612,50 @@ void MainWindow::saveAllData()
         showStatusMessage("Данные сохранены", 3000);
         QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
     }
+    catch (const FileManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        handleException(e);
+    }
+    catch (const PropertyManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const ClientManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const TransactionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const AuctionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::bad_alloc &e)
+    {
+        handleException(e);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        handleException(e);
+    }
+    catch (const std::domain_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::length_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::out_of_range &e)
+    {
+        handleException(e);
+    }
     catch (const std::exception &e)
     {
         handleException(e);
@@ -632,6 +676,50 @@ void MainWindow::loadAllData()
         refreshAllData();
         showStatusMessage("Данные загружены", 3000);
         QMessageBox::information(this, "Успех", "Данные успешно загружены");
+    }
+    catch (const FileManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        handleException(e);
+    }
+    catch (const PropertyManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const ClientManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const TransactionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const AuctionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::bad_alloc &e)
+    {
+        handleException(e);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        handleException(e);
+    }
+    catch (const std::domain_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::length_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::out_of_range &e)
+    {
+        handleException(e);
     }
     catch (const std::exception &e)
     {
