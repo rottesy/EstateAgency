@@ -16,7 +16,6 @@
 #include <QStatusBar>
 #include <QTimer>
 #include <filesystem>
-#include <functional>
 #include <stdexcept>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -519,58 +518,6 @@ void MainWindow::showStatusMessage(const QString &message, int timeout) const
     if (statusBar())
     {
         statusBar()->showMessage(message, timeout);
-    }
-}
-
-void MainWindow::executeWithExceptionHandling(const std::function<void()> &operation)
-{
-    try
-    {
-        operation();
-    }
-    catch (const FileManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        handleException(e);
-    }
-    catch (const PropertyManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const ClientManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const TransactionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const AuctionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::bad_alloc &e)
-    {
-        handleException(e);
-    }
-    catch (const std::invalid_argument &e)
-    {
-        handleException(e);
-    }
-    catch (const std::domain_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::length_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::out_of_range &e)
-    {
-        handleException(e);
     }
 }
 
