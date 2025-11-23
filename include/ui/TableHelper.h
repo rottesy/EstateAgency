@@ -9,6 +9,7 @@
 #include <QTableWidgetItem>
 #include <QWidget>
 #include <string_view>
+#include <utility>      // ← нужно для std::forward
 
 namespace TableHelper
 {
@@ -78,7 +79,10 @@ inline QString getPropertyTypeText(const std::string &type)
     return QString::fromStdString(type);
 }
 
-inline bool hasValidSelection(const QTableWidget *table) { return isValidRow(table, getSelectedRow(table)); }
+inline bool hasValidSelection(const QTableWidget *table)
+{
+    return isValidRow(table, getSelectedRow(table));
+}
 
 inline void selectRowById(QTableWidget *table, const QString &id, int column = 0)
 {
@@ -108,9 +112,14 @@ inline bool checkTableSelection(const QTableWidget *table, const QString &errorM
 }
 
 template <typename EditFunc, typename DeleteFunc>
-inline QWidget *createActionButtons(QTableWidget *table, const QString &id, QWidget *parent, EditFunc &&editAction,
-                                    DeleteFunc &&deleteAction, const QString &editText = "Редактировать",
-                                    int editWidth = 110)
+inline QWidget *createActionButtons(
+    QTableWidget *table,
+    const QString &id,
+    QWidget *parent,
+    EditFunc &&editAction,
+    DeleteFunc &&deleteAction,
+    const QString &editText = "Редактировать",
+    int editWidth = 110)
 {
     auto *actionsWidget = new QWidget;
     auto *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -120,22 +129,25 @@ inline QWidget *createActionButtons(QTableWidget *table, const QString &id, QWid
     auto *editBtn = new QPushButton(editText);
     editBtn->setMinimumWidth(editWidth);
     editBtn->setFixedHeight(35);
+
     auto *deleteBtn = new QPushButton("Удалить");
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 
-    connect(editBtn, &QPushButton::clicked, parent,
-            [table, id, editFunc = std::forward<EditFunc>(editAction)]()
-            {
-                selectRowById(table, id);
-                editFunc();
-            });
-    connect(deleteBtn, &QPushButton::clicked, parent,
-            [table, id, deleteFunc = std::forward<DeleteFunc>(deleteAction)]()
-            {
-                selectRowById(table, id);
-                deleteFunc();
-            });
+    // Исправление: убран неверный "parent" как получатель сигнала
+    QObject::connect(editBtn, &QPushButton::clicked,
+                     [table, id, func = std::forward<EditFunc>(editAction)]()
+                     {
+                         selectRowById(table, id);
+                         func();
+                     });
+
+    QObject::connect(deleteBtn, &QPushButton::clicked,
+                     [table, id, func = std::forward<DeleteFunc>(deleteAction)]()
+                     {
+                         selectRowById(table, id);
+                         func();
+                     });
 
     actionsLayout->addWidget(editBtn);
     actionsLayout->addWidget(deleteBtn);
@@ -143,6 +155,7 @@ inline QWidget *createActionButtons(QTableWidget *table, const QString &id, QWid
 
     return actionsWidget;
 }
+
 } // namespace TableHelper
 
 #endif // TABLE_HELPER_H

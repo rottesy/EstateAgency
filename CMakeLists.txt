@@ -46,6 +46,7 @@ set(SOURCES
     src/ui/TransactionsWidget.cpp
     src/ui/AuctionsWidget.cpp
     src/ui/DashboardWidget.cpp
+    src/ui/TableHelper.cpp
 )
 
 # Заголовочные файлы для MOC
