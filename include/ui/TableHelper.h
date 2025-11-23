@@ -9,10 +9,11 @@
 #include <QTableWidgetItem>
 #include <QWidget>
 #include <string_view>
-#include <utility>      // ← нужно для std::forward
+#include <utility>
 
 namespace TableHelper
 {
+
 inline int getSelectedRow(const QTableWidget *table)
 {
     if (!table)
@@ -32,11 +33,9 @@ inline QString getSelectedId(const QTableWidget *table, int column = 0)
     if (!table)
         return QString();
 
-    int row = getSelectedRow(table);
+    const int row = getSelectedRow(table);
     if (!isValidRow(table, row))
-    {
         return QString();
-    }
 
     const QTableWidgetItem *item = table->item(row, column);
     return item ? item->text() : QString();
@@ -45,9 +44,7 @@ inline QString getSelectedId(const QTableWidget *table, int column = 0)
 inline void clearTable(QTableWidget *table)
 {
     if (table)
-    {
         table->setRowCount(0);
-    }
 }
 
 inline QString getTransactionStatusText(std::string_view status)
@@ -88,6 +85,7 @@ inline void selectRowById(QTableWidget *table, const QString &id, int column = 0
 {
     if (!table)
         return;
+
     for (int i = 0; i < table->rowCount(); ++i)
     {
         if (table->item(i, column) && table->item(i, column)->text() == id)
@@ -98,14 +96,15 @@ inline void selectRowById(QTableWidget *table, const QString &id, int column = 0
     }
 }
 
-inline bool checkTableSelection(const QTableWidget *table, const QString &errorMessage, QWidget *parent = nullptr)
+inline bool checkTableSelection(const QTableWidget *table,
+                                const QString &errorMessage,
+                                [[maybe_unused]] const QWidget *parent = nullptr)
 {
     if (!table || !hasValidSelection(table))
     {
         if (!errorMessage.isEmpty() && parent)
-        {
-            QMessageBox::information(parent, QString("Информация"), errorMessage);
-        }
+            QMessageBox::information(const_cast<QWidget*>(parent), "Информация", errorMessage);
+
         return false;
     }
     return true;
@@ -115,16 +114,16 @@ template <typename EditFunc, typename DeleteFunc>
 inline QWidget *createActionButtons(
     QTableWidget *table,
     const QString &id,
-    QWidget *parent,
-    EditFunc &&editAction,
-    DeleteFunc &&deleteAction,
+    [[maybe_unused]] const QWidget *parent,
+    const EditFunc &editAction,     // ← передаем по const&
+    const DeleteFunc &deleteAction, // ← передаем по const&
     const QString &editText = "Редактировать",
     int editWidth = 110)
 {
     auto *actionsWidget = new QWidget;
-    auto *actionsLayout = new QHBoxLayout(actionsWidget);
-    actionsLayout->setContentsMargins(5, 5, 5, 5);
-    actionsLayout->setSpacing(8);
+    auto *layout = new QHBoxLayout(actionsWidget);
+    layout->setContentsMargins(5, 5, 5, 5);
+    layout->setSpacing(8);
 
     auto *editBtn = new QPushButton(editText);
     editBtn->setMinimumWidth(editWidth);
@@ -134,24 +133,23 @@ inline QWidget *createActionButtons(
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 
-    // Исправление: убран неверный "parent" как получатель сигнала
     QObject::connect(editBtn, &QPushButton::clicked,
-                     [table, id, func = std::forward<EditFunc>(editAction)]()
+                     [table, id, &editAction]()
                      {
                          selectRowById(table, id);
-                         func();
+                         editAction();
                      });
 
     QObject::connect(deleteBtn, &QPushButton::clicked,
-                     [table, id, func = std::forward<DeleteFunc>(deleteAction)]()
+                     [table, id, &deleteAction]()
                      {
                          selectRowById(table, id);
-                         func();
+                         deleteAction();
                      });
 
-    actionsLayout->addWidget(editBtn);
-    actionsLayout->addWidget(deleteBtn);
-    actionsLayout->addStretch();
+    layout->addWidget(editBtn);
+    layout->addWidget(deleteBtn);
+    layout->addStretch();
 
     return actionsWidget;
 }
