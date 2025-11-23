@@ -125,16 +125,16 @@ inline QWidget *createActionButtons(QTableWidget *table, const QString &id, QWid
     deleteBtn->setFixedHeight(35);
 
     connect(editBtn, &QPushButton::clicked, parent,
-            [table, id, editAction = std::forward<EditFunc>(editAction)]()
+            [table, id, editFunc = std::forward<EditFunc>(editAction)]()
             {
                 selectRowById(table, id);
-                editAction();
+                editFunc();
             });
     connect(deleteBtn, &QPushButton::clicked, parent,
-            [table, id, deleteAction = std::forward<DeleteFunc>(deleteAction)]()
+            [table, id, deleteFunc = std::forward<DeleteFunc>(deleteAction)]()
             {
                 selectRowById(table, id);
-                deleteAction();
+                deleteFunc();
             });
 
     actionsLayout->addWidget(editBtn);
