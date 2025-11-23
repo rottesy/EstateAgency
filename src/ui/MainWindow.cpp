@@ -521,11 +521,44 @@ void MainWindow::showStatusMessage(const QString &message, int timeout) const
     }
 }
 
-void MainWindow::handleException()
+void MainWindow::refreshAllData()
 {
+    if (propertiesWidget)
+        propertiesWidget->refresh();
+    if (clientsWidget)
+        clientsWidget->refresh();
+    if (transactionsWidget)
+        transactionsWidget->refresh();
+    if (auctionsWidget)
+        auctionsWidget->refresh();
+    updateDashboardStats();
+    showStatusMessage("Все данные обновлены", 2000);
+}
+
+void MainWindow::onNavigationChanged(int index)
+{
+    if (index == 0)
+    {
+        updateDashboardStats();
+    }
+}
+
+void MainWindow::onDataChanged() { updateDashboardStats(); }
+
+void MainWindow::saveAllData()
+{
+    if (!agency)
+    {
+        QMessageBox::warning(this, "Ошибка", "Система не инициализирована");
+        return;
+    }
+
     try
     {
-        throw;
+        agency->saveAllData();
+        refreshAllData();
+        showStatusMessage("Данные сохранены", 3000);
+        QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
     }
     catch (const FileManagerException &e)
     {
@@ -573,51 +606,6 @@ void MainWindow::handleException()
     }
 }
 
-void MainWindow::refreshAllData()
-{
-    if (propertiesWidget)
-        propertiesWidget->refresh();
-    if (clientsWidget)
-        clientsWidget->refresh();
-    if (transactionsWidget)
-        transactionsWidget->refresh();
-    if (auctionsWidget)
-        auctionsWidget->refresh();
-    updateDashboardStats();
-    showStatusMessage("Все данные обновлены", 2000);
-}
-
-void MainWindow::onNavigationChanged(int index)
-{
-    if (index == 0)
-    {
-        updateDashboardStats();
-    }
-}
-
-void MainWindow::onDataChanged() { updateDashboardStats(); }
-
-void MainWindow::saveAllData()
-{
-    if (!agency)
-    {
-        QMessageBox::warning(this, "Ошибка", "Система не инициализирована");
-        return;
-    }
-
-    try
-    {
-        agency->saveAllData();
-        refreshAllData();
-        showStatusMessage("Данные сохранены", 3000);
-        QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
-    }
-    catch (...)
-    {
-        handleException();
-    }
-}
-
 void MainWindow::loadAllData()
 {
     if (!agency)
@@ -633,8 +621,48 @@ void MainWindow::loadAllData()
         showStatusMessage("Данные загружены", 3000);
         QMessageBox::information(this, "Успех", "Данные успешно загружены");
     }
-    catch (...)
+    catch (const FileManagerException &e)
     {
-        handleException();
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
+    }
+    catch (const PropertyManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
+    }
+    catch (const ClientManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
+    }
+    catch (const AuctionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
+    }
+    catch (const std::bad_alloc &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
+    }
+    catch (const std::domain_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
+    }
+    catch (const std::length_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
+    }
+    catch (const std::out_of_range &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
     }
 }
