@@ -1,6 +1,7 @@
 #ifndef TABLE_HELPER_H
 #define TABLE_HELPER_H
 
+#include <QMessageBox>
 #include <QString>
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -75,6 +76,33 @@ inline QString getPropertyTypeText(const std::string &type)
 }
 
 inline bool hasValidSelection(const QTableWidget *table) { return isValidRow(table, getSelectedRow(table)); }
+
+inline void selectRowById(QTableWidget *table, const QString &id, int column = 0)
+{
+    if (!table)
+        return;
+    for (int i = 0; i < table->rowCount(); ++i)
+    {
+        if (table->item(i, column) && table->item(i, column)->text() == id)
+        {
+            table->selectRow(i);
+            break;
+        }
+    }
+}
+
+inline bool checkTableSelection(const QTableWidget *table, const QString &errorMessage, QWidget *parent = nullptr)
+{
+    if (!table || !hasValidSelection(table))
+    {
+        if (!errorMessage.isEmpty() && parent)
+        {
+            QMessageBox::information(parent, QString("Информация"), errorMessage);
+        }
+        return false;
+    }
+    return true;
+}
 } // namespace TableHelper
 
 #endif // TABLE_HELPER_H

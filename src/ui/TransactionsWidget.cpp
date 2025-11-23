@@ -442,13 +442,13 @@ QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QStr
     connect(editBtn, &QPushButton::clicked, this,
             [this, table, id, editAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 editAction();
             });
     connect(deleteBtn, &QPushButton::clicked, this,
             [this, table, id, deleteAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 deleteAction();
             });
 
@@ -461,16 +461,7 @@ QWidget *TransactionsWidget::createActionButtons(QTableWidget *table, const QStr
 
 void TransactionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
-    if (!table)
-        return;
-    for (int i = 0; i < table->rowCount(); ++i)
-    {
-        if (table->item(i, 0) && table->item(i, 0)->text() == id)
-        {
-            table->selectRow(i);
-            break;
-        }
-    }
+    TableHelper::selectRowById(table, id);
 }
 
 QString TransactionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
@@ -480,13 +471,7 @@ QString TransactionsWidget::getSelectedIdFromTable(const QTableWidget *table) co
 
 bool TransactionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
-    if (!table || !TableHelper::hasValidSelection(table))
-    {
-        if (!errorMessage.isEmpty())
-            QMessageBox::information(this, QString("Информация"), errorMessage);
-        return false;
-    }
-    return true;
+    return TableHelper::checkTableSelection(table, errorMessage, this);
 }
 
 void TransactionsWidget::addTransactionToTable(const Transaction *trans)

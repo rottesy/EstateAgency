@@ -376,13 +376,13 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
     connect(viewBtn, &QPushButton::clicked, this,
             [this, table, id, viewAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 viewAction();
             });
     connect(deleteBtn, &QPushButton::clicked, this,
             [this, table, id, deleteAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 deleteAction();
             });
 
@@ -395,16 +395,7 @@ QWidget *AuctionsWidget::createActionButtons(QTableWidget *table, const QString 
 
 void AuctionsWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
-    if (!table)
-        return;
-    for (int i = 0; i < table->rowCount(); ++i)
-    {
-        if (table->item(i, 0) && table->item(i, 0)->text() == id)
-        {
-            table->selectRow(i);
-            break;
-        }
-    }
+    TableHelper::selectRowById(table, id);
 }
 
 QString AuctionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
@@ -414,13 +405,7 @@ QString AuctionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
 
 bool AuctionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
-    if (!table || !TableHelper::hasValidSelection(table))
-    {
-        if (!errorMessage.isEmpty())
-            QMessageBox::information(this, QString("Информация"), errorMessage);
-        return false;
-    }
-    return true;
+    return TableHelper::checkTableSelection(table, errorMessage, this);
 }
 
 void AuctionsWidget::addAuctionToTable(const Auction *auction)

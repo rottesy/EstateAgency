@@ -466,13 +466,13 @@ QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QStrin
     connect(editBtn, &QPushButton::clicked, this,
             [this, table, id, editAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 editAction();
             });
     connect(deleteBtn, &QPushButton::clicked, this,
             [this, table, id, deleteAction]()
             {
-                selectRowById(table, id);
+                TableHelper::selectRowById(table, id);
                 deleteAction();
             });
 
@@ -485,16 +485,7 @@ QWidget *PropertiesWidget::createActionButtons(QTableWidget *table, const QStrin
 
 void PropertiesWidget::selectRowById(QTableWidget *table, const QString &id) const
 {
-    if (!table)
-        return;
-    for (int i = 0; i < table->rowCount(); ++i)
-    {
-        if (table->item(i, 0) && table->item(i, 0)->text() == id)
-        {
-            table->selectRow(i);
-            break;
-        }
-    }
+    TableHelper::selectRowById(table, id);
 }
 
 QString PropertiesWidget::getSelectedIdFromTable(const QTableWidget *table) const
@@ -504,15 +495,7 @@ QString PropertiesWidget::getSelectedIdFromTable(const QTableWidget *table) cons
 
 bool PropertiesWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
 {
-    if (!table || !TableHelper::hasValidSelection(table))
-    {
-        if (!errorMessage.isEmpty())
-        {
-            QMessageBox::information(this, QString("Информация"), errorMessage);
-        }
-        return false;
-    }
-    return true;
+    return TableHelper::checkTableSelection(table, errorMessage, this);
 }
 
 bool PropertiesWidget::isNumericId(const QString &text) const
