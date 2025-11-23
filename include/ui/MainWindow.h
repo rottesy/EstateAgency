@@ -34,6 +34,7 @@ class MainWindow : public QMainWindow
     void updateDashboardStats();
     void showStatusMessage(const QString &message, int timeout = 3000) const;
     void handleException(const std::exception &e);
+    void executeWithExceptionHandling(const std::function<void()> &operation);
 
     EstateAgency *agency;
 

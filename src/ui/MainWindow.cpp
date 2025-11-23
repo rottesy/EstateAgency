@@ -16,6 +16,7 @@
 #include <QStatusBar>
 #include <QTimer>
 #include <filesystem>
+#include <functional>
 #include <stdexcept>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
@@ -521,6 +522,58 @@ void MainWindow::showStatusMessage(const QString &message, int timeout) const
     }
 }
 
+void MainWindow::executeWithExceptionHandling(const std::function<void()> &operation)
+{
+    try
+    {
+        operation();
+    }
+    catch (const FileManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        handleException(e);
+    }
+    catch (const PropertyManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const ClientManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const TransactionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const AuctionManagerException &e)
+    {
+        handleException(e);
+    }
+    catch (const std::bad_alloc &e)
+    {
+        handleException(e);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        handleException(e);
+    }
+    catch (const std::domain_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::length_error &e)
+    {
+        handleException(e);
+    }
+    catch (const std::out_of_range &e)
+    {
+        handleException(e);
+    }
+}
+
 void MainWindow::handleException(const std::exception &e)
 {
     if (dynamic_cast<const FileManagerException *>(&e))
@@ -605,57 +658,14 @@ void MainWindow::saveAllData()
         return;
     }
 
-    try
-    {
-        agency->saveAllData();
-        refreshAllData();
-        showStatusMessage("Данные сохранены", 3000);
-        QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
-    }
-    catch (const FileManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        handleException(e);
-    }
-    catch (const PropertyManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const ClientManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const TransactionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const AuctionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::bad_alloc &e)
-    {
-        handleException(e);
-    }
-    catch (const std::invalid_argument &e)
-    {
-        handleException(e);
-    }
-    catch (const std::domain_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::length_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::out_of_range &e)
-    {
-        handleException(e);
-    }
+    executeWithExceptionHandling(
+        [this]()
+        {
+            agency->saveAllData();
+            refreshAllData();
+            showStatusMessage("Данные сохранены", 3000);
+            QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
+        });
 }
 
 void MainWindow::loadAllData()
@@ -666,55 +676,12 @@ void MainWindow::loadAllData()
         return;
     }
 
-    try
-    {
-        agency->loadAllData();
-        refreshAllData();
-        showStatusMessage("Данные загружены", 3000);
-        QMessageBox::information(this, "Успех", "Данные успешно загружены");
-    }
-    catch (const FileManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        handleException(e);
-    }
-    catch (const PropertyManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const ClientManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const TransactionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const AuctionManagerException &e)
-    {
-        handleException(e);
-    }
-    catch (const std::bad_alloc &e)
-    {
-        handleException(e);
-    }
-    catch (const std::invalid_argument &e)
-    {
-        handleException(e);
-    }
-    catch (const std::domain_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::length_error &e)
-    {
-        handleException(e);
-    }
-    catch (const std::out_of_range &e)
-    {
-        handleException(e);
-    }
+    executeWithExceptionHandling(
+        [this]()
+        {
+            agency->loadAllData();
+            refreshAllData();
+            showStatusMessage("Данные загружены", 3000);
+            QMessageBox::information(this, "Успех", "Данные успешно загружены");
+        });
 }
