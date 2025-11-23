@@ -6,8 +6,9 @@
 
 namespace TableHelper
 {
-QWidget *createActionButtons(QTableWidget *table, const QString &id, QWidget *parent, std::function<void()> editAction,
-                             std::function<void()> deleteAction, const QString &editText, int editWidth)
+QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget *parent,
+                             const std::function<void()> &editAction, const std::function<void()> &deleteAction,
+                             const QString &editText, int editWidth)
 {
     auto *actionsWidget = new QWidget;
     auto *actionsLayout = new QHBoxLayout(actionsWidget);
@@ -22,13 +23,13 @@ QWidget *createActionButtons(QTableWidget *table, const QString &id, QWidget *pa
     deleteBtn->setFixedHeight(35);
 
     // Используем QObject::connect для явного указания пространства имен
-    QObject::connect(editBtn, &QPushButton::clicked, parent,
+    QObject::connect(editBtn, &QPushButton::clicked, const_cast<QWidget *>(parent),
                      [table, id, editAction]()
                      {
                          selectRowById(table, id);
                          editAction();
                      });
-    QObject::connect(deleteBtn, &QPushButton::clicked, parent,
+    QObject::connect(deleteBtn, &QPushButton::clicked, const_cast<QWidget *>(parent),
                      [table, id, deleteAction]()
                      {
                          selectRowById(table, id);

@@ -8,8 +8,8 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QWidget>
+#include <functional>
 #include <string_view>
-#include <utility>
 
 namespace TableHelper
 {
@@ -76,10 +76,7 @@ inline QString getPropertyTypeText(const std::string &type)
     return QString::fromStdString(type);
 }
 
-inline bool hasValidSelection(const QTableWidget *table)
-{
-    return isValidRow(table, getSelectedRow(table));
-}
+inline bool hasValidSelection(const QTableWidget *table) { return isValidRow(table, getSelectedRow(table)); }
 
 inline void selectRowById(QTableWidget *table, const QString &id, int column = 0)
 {
@@ -96,29 +93,31 @@ inline void selectRowById(QTableWidget *table, const QString &id, int column = 0
     }
 }
 
-inline bool checkTableSelection(const QTableWidget *table,
-                                const QString &errorMessage,
+inline bool checkTableSelection(const QTableWidget *table, const QString &errorMessage,
                                 [[maybe_unused]] const QWidget *parent = nullptr)
 {
     if (!table || !hasValidSelection(table))
     {
         if (!errorMessage.isEmpty() && parent)
-            QMessageBox::information(const_cast<QWidget*>(parent), "Информация", errorMessage);
+            QMessageBox::information(const_cast<QWidget *>(parent), "Информация", errorMessage);
 
         return false;
     }
     return true;
 }
 
+// Нешаблонная функция для создания кнопок действий
+// Принимает std::function вместо шаблонных параметров
+// Реализация в TableHelper.cpp
+QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget *parent,
+                             const std::function<void()> &editAction, const std::function<void()> &deleteAction,
+                             const QString &editText = "Редактировать", int editWidth = 110);
+
 template <typename EditFunc, typename DeleteFunc>
-inline QWidget *createActionButtons(
-    QTableWidget *table,
-    const QString &id,
-    [[maybe_unused]] const QWidget *parent,
-    const EditFunc &editAction,     // ← передаем по const&
-    const DeleteFunc &deleteAction, // ← передаем по const&
-    const QString &editText = "Редактировать",
-    int editWidth = 110)
+inline QWidget *createActionButtons(QTableWidget *table, const QString &id, [[maybe_unused]] const QWidget *parent,
+                                    const EditFunc &editAction,     // ← передаем по const&
+                                    const DeleteFunc &deleteAction, // ← передаем по const&
+                                    const QString &editText = "Редактировать", int editWidth = 110)
 {
     auto *actionsWidget = new QWidget;
     auto *layout = new QHBoxLayout(actionsWidget);

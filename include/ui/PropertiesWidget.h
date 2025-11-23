@@ -37,7 +37,7 @@ class PropertiesWidget : public QWidget
     void addPropertyToTable(const Property *prop);
     void selectRowById(QTableWidget *table, const QString &id) const;
     QString getSelectedIdFromTable(const QTableWidget *table) const;
-    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage);
+    bool checkTableSelection(const QTableWidget *table, const QString &errorMessage) const;
     bool isNumericId(const QString &text) const;
 
     EstateAgency *agency;

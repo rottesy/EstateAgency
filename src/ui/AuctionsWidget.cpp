@@ -403,7 +403,7 @@ QString AuctionsWidget::getSelectedIdFromTable(const QTableWidget *table) const
     return TableHelper::getSelectedId(table);
 }
 
-bool AuctionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage)
+bool AuctionsWidget::checkTableSelection(const QTableWidget *table, const QString &errorMessage) const
 {
     return TableHelper::checkTableSelection(table, errorMessage, this);
 }
