@@ -101,34 +101,7 @@ void AuctionsWidget::updateTable()
     {
         if (!auction)
             continue;
-
-        int row = auctionsTable->rowCount();
-        auctionsTable->insertRow(row);
-
-        double currentBid = auction->getCurrentHighestBid();
-
-        auctionsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(auction->getId())));
-        auctionsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(auction->getPropertyAddress())));
-        auctionsTable->setItem(row, 2,
-                               new QTableWidgetItem(QString::number(auction->getStartingPrice(), 'f', 2) + " руб."));
-
-        QString currentBidText = (currentBid > 0) ? QString::number(currentBid, 'f', 2) + " руб." : "Нет ставок";
-        auctionsTable->setItem(row, 3, new QTableWidgetItem(currentBidText));
-
-        QString statusText;
-        if (auction->getStatus() == "active")
-            statusText = "Активен";
-        else if (auction->getStatus() == "completed")
-            statusText = "Завершен";
-        else
-            statusText = "Отменен";
-        auctionsTable->setItem(row, 4, new QTableWidgetItem(statusText));
-        auctionsTable->setItem(row, 5, new QTableWidgetItem(QString::number(auction->getBids().size())));
-
-        QString auctionId = QString::fromStdString(auction->getId());
-        QWidget *actionsWidget =
-            createActionButtons(auctionsTable, auctionId, [this]() { viewAuction(); }, [this]() { deleteAuction(); });
-        auctionsTable->setCellWidget(row, 6, actionsWidget);
+        addAuctionToTable(auction);
     }
 }
 
@@ -276,33 +249,7 @@ void AuctionsWidget::searchAuctions()
         const Auction *auction = agency->getAuctionManager().findAuction(searchText.toStdString());
         if (auction)
         {
-            int row = auctionsTable->rowCount();
-            auctionsTable->insertRow(row);
-
-            double currentBid = auction->getCurrentHighestBid();
-
-            auctionsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(auction->getId())));
-            auctionsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(auction->getPropertyAddress())));
-            auctionsTable->setItem(
-                row, 2, new QTableWidgetItem(QString::number(auction->getStartingPrice(), 'f', 2) + " руб."));
-
-            QString currentBidText = (currentBid > 0) ? QString::number(currentBid, 'f', 2) + " руб." : "Нет ставок";
-            auctionsTable->setItem(row, 3, new QTableWidgetItem(currentBidText));
-
-            QString statusText;
-            if (auction->getStatus() == "active")
-                statusText = "Активен";
-            else if (auction->getStatus() == "completed")
-                statusText = "Завершен";
-            else
-                statusText = "Отменен";
-            auctionsTable->setItem(row, 4, new QTableWidgetItem(statusText));
-            auctionsTable->setItem(row, 5, new QTableWidgetItem(QString::number(auction->getBids().size())));
-
-            QString auctionId = QString::fromStdString(auction->getId());
-            QWidget *actionsWidget = createActionButtons(
-                auctionsTable, auctionId, [this]() { viewAuction(); }, [this]() { deleteAuction(); });
-            auctionsTable->setCellWidget(row, 6, actionsWidget);
+            addAuctionToTable(auction);
         }
     }
 }
@@ -474,4 +421,38 @@ bool AuctionsWidget::checkTableSelection(const QTableWidget *table, const QStrin
         return false;
     }
     return true;
+}
+
+void AuctionsWidget::addAuctionToTable(const Auction *auction)
+{
+    if (!auction || !auctionsTable)
+        return;
+
+    int row = auctionsTable->rowCount();
+    auctionsTable->insertRow(row);
+
+    double currentBid = auction->getCurrentHighestBid();
+
+    auctionsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(auction->getId())));
+    auctionsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(auction->getPropertyAddress())));
+    auctionsTable->setItem(row, 2,
+                           new QTableWidgetItem(QString::number(auction->getStartingPrice(), 'f', 2) + " руб."));
+
+    QString currentBidText = (currentBid > 0) ? QString::number(currentBid, 'f', 2) + " руб." : "Нет ставок";
+    auctionsTable->setItem(row, 3, new QTableWidgetItem(currentBidText));
+
+    QString statusText;
+    if (auction->getStatus() == "active")
+        statusText = "Активен";
+    else if (auction->getStatus() == "completed")
+        statusText = "Завершен";
+    else
+        statusText = "Отменен";
+    auctionsTable->setItem(row, 4, new QTableWidgetItem(statusText));
+    auctionsTable->setItem(row, 5, new QTableWidgetItem(QString::number(auction->getBids().size())));
+
+    QString auctionId = QString::fromStdString(auction->getId());
+    QWidget *actionsWidget =
+        createActionButtons(auctionsTable, auctionId, [this]() { viewAuction(); }, [this]() { deleteAuction(); });
+    auctionsTable->setCellWidget(row, 6, actionsWidget);
 }

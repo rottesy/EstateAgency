@@ -33,6 +33,7 @@ class TransactionsWidget : public QWidget
   private:
     void setupUI();
     void showTransactionDetails(const Transaction *trans);
+    void addTransactionToTable(const Transaction *trans);
     bool validateTransaction(std::string_view propertyId, std::string_view clientId, std::string_view status,
                              std::string_view excludeId = "");
     bool hasActiveTransactions(const std::string &propertyId);

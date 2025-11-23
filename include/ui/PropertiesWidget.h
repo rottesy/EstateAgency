@@ -34,6 +34,7 @@ class PropertiesWidget : public QWidget
     void setupUI();
     void showPropertyDetails(const Property *prop);
     void showPropertyTransactions(const std::string &propertyId);
+    void addPropertyToTable(const Property *prop);
     QWidget *createActionButtons(QTableWidget *table, const QString &id, const std::function<void()> &editAction,
                                  const std::function<void()> &deleteAction);
     void selectRowById(QTableWidget *table, const QString &id) const;

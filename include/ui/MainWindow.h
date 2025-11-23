@@ -33,6 +33,7 @@ class MainWindow : public QMainWindow
     void applyStyles();
     void updateDashboardStats();
     void showStatusMessage(const QString &message, int timeout = 3000) const;
+    void handleException();
 
     EstateAgency *agency;
 

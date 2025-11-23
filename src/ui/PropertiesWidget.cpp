@@ -18,7 +18,6 @@
 #include <functional>
 #include <ranges>
 
-
 PropertiesWidget::PropertiesWidget(EstateAgency *agency, QWidget *parent) : QWidget(parent), agency(agency)
 {
     setupUI();
@@ -109,21 +108,7 @@ void PropertiesWidget::updateTable()
     {
         if (!prop)
             continue;
-
-        int row = propertiesTable->rowCount();
-        propertiesTable->insertRow(row);
-
-        propertiesTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(prop->getId())));
-        propertiesTable->setItem(row, 1, new QTableWidgetItem(TableHelper::getPropertyTypeText(prop->getType())));
-        propertiesTable->setItem(row, 2, new QTableWidgetItem(Utils::toQString(prop->getAddress())));
-        propertiesTable->setItem(row, 3, new QTableWidgetItem(Utils::formatNumber(prop->getPrice())));
-        propertiesTable->setItem(row, 4, new QTableWidgetItem(Utils::formatNumber(prop->getArea())));
-        propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
-
-        QString propId = Utils::toQString(prop->getId());
-        QWidget *actionsWidget =
-            createActionButtons(propertiesTable, propId, [this]() { editProperty(); }, [this]() { deleteProperty(); });
-        propertiesTable->setCellWidget(row, 6, actionsWidget);
+        addPropertyToTable(prop);
     }
 }
 
@@ -327,20 +312,9 @@ void PropertiesWidget::searchProperties()
 
     for (const Property *prop : properties)
     {
-        int row = propertiesTable->rowCount();
-        propertiesTable->insertRow(row);
-
-        propertiesTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(prop->getId())));
-        propertiesTable->setItem(row, 1, new QTableWidgetItem(TableHelper::getPropertyTypeText(prop->getType())));
-        propertiesTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(prop->getAddress())));
-        propertiesTable->setItem(row, 3, new QTableWidgetItem(QString::number(prop->getPrice(), 'f', 2)));
-        propertiesTable->setItem(row, 4, new QTableWidgetItem(QString::number(prop->getArea(), 'f', 2)));
-        propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
-
-        QString propId = QString::fromStdString(prop->getId());
-        QWidget *actionsWidget =
-            createActionButtons(propertiesTable, propId, [this]() { editProperty(); }, [this]() { deleteProperty(); });
-        propertiesTable->setCellWidget(row, 6, actionsWidget);
+        if (!prop)
+            continue;
+        addPropertyToTable(prop);
     }
 }
 
@@ -544,4 +518,25 @@ bool PropertiesWidget::checkTableSelection(const QTableWidget *table, const QStr
 bool PropertiesWidget::isNumericId(const QString &text) const
 {
     return std::ranges::all_of(text, [](const QChar &ch) { return ch.isDigit(); });
+}
+
+void PropertiesWidget::addPropertyToTable(const Property *prop)
+{
+    if (!prop || !propertiesTable)
+        return;
+
+    int row = propertiesTable->rowCount();
+    propertiesTable->insertRow(row);
+
+    propertiesTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(prop->getId())));
+    propertiesTable->setItem(row, 1, new QTableWidgetItem(TableHelper::getPropertyTypeText(prop->getType())));
+    propertiesTable->setItem(row, 2, new QTableWidgetItem(Utils::toQString(prop->getAddress())));
+    propertiesTable->setItem(row, 3, new QTableWidgetItem(Utils::formatNumber(prop->getPrice())));
+    propertiesTable->setItem(row, 4, new QTableWidgetItem(Utils::formatNumber(prop->getArea())));
+    propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
+
+    QString propId = Utils::toQString(prop->getId());
+    QWidget *actionsWidget =
+        createActionButtons(propertiesTable, propId, [this]() { editProperty(); }, [this]() { deleteProperty(); });
+    propertiesTable->setCellWidget(row, 6, actionsWidget);
 }

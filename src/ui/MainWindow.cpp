@@ -521,6 +521,58 @@ void MainWindow::showStatusMessage(const QString &message, int timeout) const
     }
 }
 
+void MainWindow::handleException()
+{
+    try
+    {
+        throw;
+    }
+    catch (const FileManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
+    }
+    catch (const std::filesystem::filesystem_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
+    }
+    catch (const PropertyManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
+    }
+    catch (const ClientManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
+    }
+    catch (const TransactionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
+    }
+    catch (const AuctionManagerException &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
+    }
+    catch (const std::bad_alloc &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
+    }
+    catch (const std::domain_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
+    }
+    catch (const std::length_error &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
+    }
+    catch (const std::out_of_range &e)
+    {
+        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
+    }
+}
+
 void MainWindow::refreshAllData()
 {
     if (propertiesWidget)
@@ -560,49 +612,9 @@ void MainWindow::saveAllData()
         showStatusMessage("Данные сохранены", 3000);
         QMessageBox::information(this, "Успех", "Все данные успешно сохранены");
     }
-    catch (const FileManagerException &e)
+    catch (...)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
-    }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
-    }
-    catch (const PropertyManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
-    }
-    catch (const ClientManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
-    }
-    catch (const TransactionManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
-    }
-    catch (const AuctionManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
-    }
-    catch (const std::bad_alloc &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
-    }
-    catch (const std::invalid_argument &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
-    }
-    catch (const std::domain_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
-    }
-    catch (const std::length_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
-    }
-    catch (const std::out_of_range &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
+        handleException();
     }
 }
 
@@ -621,48 +633,8 @@ void MainWindow::loadAllData()
         showStatusMessage("Данные загружены", 3000);
         QMessageBox::information(this, "Успех", "Данные успешно загружены");
     }
-    catch (const FileManagerException &e)
+    catch (...)
     {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка файлового менеджера: %1").arg(e.what()));
-    }
-    catch (const std::filesystem::filesystem_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка файловой системы: %1").arg(e.what()));
-    }
-    catch (const PropertyManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера недвижимости: %1").arg(e.what()));
-    }
-    catch (const ClientManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера клиентов: %1").arg(e.what()));
-    }
-    catch (const TransactionManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера сделок: %1").arg(e.what()));
-    }
-    catch (const AuctionManagerException &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка менеджера аукционов: %1").arg(e.what()));
-    }
-    catch (const std::bad_alloc &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Недостаточно памяти: %1").arg(e.what()));
-    }
-    catch (const std::invalid_argument &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Неверный аргумент: %1").arg(e.what()));
-    }
-    catch (const std::domain_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка домена: %1").arg(e.what()));
-    }
-    catch (const std::length_error &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Ошибка длины: %1").arg(e.what()));
-    }
-    catch (const std::out_of_range &e)
-    {
-        QMessageBox::warning(this, "Ошибка", QString("Выход за границы: %1").arg(e.what()));
+        handleException();
     }
 }

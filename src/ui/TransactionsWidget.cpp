@@ -106,27 +106,7 @@ void TransactionsWidget::updateTable()
     {
         if (!trans)
             continue;
-
-        int row = transactionsTable->rowCount();
-        transactionsTable->insertRow(row);
-
-        const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
-        const Client *client = agency->getClientManager().findClient(trans->getClientId());
-
-        transactionsTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(trans->getId())));
-        transactionsTable->setItem(row, 1,
-                                   new QTableWidgetItem(prop ? Utils::toQString(prop->getAddress()) : "Не указана"));
-        transactionsTable->setItem(row, 2,
-                                   new QTableWidgetItem(client ? Utils::toQString(client->getName()) : "Не указан"));
-        transactionsTable->setItem(row, 3, new QTableWidgetItem(Utils::formatNumber(trans->getFinalPrice())));
-        transactionsTable->setItem(row, 4, new QTableWidgetItem(Utils::toQString(trans->getDate())));
-        transactionsTable->setItem(row, 5,
-                                   new QTableWidgetItem(TableHelper::getTransactionStatusText(trans->getStatus())));
-
-        QString transId = Utils::toQString(trans->getId());
-        QWidget *actionsWidget = createActionButtons(
-            transactionsTable, transId, [this]() { editTransaction(); }, [this]() { deleteTransaction(); });
-        transactionsTable->setCellWidget(row, 6, actionsWidget);
+        addTransactionToTable(trans);
     }
 }
 
@@ -311,26 +291,7 @@ void TransactionsWidget::searchTransactions()
     {
         if (const Transaction *trans = agency->getTransactionManager().findTransaction(searchText.toStdString()); trans)
         {
-            int row = transactionsTable->rowCount();
-            transactionsTable->insertRow(row);
-
-            const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
-            const Client *client = agency->getClientManager().findClient(trans->getClientId());
-
-            transactionsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(trans->getId())));
-            transactionsTable->setItem(row, 1,
-                                       new QTableWidgetItem(prop ? QString::fromStdString(prop->getAddress()) : "N/A"));
-            transactionsTable->setItem(
-                row, 2, new QTableWidgetItem(client ? QString::fromStdString(client->getName()) : "N/A"));
-            transactionsTable->setItem(row, 3, new QTableWidgetItem(QString::number(trans->getFinalPrice(), 'f', 2)));
-            transactionsTable->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(trans->getDate())));
-            transactionsTable->setItem(row, 5,
-                                       new QTableWidgetItem(TableHelper::getTransactionStatusText(trans->getStatus())));
-
-            QString transId = QString::fromStdString(trans->getId());
-            QWidget *actionsWidget = createActionButtons(
-                transactionsTable, transId, [this]() { editTransaction(); }, [this]() { deleteTransaction(); });
-            transactionsTable->setCellWidget(row, 6, actionsWidget);
+            addTransactionToTable(trans);
         }
     }
 }
@@ -526,4 +487,30 @@ bool TransactionsWidget::checkTableSelection(const QTableWidget *table, const QS
         return false;
     }
     return true;
+}
+
+void TransactionsWidget::addTransactionToTable(const Transaction *trans)
+{
+    if (!trans || !transactionsTable)
+        return;
+
+    int row = transactionsTable->rowCount();
+    transactionsTable->insertRow(row);
+
+    const Property *prop = agency->getPropertyManager().findProperty(trans->getPropertyId());
+    const Client *client = agency->getClientManager().findClient(trans->getClientId());
+
+    transactionsTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(trans->getId())));
+    transactionsTable->setItem(row, 1,
+                               new QTableWidgetItem(prop ? Utils::toQString(prop->getAddress()) : "Не указана"));
+    transactionsTable->setItem(row, 2,
+                               new QTableWidgetItem(client ? Utils::toQString(client->getName()) : "Не указан"));
+    transactionsTable->setItem(row, 3, new QTableWidgetItem(Utils::formatNumber(trans->getFinalPrice())));
+    transactionsTable->setItem(row, 4, new QTableWidgetItem(Utils::toQString(trans->getDate())));
+    transactionsTable->setItem(row, 5, new QTableWidgetItem(TableHelper::getTransactionStatusText(trans->getStatus())));
+
+    QString transId = Utils::toQString(trans->getId());
+    QWidget *actionsWidget = createActionButtons(
+        transactionsTable, transId, [this]() { editTransaction(); }, [this]() { deleteTransaction(); });
+    transactionsTable->setCellWidget(row, 6, actionsWidget);
 }

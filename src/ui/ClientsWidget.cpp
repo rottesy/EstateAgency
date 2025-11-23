@@ -101,20 +101,7 @@ void ClientsWidget::updateTable()
     {
         if (!client)
             continue;
-
-        int row = clientsTable->rowCount();
-        clientsTable->insertRow(row);
-
-        clientsTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(client->getId())));
-        clientsTable->setItem(row, 1, new QTableWidgetItem(Utils::toQString(client->getName())));
-        clientsTable->setItem(row, 2, new QTableWidgetItem(Utils::toQString(client->getPhone())));
-        clientsTable->setItem(row, 3, new QTableWidgetItem(Utils::toQString(client->getEmail())));
-        clientsTable->setItem(row, 4, new QTableWidgetItem(Utils::toQString(client->getRegistrationDate())));
-
-        QString clientId = Utils::toQString(client->getId());
-        QWidget *actionsWidget =
-            createActionButtons(clientsTable, clientId, [this]() { editClient(); }, [this]() { deleteClient(); });
-        clientsTable->setCellWidget(row, 5, actionsWidget);
+        addClientToTable(client);
     }
 }
 
@@ -247,20 +234,7 @@ void ClientsWidget::searchClients()
     {
         if (!client)
             continue;
-
-        int row = clientsTable->rowCount();
-        clientsTable->insertRow(row);
-
-        clientsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(client->getId())));
-        clientsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(client->getName())));
-        clientsTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(client->getPhone())));
-        clientsTable->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(client->getEmail())));
-        clientsTable->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(client->getRegistrationDate())));
-
-        QString clientId = QString::fromStdString(client->getId());
-        QWidget *actionsWidget =
-            createActionButtons(clientsTable, clientId, [this]() { editClient(); }, [this]() { deleteClient(); });
-        clientsTable->setCellWidget(row, 5, actionsWidget);
+        addClientToTable(client);
     }
 }
 
@@ -421,4 +395,24 @@ bool ClientsWidget::checkTableSelection(const QTableWidget *table, const QString
         return false;
     }
     return true;
+}
+
+void ClientsWidget::addClientToTable(const Client *client)
+{
+    if (!client || !clientsTable)
+        return;
+
+    int row = clientsTable->rowCount();
+    clientsTable->insertRow(row);
+
+    clientsTable->setItem(row, 0, new QTableWidgetItem(Utils::toQString(client->getId())));
+    clientsTable->setItem(row, 1, new QTableWidgetItem(Utils::toQString(client->getName())));
+    clientsTable->setItem(row, 2, new QTableWidgetItem(Utils::toQString(client->getPhone())));
+    clientsTable->setItem(row, 3, new QTableWidgetItem(Utils::toQString(client->getEmail())));
+    clientsTable->setItem(row, 4, new QTableWidgetItem(Utils::toQString(client->getRegistrationDate())));
+
+    QString clientId = Utils::toQString(client->getId());
+    QWidget *actionsWidget =
+        createActionButtons(clientsTable, clientId, [this]() { editClient(); }, [this]() { deleteClient(); });
+    clientsTable->setCellWidget(row, 5, actionsWidget);
 }
