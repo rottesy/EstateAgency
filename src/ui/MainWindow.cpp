@@ -656,10 +656,6 @@ void MainWindow::saveAllData()
     {
         handleException(e);
     }
-    catch (const std::exception &e)
-    {
-        handleException(e);
-    }
 }
 
 void MainWindow::loadAllData()
@@ -718,10 +714,6 @@ void MainWindow::loadAllData()
         handleException(e);
     }
     catch (const std::out_of_range &e)
-    {
-        handleException(e);
-    }
-    catch (const std::exception &e)
     {
         handleException(e);
     }
