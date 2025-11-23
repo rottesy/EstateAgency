@@ -113,46 +113,6 @@ QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidg
                              const std::function<void()> &editAction, const std::function<void()> &deleteAction,
                              const QString &editText = "Редактировать", int editWidth = 110);
 
-template <typename EditFunc, typename DeleteFunc>
-inline QWidget *createActionButtons(QTableWidget *table, const QString &id, [[maybe_unused]] QWidget *parent,
-                                    const EditFunc &editAction,     // ← передаем по const&
-                                    const DeleteFunc &deleteAction, // ← передаем по const&
-                                    const QString &editText = "Редактировать", int editWidth = 110)
-{
-    auto *actionsWidget = new QWidget;
-    auto *layout = new QHBoxLayout(actionsWidget);
-    layout->setContentsMargins(5, 5, 5, 5);
-    layout->setSpacing(8);
-
-    auto *editBtn = new QPushButton(editText);
-    editBtn->setMinimumWidth(editWidth);
-    editBtn->setFixedHeight(35);
-
-    auto *deleteBtn = new QPushButton("Удалить");
-    deleteBtn->setMinimumWidth(90);
-    deleteBtn->setFixedHeight(35);
-
-    QObject::connect(editBtn, &QPushButton::clicked,
-                     [table, id, &editAction]()
-                     {
-                         selectRowById(table, id);
-                         editAction();
-                     });
-
-    QObject::connect(deleteBtn, &QPushButton::clicked,
-                     [table, id, &deleteAction]()
-                     {
-                         selectRowById(table, id);
-                         deleteAction();
-                     });
-
-    layout->addWidget(editBtn);
-    layout->addWidget(deleteBtn);
-    layout->addStretch();
-
-    return actionsWidget;
-}
-
 } // namespace TableHelper
 
 #endif // TABLE_HELPER_H
