@@ -99,7 +99,11 @@ inline bool checkTableSelection(const QTableWidget *table, const QString &errorM
     if (!table || !hasValidSelection(table))
     {
         if (!errorMessage.isEmpty() && parent)
+        {
+            // Безопасное использование const_cast: QMessageBox::information не изменяет объект,
+            // а только использует его для позиционирования диалога
             QMessageBox::information(const_cast<QWidget *>(parent), "Информация", errorMessage);
+        }
 
         return false;
     }
@@ -109,12 +113,12 @@ inline bool checkTableSelection(const QTableWidget *table, const QString &errorM
 // Нешаблонная функция для создания кнопок действий
 // Принимает std::function вместо шаблонных параметров
 // Реализация в TableHelper.cpp
-QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget *parent,
+QWidget *createActionButtons(QTableWidget *table, const QString &id, QWidget *parent,
                              const std::function<void()> &editAction, const std::function<void()> &deleteAction,
                              const QString &editText = "Редактировать", int editWidth = 110);
 
 template <typename EditFunc, typename DeleteFunc>
-inline QWidget *createActionButtons(QTableWidget *table, const QString &id, [[maybe_unused]] const QWidget *parent,
+inline QWidget *createActionButtons(QTableWidget *table, const QString &id, [[maybe_unused]] QWidget *parent,
                                     const EditFunc &editAction,     // ← передаем по const&
                                     const DeleteFunc &deleteAction, // ← передаем по const&
                                     const QString &editText = "Редактировать", int editWidth = 110)
