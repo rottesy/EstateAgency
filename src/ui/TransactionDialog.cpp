@@ -352,8 +352,7 @@ double TransactionDialog::getFinalPrice() const { return priceSpin->value(); }
 QString TransactionDialog::getStatus() const
 {
     // Преобразуем русский текст обратно в английский статус для хранения
-    QString currentText = statusCombo->currentText();
-    if (currentText == "В ожидании")
+    if (QString currentText = statusCombo->currentText(); currentText == "В ожидании")
         return "pending";
     else if (currentText == "Завершена")
         return "completed";
