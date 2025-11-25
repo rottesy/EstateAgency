@@ -29,6 +29,7 @@ class PropertiesWidget : public QWidget
     void deleteProperty();
     void searchProperties();
     void propertySelectionChanged();
+    void showHelp();
 
   private:
     void setupUI();

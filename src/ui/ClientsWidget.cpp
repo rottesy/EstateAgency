@@ -57,6 +57,8 @@ void ClientsWidget::setupUI()
     clientsTable->setColumnWidth(4, 150);
     clientsTable->setColumnWidth(5, 300);
     clientsTable->horizontalHeader()->setStretchLastSection(false);
+    clientsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    clientsTable->setShowGrid(true);
 
     auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);

@@ -63,6 +63,8 @@ void TransactionsWidget::setupUI()
     transactionsTable->setColumnWidth(5, 120);
     transactionsTable->setColumnWidth(6, 300);
     transactionsTable->horizontalHeader()->setStretchLastSection(false);
+    transactionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    transactionsTable->setShowGrid(true);
 
     auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);

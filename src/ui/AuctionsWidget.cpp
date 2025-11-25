@@ -60,6 +60,8 @@ void AuctionsWidget::setupUI()
     auctionsTable->setColumnWidth(5, 80);
     auctionsTable->setColumnWidth(6, 300);
     auctionsTable->horizontalHeader()->setStretchLastSection(false);
+    auctionsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    auctionsTable->setShowGrid(true);
 
     auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);

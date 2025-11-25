@@ -121,8 +121,9 @@ void TransactionDialog::setupUI()
     priceLayout->addWidget(differenceLabel);
 
     statusCombo = new QComboBox;
-    statusCombo->addItems({"pending", "completed", "cancelled"});
-    statusCombo->setToolTip("pending - в ожидании\ncompleted - завершена\ncancelled - отменена");
+    statusCombo->addItems({"В ожидании", "Завершена", "Отменена"});
+    statusCombo->setToolTip(
+        "В ожидании - сделка в процессе\nЗавершена - сделка успешно завершена\nОтменена - сделка отменена");
 
     notesEdit = new QTextEdit;
     notesEdit->setMaximumHeight(100);
@@ -183,12 +184,15 @@ void TransactionDialog::loadTransactionData(const Transaction *trans)
         clientCombo->setCurrentIndex(clientIndex);
     priceSpin->setValue(trans->getFinalPrice());
 
+    // Маппинг английских статусов на русские индексы
     if (trans->getStatus() == "pending")
-        statusCombo->setCurrentIndex(0);
+        statusCombo->setCurrentIndex(0); // "В ожидании"
     else if (trans->getStatus() == "completed")
-        statusCombo->setCurrentIndex(1);
+        statusCombo->setCurrentIndex(1); // "Завершена"
+    else if (trans->getStatus() == "cancelled")
+        statusCombo->setCurrentIndex(2); // "Отменена"
     else
-        statusCombo->setCurrentIndex(2);
+        statusCombo->setCurrentIndex(0); // По умолчанию "В ожидании"
 
     notesEdit->setPlainText(QString::fromStdString(trans->getNotes()));
 }
@@ -345,5 +349,16 @@ QString TransactionDialog::getClientId() const
     return text;
 }
 double TransactionDialog::getFinalPrice() const { return priceSpin->value(); }
-QString TransactionDialog::getStatus() const { return statusCombo->currentText(); }
+QString TransactionDialog::getStatus() const
+{
+    // Преобразуем русский текст обратно в английский статус для хранения
+    QString currentText = statusCombo->currentText();
+    if (currentText == "В ожидании")
+        return "pending";
+    else if (currentText == "Завершена")
+        return "completed";
+    else if (currentText == "Отменена")
+        return "cancelled";
+    return "pending"; // По умолчанию
+}
 QString TransactionDialog::getNotes() const { return notesEdit->toPlainText(); }

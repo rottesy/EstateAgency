@@ -7,10 +7,14 @@
 #include "../../include/entities/House.h"
 #include "../../include/entities/PropertyParams.h"
 #include "../../include/entities/Transaction.h"
+#include "../../include/services/ClientManager.h"
 #include "../../include/services/PropertyManager.h"
+#include "../../include/services/TransactionManager.h"
 #include "../../include/ui/PropertyDialog.h"
 #include "../../include/ui/TableHelper.h"
 #include <QAbstractItemView>
+#include <QBrush>
+#include <QColor>
 #include <QHeaderView>
 #include <QLabel>
 #include <QMessageBox>
@@ -43,8 +47,11 @@ void PropertiesWidget::setupUI()
 
     addPropertyBtn = new QPushButton("➕ Добавить");
     refreshPropertyBtn = new QPushButton("🔄 Обновить");
+    auto *helpBtn = new QPushButton("❓ Справка");
+    helpBtn->setToolTip("Информация о выделении доступной недвижимости");
     headerLayout->addWidget(addPropertyBtn);
     headerLayout->addWidget(refreshPropertyBtn);
+    headerLayout->addWidget(helpBtn);
     layout->addLayout(headerLayout);
 
     auto *splitter = new QSplitter(Qt::Horizontal);
@@ -64,6 +71,8 @@ void PropertiesWidget::setupUI()
     propertiesTable->setColumnWidth(5, 120);
     propertiesTable->setColumnWidth(6, 300);
     propertiesTable->horizontalHeader()->setStretchLastSection(false);
+    propertiesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    propertiesTable->setShowGrid(true);
 
     auto *detailsFrame = new QFrame;
     detailsFrame->setFixedWidth(400);
@@ -88,6 +97,7 @@ void PropertiesWidget::setupUI()
     connect(addPropertyBtn, &QPushButton::clicked, this, &PropertiesWidget::addProperty);
     connect(refreshPropertyBtn, &QPushButton::clicked, this, &PropertiesWidget::refresh);
     connect(searchPropertyBtn, &QPushButton::clicked, this, &PropertiesWidget::searchProperties);
+    connect(helpBtn, &QPushButton::clicked, this, &PropertiesWidget::showHelp);
     connect(propertiesTable, &QTableWidget::itemSelectionChanged, this, &PropertiesWidget::propertySelectionChanged);
 }
 
@@ -466,6 +476,20 @@ bool PropertiesWidget::isNumericId(const QString &text) const
     return std::ranges::all_of(text, [](const QChar &ch) { return ch.isDigit(); });
 }
 
+void PropertiesWidget::showHelp()
+{
+    QMessageBox::information(
+        this, "Справка",
+        "<html><body style='font-family: Arial, sans-serif;'>"
+        "<h3 style='color: #5a9; margin-bottom: 15px;'>💡 Выделение доступной недвижимости</h3>"
+        "<p style='line-height: 1.6;'>"
+        "В таблице недвижимости строки с <b style='color: #6a9;'>зелёным фоном</b> обозначают "
+        "<b>доступную недвижимость</b> (статус \"Да\" в колонке \"Доступность\").<br><br>"
+        "Это помогает быстро визуально определить, какая недвижимость доступна для продажи или аренды."
+        "</p>"
+        "</body></html>");
+}
+
 void PropertiesWidget::addPropertyToTable(const Property *prop)
 {
     if (!prop || !propertiesTable)
@@ -480,6 +504,33 @@ void PropertiesWidget::addPropertyToTable(const Property *prop)
     propertiesTable->setItem(row, 3, new QTableWidgetItem(Utils::formatNumber(prop->getPrice())));
     propertiesTable->setItem(row, 4, new QTableWidgetItem(Utils::formatNumber(prop->getArea())));
     propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
+
+    // Выделяем доступную недвижимость другим цветом фона
+    if (prop->getIsAvailable())
+    {
+        for (int col = 0; col < 6; ++col)
+        {
+            QTableWidgetItem *item = propertiesTable->item(row, col);
+            if (item)
+            {
+                // Темно-зеленый фон для доступной недвижимости
+                item->setBackground(QBrush(QColor("#2a4a2a")));
+                item->setData(Qt::UserRole, QVariant(true)); // Помечаем как доступную
+            }
+        }
+    }
+    else
+    {
+        // Помечаем недоступную недвижимость
+        for (int col = 0; col < 6; ++col)
+        {
+            QTableWidgetItem *item = propertiesTable->item(row, col);
+            if (item)
+            {
+                item->setData(Qt::UserRole, QVariant(false));
+            }
+        }
+    }
 
     QString propId = Utils::toQString(prop->getId());
     QWidget *actionsWidget = TableHelper::createActionButtons(
