@@ -9,7 +9,7 @@ constexpr int MIN_ROOMS = 1;
 constexpr int MAX_ROOMS = 10;
 constexpr int MIN_FLOOR = 1;
 constexpr int MAX_FLOOR = 100;
-} // namespace
+} 
 
 Apartment::Apartment(const ApartmentParams &params)
     : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,

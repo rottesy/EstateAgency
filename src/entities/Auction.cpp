@@ -13,7 +13,7 @@ constexpr double MIN_BID_INCREMENT = 0.01;
 constexpr double NO_BID = 0.0;
 constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 constexpr int PRICE_PRECISION = 2;
-} // namespace
+} 
 
 Auction::Auction(const std::string &id, const std::string &propertyId, const std::string &propertyAddress,
                  double startingPrice)

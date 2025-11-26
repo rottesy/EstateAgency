@@ -10,7 +10,7 @@ namespace
 constexpr double MIN_AMOUNT = 0.0;
 constexpr const char *const DATE_FORMAT = "%Y-%m-%d %H:%M:%S";
 constexpr int PRICE_PRECISION = 2;
-} // namespace
+} 
 
 Bid::Bid(const std::string &clientId, const std::string &clientName, double amount)
     : clientId(clientId), clientName(clientName), amount(amount)
@@ -29,7 +29,6 @@ std::partial_ordering Bid::operator<=>(const Bid &other) const
 {
     if (auto cmp = amount <=> other.amount; cmp != 0)
         return cmp;
-    // Convert string comparison (strong_ordering) to partial_ordering
     auto strCmp = timestamp <=> other.timestamp;
     if (strCmp == std::strong_ordering::less)
         return std::partial_ordering::less;

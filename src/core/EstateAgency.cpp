@@ -8,7 +8,7 @@ constexpr const char *PROPERTIES_FILE = "properties.txt";
 constexpr const char *CLIENTS_FILE = "clients.txt";
 constexpr const char *TRANSACTIONS_FILE = "transactions.txt";
 constexpr const char *AUCTIONS_FILE = "auctions.txt";
-} // namespace
+} 
 
 EstateAgency *EstateAgency::instance = nullptr;
 
@@ -20,8 +20,7 @@ EstateAgency::EstateAgency()
     }
     catch (const std::filesystem::filesystem_error &e)
     {
-        // Ignore filesystem errors during initialization - directory may already exist
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
 }
 
@@ -57,13 +56,11 @@ void EstateAgency::saveAllData() const
     }
     catch (const FileManagerException &e)
     {
-        // Ignore file manager errors during save - data may be corrupted or inaccessible
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
     catch (const std::filesystem::filesystem_error &e)
     {
-        // Ignore filesystem errors during save - disk may be full or inaccessible
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
 }
 
@@ -78,12 +75,10 @@ void EstateAgency::loadAllData()
     }
     catch (const FileManagerException &e)
     {
-        // Ignore file manager errors during load - files may not exist yet (first run)
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
     catch (const std::filesystem::filesystem_error &e)
     {
-        // Ignore filesystem errors during load - files may not exist yet (first run)
-        (void)e; // Suppress unused variable warning
+        (void)e;
     }
 }

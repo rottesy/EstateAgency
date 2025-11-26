@@ -8,7 +8,7 @@ namespace
 {
 constexpr int MIN_PARKING_SPACES = 0;
 constexpr int MAX_PARKING_SPACES = 1000;
-} // namespace
+} 
 
 CommercialProperty::CommercialProperty(const CommercialPropertyParams &params)
     : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,

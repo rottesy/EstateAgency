@@ -682,7 +682,7 @@ std::string ensureUniqueTransactionId(EstateAgency *agency, const std::string &b
 
     return transactionId;
 }
-} // namespace
+} 
 
 void AuctionDialog::createTransactionFromAuction()
 {

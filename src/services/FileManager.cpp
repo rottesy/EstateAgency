@@ -171,12 +171,10 @@ void FileManager::loadProperties(PropertyManager &manager, const std::string &fi
         }
         catch (const std::invalid_argument &)
         {
-            // Skip invalid property data
             continue;
         }
         catch (const PropertyManagerException &)
         {
-            // Skip property manager errors
             continue;
         }
     }
@@ -241,12 +239,10 @@ void FileManager::loadClients(ClientManager &manager, const std::string &filenam
         }
         catch (const std::invalid_argument &)
         {
-            // Skip invalid client data
             continue;
         }
         catch (const ClientManagerException &)
         {
-            // Skip client manager errors
             continue;
         }
     }
@@ -315,12 +311,10 @@ void FileManager::loadTransactions(TransactionManager &manager, const std::strin
         }
         catch (const std::invalid_argument &)
         {
-            // Skip invalid transaction data
             continue;
         }
         catch (const TransactionManagerException &)
         {
-            // Skip transaction manager errors
             continue;
         }
     }
@@ -397,13 +391,11 @@ void FileManager::parseBidLine(std::string_view line, Auction *currentAuction)
     }
     catch (const std::invalid_argument &e)
     {
-        // Skip invalid bid data
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
     catch (const AuctionManagerException &e)
     {
-        // Skip auction manager errors
-        (void)e; // Suppress unused variable warning
+        (void)e; 
     }
 }
 
@@ -446,14 +438,12 @@ std::shared_ptr<Auction> FileManager::parseAuctionLine(std::string_view line)
     }
     catch (const std::invalid_argument &e)
     {
-        // Skip invalid auction data
-        (void)e; // Suppress unused variable warning
+        (void)e; 
         return nullptr;
     }
     catch (const AuctionManagerException &e)
     {
-        // Skip auction manager errors
-        (void)e; // Suppress unused variable warning
+        (void)e;
         return nullptr;
     }
 }

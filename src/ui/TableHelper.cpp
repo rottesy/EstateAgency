@@ -24,7 +24,6 @@ QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidg
     deleteBtn->setMinimumWidth(90);
     deleteBtn->setFixedHeight(35);
 
-    // Захватываем editAction и deleteAction по значению, чтобы избежать висячих ссылок
     QObject::connect(editBtn, &QPushButton::clicked,
                      [table, id, editAction]()
                      {
@@ -46,4 +45,4 @@ QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidg
     return actionsWidget;
 }
 
-} // namespace TableHelper
+} 

@@ -18,7 +18,7 @@
 
 namespace Utils
 {
-// Thread-safe localtime wrapper
+
 inline std::tm getLocalTime(std::time_t time)
 {
     std::tm result;
@@ -30,7 +30,7 @@ inline std::tm getLocalTime(std::time_t time)
     return result;
 }
 
-// Format current time using std::chrono
+
 inline std::string getCurrentTimeString(const char *format = "%Y-%m-%d %H:%M:%S")
 {
     auto now = std::chrono::system_clock::now();
@@ -60,8 +60,8 @@ inline bool isNumericId(const QString &str)
     return std::ranges::all_of(str, [](const QChar &ch) { return ch.isDigit(); });
 }
 
-// Helper function to check if string contains substring (C++23)
+
 inline bool stringContains(std::string_view str, std::string_view substr) { return str.contains(substr); }
-} // namespace Utils
+} 
 
 #endif

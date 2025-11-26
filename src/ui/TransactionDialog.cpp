@@ -184,15 +184,14 @@ void TransactionDialog::loadTransactionData(const Transaction *trans)
         clientCombo->setCurrentIndex(clientIndex);
     priceSpin->setValue(trans->getFinalPrice());
 
-    // Маппинг английских статусов на русские индексы
     if (trans->getStatus() == "pending")
-        statusCombo->setCurrentIndex(0); // "В ожидании"
+        statusCombo->setCurrentIndex(0); 
     else if (trans->getStatus() == "completed")
-        statusCombo->setCurrentIndex(1); // "Завершена"
+        statusCombo->setCurrentIndex(1);
     else if (trans->getStatus() == "cancelled")
-        statusCombo->setCurrentIndex(2); // "Отменена"
+        statusCombo->setCurrentIndex(2); 
     else
-        statusCombo->setCurrentIndex(0); // По умолчанию "В ожидании"
+        statusCombo->setCurrentIndex(0);
 
     notesEdit->setPlainText(QString::fromStdString(trans->getNotes()));
 }
@@ -238,8 +237,6 @@ void TransactionDialog::validateAndAccept()
         QMessageBox::warning(this, "Ошибка", "Цена сделки не может превышать 1 000 000 000 рублей");
         return;
     }
-
-    // Property validation is handled in updatePriceFromProperty
 
     accept();
 }
@@ -351,13 +348,12 @@ QString TransactionDialog::getClientId() const
 double TransactionDialog::getFinalPrice() const { return priceSpin->value(); }
 QString TransactionDialog::getStatus() const
 {
-    // Преобразуем русский текст обратно в английский статус для хранения
     if (QString currentText = statusCombo->currentText(); currentText == "В ожидании")
         return "pending";
     else if (currentText == "Завершена")
         return "completed";
     else if (currentText == "Отменена")
         return "cancelled";
-    return "pending"; // По умолчанию
+    return "pending"; 
 }
 QString TransactionDialog::getNotes() const { return notesEdit->toPlainText(); }

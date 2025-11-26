@@ -11,7 +11,7 @@ constexpr int MIN_ROOMS = 1;
 constexpr int MAX_ROOMS = 50;
 constexpr double MIN_LAND_AREA = 0.0;
 constexpr double MAX_LAND_AREA = 10000.0;
-} // namespace
+} 
 
 House::House(const HouseParams &params)
     : Property(params.base.id, params.base.city, params.base.street, params.base.house, params.base.price,

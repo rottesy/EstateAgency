@@ -36,18 +36,15 @@ class FileManager
     static constexpr char UNAVAILABLE_CHAR = '0';
     static constexpr size_t BID_PREFIX_LENGTH = 4;
 
-    // Вспомогательные функции для загрузки аукционов
     static void parseBidLine(std::string_view line, Auction *currentAuction);
     static std::shared_ptr<Auction> parseAuctionLine(std::string_view line);
 
   public:
-    // Сохранение данных через менеджеры
     static void saveProperties(const PropertyManager &manager, const std::string &filename);
     static void saveClients(const ClientManager &manager, const std::string &filename);
     static void saveTransactions(const TransactionManager &manager, const std::string &filename);
     static void saveAuctions(const AuctionManager &manager, const std::string &filename);
 
-    // Загрузка данных через менеджеры
     static void loadProperties(PropertyManager &manager, const std::string &filename);
     static void loadClients(ClientManager &manager, const std::string &filename);
     static void loadTransactions(TransactionManager &manager, const std::string &filename);

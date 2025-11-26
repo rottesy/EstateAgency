@@ -374,10 +374,8 @@ bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::s
         return false;
     }
 
-    // Проверка доступности недвижимости для сделок со статусом pending или completed
     if (status == "pending" || status == "completed")
     {
-        // Проверяем, редактируем ли мы существующую сделку
         const std::string excludeIdStr(excludeTransactionId);
         const bool isEditing = !excludeIdStr.empty();
         const Transaction *existingTrans = nullptr;
@@ -386,7 +384,6 @@ bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::s
             existingTrans = agency->getTransactionManager().findTransaction(excludeIdStr);
         }
 
-        // Если создаем новую сделку или меняем недвижимость при редактировании - проверяем доступность
         if ((!isEditing || (existingTrans && existingTrans->getPropertyId() != propertyIdStr)) &&
             !prop->getIsAvailable())
         {
@@ -396,7 +393,6 @@ bool TransactionsWidget::validateTransaction(std::string_view propertyId, std::s
             return false;
         }
 
-        // Проверяем наличие других активных сделок для этой недвижимости
         auto existingTransList = agency->getTransactionManager().getTransactionsByProperty(propertyIdStr);
         if (std::ranges::any_of(existingTransList,
                                 [&excludeIdStr](const Transaction *t)

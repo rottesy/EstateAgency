@@ -33,7 +33,6 @@ class AuctionManager
     std::vector<Auction *> getCompletedAuctions() const;
     std::vector<Auction *> getAuctionsByProperty(std::string_view propertyId) const;
 
-    // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Auction>> &getAuctions() const { return auctions; }
     void setAuctions(std::vector<std::shared_ptr<Auction>> &&newAuctions) { auctions = std::move(newAuctions); }
 

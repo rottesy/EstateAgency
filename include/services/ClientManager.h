@@ -33,7 +33,6 @@ class ClientManager
     std::vector<Client *> searchByName(std::string_view name) const;
     std::vector<Client *> searchByPhone(std::string_view phone) const;
 
-    // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Client>> &getClients() const { return clients; }
     void setClients(std::vector<std::shared_ptr<Client>> &&newClients) { clients = std::move(newClients); }
 

@@ -1,9 +1,70 @@
-@startuml EstateAgency Class Diagram
+@startuml course-work
+scale 1.2
+left to right direction
 
-!theme plain
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontColor black
+
+skinparam ranksep 0.9
+skinparam nodesep 0.8
+skinparam linetype ortho
+
+hide empty members
+hide circle
+hide stereotype
 skinparam classAttributeIconSize 0
+skinparam classVisibilityIconSize 0
 
-' Core Domain Classes
+skinparam class {
+    AttributeFontSize 9
+    FontSize 10
+    Padding 6
+    BackgroundColor white
+    BorderColor black
+    ArrowColor black
+    BorderThickness 1
+}
+skinparam defaultFontSize 10
+
+' 1. Structures (4 structures)
+struct PropertyBaseParams {
+  +id: string
+  +city: string
+  +street: string
+  +house: string
+  +price: double
+  +area: double
+  +description: string
+}
+
+struct ApartmentParams {
+  +base: PropertyBaseParams
+  +rooms: int
+  +floor: int
+  +hasBalcony: bool
+  +hasElevator: bool
+}
+
+struct HouseParams {
+  +base: PropertyBaseParams
+  +floors: int
+  +rooms: int
+  +landArea: double
+  +hasGarage: bool
+  +hasGarden: bool
+}
+
+struct CommercialPropertyParams {
+  +base: PropertyBaseParams
+  +businessType: string
+  +hasParking: bool
+  +parkingSpaces: int
+  +isVisibleFromStreet: bool
+}
+
+' 2. Abstract Property and implementations (4 classes)
 abstract class Property {
   -id: string
   -city: string
@@ -15,18 +76,9 @@ abstract class Property {
   -isAvailable: bool
   +getId(): string
   +getCity(): string
-  +getStreet(): string
-  +getHouse(): string
   +getAddress(): string
   +getPrice(): double
   +getArea(): double
-  +getDescription(): string
-  +getIsAvailable(): bool
-  +setPrice(double)
-  +setArea(double)
-  +setAddress(string, string, string)
-  +setDescription(string)
-  +setAvailable(bool)
   +{abstract} getType(): string
   +{abstract} displayInfo(): void
   +{abstract} toFileString(): string
@@ -44,10 +96,6 @@ class Apartment {
   -hasElevator: bool
   +getRooms(): int
   +getFloor(): int
-  +getHasBalcony(): bool
-  +getHasElevator(): bool
-  +setRooms(int)
-  +setFloor(int)
   +getType(): string
   +displayInfo(): void
   +toFileString(): string
@@ -63,11 +111,6 @@ class House {
   +getFloors(): int
   +getRooms(): int
   +getLandArea(): double
-  +getHasGarage(): bool
-  +getHasGarden(): bool
-  +setFloors(int)
-  +setRooms(int)
-  +setLandArea(double)
   +getType(): string
   +displayInfo(): void
   +toFileString(): string
@@ -81,16 +124,13 @@ class CommercialProperty {
   -isVisibleFromStreet: bool
   +getBusinessType(): string
   +getHasParking(): bool
-  +getParkingSpaces(): int
-  +getIsVisibleFromStreet(): bool
-  +setBusinessType(string)
-  +setParkingSpaces(int)
   +getType(): string
   +displayInfo(): void
   +toFileString(): string
   +clone(): Property*
 }
 
+' 3. Core entities (4 classes)
 class Client {
   -id: string
   -name: string
@@ -101,10 +141,6 @@ class Client {
   +getName(): string
   +getPhone(): string
   +getEmail(): string
-  +getRegistrationDate(): string
-  +setName(string)
-  +setPhone(string)
-  +setEmail(string)
   +toString(): string
   +{static} validateId(string): bool
   +{static} validatePhone(string): bool
@@ -122,13 +158,8 @@ class Transaction {
   +getId(): string
   +getPropertyId(): string
   +getClientId(): string
-  +getDate(): string
   +getFinalPrice(): double
   +getStatus(): string
-  +getNotes(): string
-  +setStatus(string)
-  +setFinalPrice(double)
-  +setNotes(string)
   +toString(): string
   +toFileString(): string
   +{static} validateId(string): bool
@@ -146,22 +177,13 @@ class Auction {
   -completedAt: string
   +getId(): string
   +getPropertyId(): string
-  +getPropertyAddress(): string
   +getStartingPrice(): double
   +getBuyoutPrice(): double
-  +getBids(): vector<shared_ptr<Bid>>
   +getStatus(): string
-  +getCreatedAt(): string
-  +getCompletedAt(): string
   +isActive(): bool
-  +isCompleted(): bool
   +addBid(shared_ptr<Bid>): bool
-  +addBidDirect(shared_ptr<Bid>): void
   +getCurrentHighestBid(): double
-  +getHighestBid(): Bid*
   +complete(): void
-  +cancel(): void
-  +wasBuyout(): bool
   +toString(): string
   +toFileString(): string
 }
@@ -179,42 +201,35 @@ class Bid {
   +toFileString(): string
 }
 
-' Manager Classes
+' 4. Manager classes (4 classes)
 class PropertyManager {
   -properties: vector<unique_ptr<Property>>
-  -dataFilePath: string
   +addProperty(unique_ptr<Property>): void
-  +addApartment(...): void
-  +addHouse(...): void
-  +addCommercialProperty(...): void
+  +addApartment(ApartmentParams): void
+  +addHouse(HouseParams): void
+  +addCommercialProperty(CommercialPropertyParams): void
   +removeProperty(string): bool
   +findProperty(string): Property*
   +getAllProperties(): vector<Property*>
   +getAvailableProperties(): vector<Property*>
   +searchByPriceRange(double, double): vector<Property*>
   +searchByAddress(string, string, string): vector<Property*>
-  +saveToFile(string): void
-  +loadFromFile(string): void
   +getCount(): size_t
 }
 
 class ClientManager {
   -clients: vector<shared_ptr<Client>>
-  -dataFilePath: string
   +addClient(shared_ptr<Client>): void
   +removeClient(string): bool
   +findClient(string): Client*
   +getAllClients(): vector<Client*>
   +searchByName(string): vector<Client*>
   +searchByPhone(string): vector<Client*>
-  +saveToFile(string): void
-  +loadFromFile(string): void
   +getCount(): size_t
 }
 
 class TransactionManager {
   -transactions: vector<shared_ptr<Transaction>>
-  -dataFilePath: string
   +addTransaction(shared_ptr<Transaction>): void
   +removeTransaction(string): bool
   +findTransaction(string): Transaction*
@@ -222,14 +237,11 @@ class TransactionManager {
   +getTransactionsByClient(string): vector<Transaction*>
   +getTransactionsByProperty(string): vector<Transaction*>
   +getTransactionsByStatus(string): vector<Transaction*>
-  +saveToFile(string): void
-  +loadFromFile(string): void
   +getCount(): size_t
 }
 
 class AuctionManager {
   -auctions: vector<shared_ptr<Auction>>
-  -dataFilePath: string
   +addAuction(shared_ptr<Auction>): void
   +removeAuction(string): bool
   +findAuction(string): Auction*
@@ -237,33 +249,57 @@ class AuctionManager {
   +getActiveAuctions(): vector<Auction*>
   +getCompletedAuctions(): vector<Auction*>
   +getAuctionsByProperty(string): vector<Auction*>
-  +saveToFile(string): void
-  +loadFromFile(string): void
   +getCount(): size_t
 }
 
-' Exception Classes
+' 5. File Manager (1 class)
+class FileManager {
+  -{static} FILE_DELIMITER: char
+  -{static} AVAILABLE_CHAR: char
+  -{static} UNAVAILABLE_CHAR: char
+  -{static} BID_PREFIX_LENGTH: size_t
+  +{static} saveProperties(const PropertyManager&, string): void
+  +{static} saveClients(const ClientManager&, string): void
+  +{static} saveTransactions(const TransactionManager&, string): void
+  +{static} saveAuctions(const AuctionManager&, string): void
+  +{static} loadProperties(PropertyManager&, string): void
+  +{static} loadClients(ClientManager&, string): void
+  +{static} loadTransactions(TransactionManager&, string): void
+  +{static} loadAuctions(AuctionManager&, string): void
+}
+
+' 6. Exception classes (5 classes)
 class PropertyManagerException {
   -message: string
+  +PropertyManagerException(string)
   +what(): const char*
 }
 
 class ClientManagerException {
   -message: string
+  +ClientManagerException(string)
   +what(): const char*
 }
 
 class TransactionManagerException {
   -message: string
+  +TransactionManagerException(string)
   +what(): const char*
 }
 
 class AuctionManagerException {
   -message: string
+  +AuctionManagerException(string)
   +what(): const char*
 }
 
-' Template Class
+class FileManagerException {
+  -message: string
+  +FileManagerException(string)
+  +what(): const char*
+}
+
+' 7. Template class (1 class)
 class ContainerManager<T> {
   #items: vector<shared_ptr<T>>
   +add(shared_ptr<T>): void
@@ -274,7 +310,7 @@ class ContainerManager<T> {
   +end(): const_iterator
 }
 
-' Singleton Class
+' 8. Singleton main class (1 class)
 class EstateAgency {
   -{static} instance: EstateAgency*
   -propertyManager: PropertyManager
@@ -295,7 +331,7 @@ class EstateAgency {
   +getDataDirectory(): string
 }
 
-' UI Classes
+' 9. UI Classes (10+ classes)
 class MainWindow {
   -agency: EstateAgency*
   -navigationList: QListWidget*
@@ -308,10 +344,86 @@ class MainWindow {
   +MainWindow(QWidget*)
   -setupUI(): void
   -setupMenuBar(): void
-  -setupNewUI(): void
   -applyStyles(): void
   -updateDashboardStats(): void
   -showStatusMessage(QString, int): void
+  -handleException(exception&): void
+}
+
+class DashboardWidget {
+  -agency: EstateAgency*
+  -statsPropertiesLabel: QLabel*
+  -statsClientsLabel: QLabel*
+  -statsTransactionsLabel: QLabel*
+  -statsAvailableLabel: QLabel*
+  -statsAuctionsLabel: QLabel*
+  -saveBtn: QPushButton*
+  -loadBtn: QPushButton*
+  -refreshBtn: QPushButton*
+  +DashboardWidget(EstateAgency*, QWidget*)
+  +updateStats(): void
+}
+
+class PropertiesWidget {
+  -agency: EstateAgency*
+  -propertiesTable: QTableWidget*
+  -addPropertyBtn: QPushButton*
+  -refreshPropertyBtn: QPushButton*
+  -searchPropertyBtn: QPushButton*
+  -searchPropertyEdit: QLineEdit*
+  -propertyDetailsText: QTextEdit*
+  +PropertiesWidget(EstateAgency*, QWidget*)
+  +refresh(): void
+  +updateTable(): void
+  -addProperty(): void
+  -editProperty(): void
+  -deleteProperty(): void
+  -searchProperties(): void
+  -showPropertyDetails(Property*): void
+}
+
+class ClientsWidget {
+  -agency: EstateAgency*
+  -clientsTable: QTableWidget*
+  -addClientBtn: QPushButton*
+  -refreshClientBtn: QPushButton*
+  -searchClientBtn: QPushButton*
+  -searchClientEdit: QLineEdit*
+  -clientDetailsText: QTextEdit*
+  +ClientsWidget(EstateAgency*, QWidget*)
+  +refresh(): void
+  +updateTable(): void
+  -showClientDetails(Client*): void
+}
+
+class TransactionsWidget {
+  -agency: EstateAgency*
+  -transactionsTable: QTableWidget*
+  -addTransactionBtn: QPushButton*
+  -refreshTransactionBtn: QPushButton*
+  -searchTransactionBtn: QPushButton*
+  -searchTransactionEdit: QLineEdit*
+  -transactionDetailsText: QTextEdit*
+  +TransactionsWidget(EstateAgency*, QWidget*)
+  +refresh(): void
+  +updateTable(): void
+  -showTransactionDetails(Transaction*): void
+  -validateTransaction(string, string, string, string): bool
+}
+
+class AuctionsWidget {
+  -agency: EstateAgency*
+  -auctionsTable: QTableWidget*
+  -addAuctionBtn: QPushButton*
+  -refreshAuctionBtn: QPushButton*
+  -searchAuctionBtn: QPushButton*
+  -searchAuctionEdit: QLineEdit*
+  -auctionDetailsText: QTextEdit*
+  +AuctionsWidget(EstateAgency*, QWidget*)
+  +refresh(): void
+  +updateTable(): void
+  -showAuctionDetails(Auction*): void
+  -hasActiveTransactions(string): bool
 }
 
 class PropertyDialog {
@@ -347,6 +459,7 @@ class ClientDialog {
   +getName(): QString
   +getPhone(): QString
   +getEmail(): QString
+  -validateAndAccept(): void
 }
 
 class TransactionDialog {
@@ -382,133 +495,82 @@ class AuctionDialog {
   +getPropertyId(): QString
   +getStartingPrice(): double
   +refreshBids(): void
-  +updateAuctionInfo(): void
+  +refreshAuctionInfo(): void
+  -addBid(): void
+  -completeAuction(): void
+  -createTransactionFromAuction(): void
 }
 
-class PropertiesWidget {
-  -agency: EstateAgency*
-  -propertiesTable: QTableWidget*
-  -addPropertyBtn: QPushButton*
-  -refreshPropertyBtn: QPushButton*
-  -searchPropertyEdit: QLineEdit*
-  -propertyDetailsText: QTextEdit*
-  +PropertiesWidget(EstateAgency*, QWidget*)
-  +refresh(): void
-  +updateTable(): void
-}
+' === RELATIONSHIPS ===
 
-class ClientsWidget {
-  -agency: EstateAgency*
-  -clientsTable: QTableWidget*
-  -addClientBtn: QPushButton*
-  -refreshClientBtn: QPushButton*
-  -searchClientEdit: QLineEdit*
-  -clientDetailsText: QTextEdit*
-  +ClientsWidget(EstateAgency*, QWidget*)
-  +refresh(): void
-  +updateTable(): void
-}
+' Structure composition
+ApartmentParams *-- PropertyBaseParams
+HouseParams *-- PropertyBaseParams
+CommercialPropertyParams *-- PropertyBaseParams
 
-class TransactionsWidget {
-  -agency: EstateAgency*
-  -transactionsTable: QTableWidget*
-  -addTransactionBtn: QPushButton*
-  -refreshTransactionBtn: QPushButton*
-  -searchTransactionEdit: QLineEdit*
-  -transactionDetailsText: QTextEdit*
-  +TransactionsWidget(EstateAgency*, QWidget*)
-  +refresh(): void
-  +updateTable(): void
-}
+' Structure usage
+PropertyManager ..> ApartmentParams
+PropertyManager ..> HouseParams
+PropertyManager ..> CommercialPropertyParams
 
-class AuctionsWidget {
-  -agency: EstateAgency*
-  -auctionsTable: QTableWidget*
-  -addAuctionBtn: QPushButton*
-  -refreshAuctionBtn: QPushButton*
-  -searchAuctionEdit: QLineEdit*
-  -auctionDetailsText: QTextEdit*
-  +AuctionsWidget(EstateAgency*, QWidget*)
-  +refresh(): void
-  +updateTable(): void
-}
-
-class DashboardWidget {
-  -agency: EstateAgency*
-  -statsPropertiesLabel: QLabel*
-  -statsClientsLabel: QLabel*
-  -statsTransactionsLabel: QLabel*
-  -statsAvailableLabel: QLabel*
-  -statsAuctionsLabel: QLabel*
-  +DashboardWidget(EstateAgency*, QWidget*)
-  +updateStats(): void
-}
-
-' Inheritance Relationships
+' Inheritance
 Property <|-- Apartment
 Property <|-- House
 Property <|-- CommercialProperty
 
-' Composition/Aggregation Relationships
-Auction "1" *-- "0..*" Bid : contains
-Auction ..> Property : references (by id)
-Transaction ..> Property : references (by id)
-Transaction ..> Client : references (by id)
-Bid ..> Client : references (by id)
+' Composition
+Auction *-- Bid
 
-PropertyManager "1" *-- "0..*" Property : manages
-ClientManager "1" *-- "0..*" Client : manages
-TransactionManager "1" *-- "0..*" Transaction : manages
-AuctionManager "1" *-- "0..*" Auction : manages
+' Core associations
+Transaction --> Property
+Transaction --> Client
+Auction --> Property
+Bid --> Client
 
-EstateAgency "1" *-- "1" PropertyManager : contains
-EstateAgency "1" *-- "1" ClientManager : contains
-EstateAgency "1" *-- "1" TransactionManager : contains
-EstateAgency "1" *-- "1" AuctionManager : contains
+' Manager composition
+EstateAgency *-- PropertyManager
+EstateAgency *-- ClientManager
+EstateAgency *-- TransactionManager
+EstateAgency *-- AuctionManager
 
-MainWindow "1" *-- "1" DashboardWidget : contains
-MainWindow "1" *-- "1" PropertiesWidget : contains
-MainWindow "1" *-- "1" ClientsWidget : contains
-MainWindow "1" *-- "1" TransactionsWidget : contains
-MainWindow "1" *-- "1" AuctionsWidget : contains
+PropertyManager o-- Property
+ClientManager o-- Client
+TransactionManager o-- Transaction
+AuctionManager o-- Auction
 
-' Reference Relationships
-MainWindow ..> EstateAgency : uses
-PropertiesWidget ..> EstateAgency : uses
-ClientsWidget ..> EstateAgency : uses
-TransactionsWidget ..> EstateAgency : uses
-AuctionsWidget ..> EstateAgency : uses
-DashboardWidget ..> EstateAgency : uses
-AuctionDialog ..> EstateAgency : uses
-TransactionDialog ..> EstateAgency : uses
+' File manager usage
+EstateAgency --> FileManager
+FileManager --> PropertyManager
+FileManager --> ClientManager
+FileManager --> TransactionManager
+FileManager --> AuctionManager
 
-PropertyDialog ..> Property : edits
-ClientDialog ..> Client : edits
-TransactionDialog ..> Transaction : edits
-AuctionDialog ..> Auction : edits
+' Exception relationships
+PropertyManager ..> PropertyManagerException
+ClientManager ..> ClientManagerException
+TransactionManager ..> TransactionManagerException
+AuctionManager ..> AuctionManagerException
+FileManager ..> FileManagerException
 
-' Exception Relationships
-PropertyManager ..> PropertyManagerException : throws
-ClientManager ..> ClientManagerException : throws
-TransactionManager ..> TransactionManagerException : throws
-AuctionManager ..> AuctionManagerException : throws
+' UI composition
+MainWindow *-- DashboardWidget
+MainWindow *-- PropertiesWidget
+MainWindow *-- ClientsWidget
+MainWindow *-- TransactionsWidget
+MainWindow *-- AuctionsWidget
 
-' Note about namespaces
-note right of TableHelper
-  namespace TableHelper
-  Utility functions for QTableWidget
-end note
+' UI associations
+MainWindow --> EstateAgency
+PropertiesWidget --> EstateAgency
+ClientsWidget --> EstateAgency
+TransactionsWidget --> EstateAgency
+AuctionsWidget --> EstateAgency
+DashboardWidget --> EstateAgency
+AuctionDialog --> EstateAgency
 
-note right of Utils
-  namespace Utils
-  String conversion utilities
-end note
-
-note right of Constants
-  namespace Constants
-  Application constants
-end note
+PropertyDialog --> Property
+ClientDialog --> Client
+TransactionDialog --> Transaction
+AuctionDialog --> Auction
 
 @enduml
-
-

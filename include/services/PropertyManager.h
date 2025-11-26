@@ -77,7 +77,6 @@ class PropertyManager
     std::vector<Property *> searchByAddress(const std::string &city, const std::string &street = "",
                                             const std::string &house = "") const;
 
-    // Методы для доступа к данным для FileManager
     const std::vector<std::unique_ptr<Property>> &getProperties() const { return properties; }
     void setProperties(std::vector<std::unique_ptr<Property>> &&props) { properties = std::move(props); }
 

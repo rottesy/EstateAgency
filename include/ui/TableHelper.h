@@ -106,13 +106,10 @@ inline bool checkTableSelection(const QTableWidget *table, const QString &errorM
     return true;
 }
 
-// Нешаблонная функция для создания кнопок действий
-// Принимает std::function вместо шаблонных параметров
-// Реализация в TableHelper.cpp
 QWidget *createActionButtons(QTableWidget *table, const QString &id, const QWidget *parent,
                              const std::function<void()> &editAction, const std::function<void()> &deleteAction,
                              const QString &editText = "Редактировать", int editWidth = 110);
 
-} // namespace TableHelper
+} 
 
-#endif // TABLE_HELPER_H
+#endif 

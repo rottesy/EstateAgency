@@ -10,14 +10,14 @@ namespace TransactionStatus
 constexpr const char *PENDING = "pending";
 constexpr const char *COMPLETED = "completed";
 constexpr const char *CANCELLED = "cancelled";
-} // namespace TransactionStatus
+} 
 
 namespace AuctionStatus
 {
 constexpr const char *ACTIVE = "active";
 constexpr const char *COMPLETED = "completed";
 constexpr const char *CANCELLED = "cancelled";
-} // namespace AuctionStatus
+} 
 
 namespace Messages
 {
@@ -32,7 +32,7 @@ constexpr const char *ERROR = "Ошибка";
 constexpr const char *INFORMATION = "Информация";
 constexpr const char *CONFIRMATION = "Подтверждение";
 constexpr const char *VALIDATION_ERROR = "Ошибка валидации";
-} // namespace Messages
+} 
 
 namespace ErrorMessages
 {
@@ -43,7 +43,7 @@ constexpr const char *LOAD_ERROR = "Ошибка загрузки";
 constexpr const char *ADD_ERROR = "Ошибка добавления";
 constexpr const char *EDIT_ERROR = "Ошибка редактирования";
 constexpr const char *DELETE_ERROR = "Ошибка удаления";
-} // namespace ErrorMessages
+} 
 
 namespace OperationMessages
 {
@@ -58,7 +58,7 @@ constexpr const char *TRANSACTION_UPDATED = "Сделка обновлена";
 constexpr const char *TRANSACTION_DELETED = "Сделка удалена";
 constexpr const char *AUCTION_CREATED = "Аукцион создан";
 constexpr const char *AUCTION_DELETED = "Аукцион удален";
-} // namespace OperationMessages
+} 
 
 namespace SelectionMessages
 {
@@ -70,7 +70,7 @@ constexpr const char *SELECT_TRANSACTION_TO_EDIT = "Выберите сделк�
 constexpr const char *SELECT_TRANSACTION_TO_DELETE = "Выберите сделку для удаления";
 constexpr const char *SELECT_AUCTION_TO_VIEW = "Выберите аукцион для просмотра";
 constexpr const char *SELECT_AUCTION_TO_DELETE = "Выберите аукцион для удаления";
-} // namespace SelectionMessages
+} 
 
 namespace ConfirmationMessages
 {
@@ -78,7 +78,7 @@ constexpr const char *DELETE_PROPERTY = "Удалить недвижимость
 constexpr const char *DELETE_CLIENT = "Удалить клиента?";
 constexpr const char *DELETE_TRANSACTION = "Удалить сделку?";
 constexpr const char *DELETE_AUCTION = "Удалить аукцион?";
-} // namespace ConfirmationMessages
+} 
 
 namespace InfoMessages
 {
@@ -89,7 +89,7 @@ constexpr const char *INSUFFICIENT_DATA = "Недостаточно данных
 constexpr const char *INSUFFICIENT_DATA_FOR_TRANSACTION = "Недостаточно данных для создания сделки";
 constexpr const char *INSUFFICIENT_DATA_FOR_EDIT = "Недостаточно данных для редактирования сделки";
 constexpr const char *ENTER_TRANSACTION_ID = "Введите ID сделки (6-8 цифр)";
-} // namespace InfoMessages
+} 
 
 namespace DisplayStatus
 {
@@ -99,15 +99,15 @@ constexpr const char *CANCELLED = "Отменена";
 constexpr const char *ACTIVE = "Активен";
 constexpr const char *AUCTION_COMPLETED = "Завершен";
 constexpr const char *AUCTION_CANCELLED = "Отменен";
-} // namespace DisplayStatus
+} 
 
 namespace MessageTimeout
 {
 constexpr int SHORT = 2000;
 constexpr int MEDIUM = 3000;
 constexpr int LONG = 5000;
-} // namespace MessageTimeout
-} // namespace Constants
+} 
+} 
 
 #endif
 

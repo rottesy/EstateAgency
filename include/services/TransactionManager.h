@@ -34,7 +34,6 @@ class TransactionManager
     std::vector<Transaction *> getTransactionsByProperty(std::string_view propertyId) const;
     std::vector<Transaction *> getTransactionsByStatus(std::string_view status) const;
 
-    // Методы для доступа к данным для FileManager
     const std::vector<std::shared_ptr<Transaction>> &getTransactions() const { return transactions; }
     void setTransactions(std::vector<std::shared_ptr<Transaction>> &&newTransactions)
     {

@@ -504,7 +504,6 @@ void PropertiesWidget::addPropertyToTable(const Property *prop)
     propertiesTable->setItem(row, 4, new QTableWidgetItem(Utils::formatNumber(prop->getArea())));
     propertiesTable->setItem(row, 5, new QTableWidgetItem(prop->getIsAvailable() ? "Да" : "Нет"));
 
-    // Выделяем доступную недвижимость другим цветом фона
     if (prop->getIsAvailable())
     {
         for (int col = 0; col < 6; ++col)
@@ -512,15 +511,13 @@ void PropertiesWidget::addPropertyToTable(const Property *prop)
             QTableWidgetItem *item = propertiesTable->item(row, col);
             if (item)
             {
-                // Темно-зеленый фон для доступной недвижимости
                 item->setBackground(QBrush(QColor("#2a4a2a")));
-                item->setData(Qt::UserRole, QVariant(true)); // Помечаем как доступную
+                item->setData(Qt::UserRole, QVariant(true)); 
             }
         }
     }
     else
     {
-        // Помечаем недоступную недвижимость
         for (int col = 0; col < 6; ++col)
         {
             QTableWidgetItem *item = propertiesTable->item(row, col);
