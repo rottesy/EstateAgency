@@ -40,7 +40,7 @@ set(SOURCES
     src/ui/ClientDialog.cpp
     src/ui/TransactionDialog.cpp
     src/ui/AuctionDialog.cpp
-    src/ui/HtmlFormatter.cpp
+    
     src/ui/PropertiesWidget.cpp
     src/ui/ClientsWidget.cpp
     src/ui/TransactionsWidget.cpp
